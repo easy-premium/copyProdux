@@ -3,7 +3,7 @@
     "vip1": {
       "name": "VIP1",
       "price": 1000,
-      "dailyIncome": 250,
+      "dailyIncome": 150,
       "totalIncome": 25000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg"
     },
