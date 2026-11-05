@@ -1,1323 +1,1097 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-skin="starbucks" data-layout="skinOne">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Mobile Servicing and Accessories Shop</title>
-    <meta name="description" content="মোবাইল সার্ভিসিং ও এক্সেসরি শপ">
-    <meta name="keywords" content="Rewarble Voucher Services, visa card $5-$20,  visa card $5,  visa card $6,  visa card $7,  visa card $8,  visa card $9,  visa card $10,  visa card $11,  visa card $12, visa card $13, visa card $14,  visa card $15, visa card $16,  visa card $17,  visa card $18,  visa card $19,  visa card $20, visa card">
-    <meta name="author" content="Easy Premium">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://www.easy-premium.com">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Starbucks</title>
+  <link rel="icon" href="https://image.starbucksbd.com/images/95643beb86a1/logo.jpg" type="image/jpeg">
+  <style>
+    /* ═══════════════════════════════════════════
+       ROOT VARIABLES (হুবহু আপনার দেওয়া)
+    ═══════════════════════════════════════════ */
+    :root {
+      --color-status-success: #2d6a4f;
+      --color-status-failed: #c1121f;
+      --color-status-pending: #ff7a00;
+      --color-primary: #00704A;
+      --color-primary-dark: #1E3932;
+      --color-secondary: #006241;
+      --color-accent: #C8A96A;
+      --color-tab-active: #C8A96A;
+      --color-page-bg: #F2F0EB;
+      --color-card-bg: #ffffff;
+      --color-text: #1E3932;
+      --color-text-muted: #8A8A8A;
+      --color-app-bg: #ffffff;
+      --color-bg: #6B7A73;
+      --color-success-btn: #1E3932;
+      --color-btn-text: #1E3932;
+      --gradient-btn: linear-gradient(135deg, #00704A 0%, #1E3932 100%);
+      --gradient-tabbar: linear-gradient(180deg, #1E3932 0%, #0F2A24 100%);
+      --gradient-card: linear-gradient(180deg, #1E3932 0%, #00704A 100%);
+      --gradient-card-overlay: linear-gradient(180deg, #1E393299 0%, #00704A99 100%);
+      --gradient-actions: linear-gradient(135deg, #FFFFFF 0%, #EAF3EF 100%);
+      --gradient-menu-accent: linear-gradient(to right, #F2F0EB 82%, #C8A96A 18%);
+      --gradient-success: linear-gradient(180deg, #1E3932 0%, #00704A 100%);
+      --gradient-login: linear-gradient(180deg, #FFFFFF 0%, #F2F0EB 100%);
+      --gradient-page-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%);
+      --page-surface-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%), #F2F0EB;
+      --color-primary-soft: rgba(0, 112, 74, 0.08);
+      --color-primary-soft-active: rgba(0, 112, 74, 0.14);
+      --van-primary-color: #00704A;
+      --van-button-primary-background: #00704A;
+      --van-button-primary-border-color: #00704A;
+      font-size: 17.0667px;
+    }
 
-    <!-- OPEN GRAPH TAGS FOR SOCIAL MEDIA -->
-    <meta property="og:title" content="Mobile Servicing and Accessories Shop">
-    <meta property="og:description" content="Mobile Servicing and Accessories Shop">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <meta property="og:url" content="https://www.easy-premium.com">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="bn_BD">
+    /* ═══════════════════════════════════════════
+       RESET + BASE
+    ═══════════════════════════════════════════ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    <!-- TWITTER CARD TAGS -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Mobile Servicing and Accessories Shop">
-    <meta name="twitter:description" content="refers to a digital prepaid voucher system that lets you get credit you can redeem for different online payments, cards, wallet top‑ups, or gift cards — often without using your own bank or regular debit/credit card directly">
-    <meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SoDo Sans', 'Pike',
+        'Helvetica Neue', 'Noto Sans Bengali', Arial, sans-serif;
+      background: var(--color-page-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    <!-- ================== STRUCTURED DATA FOR GOOGLE ================== -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "url": "https://www.easy-premium.com",
-            "name": "Easy Premium",
-            "description": "Mobile Servicing and Accessories Shop",
-            "logo": "https://cdn-icons-png.flaticon.com/512/8701/8701941.png",
-            "image": "https://cdn-icons-png.flaticon.com/512/8701/8701941.png",
-            "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "Bangladesh"
-            },
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+8801770584994",
-                "contactType": "Customer Service",
-                "email": "support@easy-premium.com",
-                "availableLanguage": ["Bengali", "English"]
-            },
-            "sameAs": [
-                "https://m.me/906635592542978",
-                "https://www.instagram.com/easy__premium",
-                "https://www.youtube.com/@Easy_Premium",
-                "https://t.me/Easy_Pemium",
-                "https://wa.me/01321782961",
-                "https://twitter.com/EasyPremium2026"
-            ]
-        }
-    </script>
+    body {
+      display: flex;
+      justify-content: center;
+    }
 
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "url": "https://www.easy-premium.com",
-            "name": "Easy Premium",
-            "description": "Mobile Servicing and Accessories Shop",
-            "publisher": {
-                "@type": "Organization",
-                "name": "Easy Premium",
-                "logo": "https://cdn-icons-png.flaticon.com/512/8701/8701941.png"
-            }
-        }
-    </script>
+    .layout {
+      width: 100%;
+      max-width: 400px;
+      min-height: 100vh;
+      background: var(--page-surface-bg);
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+    }
 
-    <!-- ================== FAVICONS ================== -->
-    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
-    <meta name="msapplication-TileImage" content="https://cdn-icons-png.flaticon.com/512/8701/8701941.png">
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
-    <!-- PWA MANIFEST -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkVhc3kgUHJlbWl1bSIsCiAgInNob3J0X25hbWUiOiAiRWFzeSBQcmVtaXVtIiwKICAiZGVzY3JpcHRpb24iOiAiUHJlbWl1bSBTZXJ2aWNlcyBmb3IgRGlnaXRhbCBQbGF0Zm9ybXMiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgInRoZW1lX2NvbG9yIjogIiNGNTlGMDAiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxQTFBMkUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL2Nkbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi84NzAxLzg3MDE5NDEucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFzayYmYmxlIgogICAgfQogIF0KfQo=">
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    .app-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
 
-    <meta name="theme-color" content="#0a0a1a">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    .app-nav__bar {
+      background: var(--gradient-tabbar);
+      color: #fff;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+    }
 
-    <!-- EXTERNAL CSS & JS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    .app-nav__title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
 
-    <!-- ================== FIREBASE SDK (CDN) ================== -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
-    </script>
+    /* ═══════════════════════════════════════════
+       PAGE
+    ═══════════════════════════════════════════ */
+    .page {
+      padding-bottom: 90px;
+      min-height: calc(100vh - 52px);
+    }
 
-    <!-- ================== সিকিউরিটি মেটা ট্যাগ ================== -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:; style-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval';">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="format-detection" content="telephone=no, address=no, email=no">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    /* Banner */
+    .product-page__banner-wrap {
+      padding: 12px;
+    }
 
-    <style>
-        /* ========== সম্পূর্ণ CSS ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Noto Sans Bengali', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            color: #fff;
-        }
+    .product-page__banner {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(30, 57, 50, 0.15);
+    }
 
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            width: 100%;
-            height: 100%;
-            background-color: #0a0a1a;
-            /* ⚠️ লম্বা দাড়ি বা স্ক্রলবার রিমুভ করার কোড শুরু */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        html::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-        /* ⚠️ লম্বা দাড়ি বা স্ক্রলবার রিমুভ করার কোড শেষ */
+    /* Shortcuts */
+    .product-page__shortcuts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 14px 12px;
+      margin: 0 12px;
+      background: var(--color-app-bg);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06);
+    }
 
-        body {
-            background: linear-gradient(135deg, #0a0a1a 0%, #121230 50%, #1a1a3a 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #fff;
-            position: relative;
-            -webkit-tap-highlight-color: transparent;
-            /* ⚠️ সাইডে সাদা লাইন বা ওভারফ্লো রিমুভ করার কোড */
-            overflow-x: hidden;
-            width: 100%;
-        }
+    .product-page__shortcut {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text);
+      cursor: pointer;
+      padding: 4px 0;
+    }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 30%, rgba(255, 152, 0, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(255, 152, 0, 0.03) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
+    .product-page__shortcut-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--color-primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
 
-        .header {
-            background: rgba(10, 10, 26, 0.95);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            width: 100%;
-            flex-wrap: wrap;
-            gap: 10px;
-            border-bottom: none !important; /* ⚠️ নিচের সাদা লাইন রিমুভ */
-        }
+    .product-page__shortcut:active .product-page__shortcut-icon {
+      background: var(--color-primary-soft-active);
+    }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-            min-width: 200px;
-        }
+    .product-page__shortcut-icon img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            transition: transform 0.3s;
-            flex-shrink: 0;
-        }
+    /* Product list */
+    .product-page__list {
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-        .logo:hover {
-            transform: scale(1.02);
-        }
+    /* ═══════════════════════════════════════════
+       PRODUCT CARD
+    ═══════════════════════════════════════════ */
+    .product-card {
+      background: var(--color-card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(30, 57, 50, 0.08);
+      position: relative;
+      transition: transform 0.15s;
+    }
 
-        .logo-image-container {
-            width: 45px;
-            height: 45px;
-            min-width: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
-            transition: all 0.3s;
-            border-radius: 8px;
-            background: white;
-            padding: 5px;
-        }
+    .product-card:active { transform: scale(0.99); }
 
-        .logo-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-        .logo-main {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #ff9800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-        .logo-sub {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #00bcd4;
-            letter-spacing: 0.3px;
-            margin-top: 2px;
-            white-space: nowrap;
-        }
+    .product-card__img-box {
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #EAF3EF, #F2F0EB);
+    }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .product-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        /* ============================================
-           ✅ সার্চ বার - সাদা লাইন/দাড়ি রিমুভ করা হয়েছে
-           ============================================ */
-        .search-container {
-            display: block;
-            flex: 1;
-            max-width: 300px;
-            margin-left: 20px;
-            min-width: 150px;
-        }
-        .search-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px 40px 12px 15px;
-            border-radius: 25px;
-            border: 2px solid #ff9800;
-            background: rgba(0, 0, 0, 0.5); /* ✅ সাদা লাইন রিমুভ - গাঢ় ব্যাকগ্রাউন্ড */
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s;
-        }
-        .search-input:focus {
-            background: rgba(0, 0, 0, 0.7); /* ✅ ফোকাসেও গাঢ় */
-            box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
-        }
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .search-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: #ff9800;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            padding: 5px;
-        }
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: rgba(20, 20, 40, 0.95);
-            border-radius: 10px;
-            margin-top: 5px;
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 1001;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid #ff9800;
-            display: none;
-        }
-        .search-result-item {
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 152, 0, 0.2);
-        }
-        .search-result-item:hover {
-            background: rgba(255, 152, 0, 0.1);
-        }
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-        .search-result-icon {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-            border-radius: 4px;
-        }
-        .search-result-content {
-            flex: 1;
-            min-width: 0;
-        }
-        .search-result-name {
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 3px;
-            font-size: 0.95rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .search-result-desc {
-            font-size: 0.75rem;
-            color: #b0bec5;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        .search-result-price {
-            font-weight: 700;
-            color: #ff9800;
-            font-size: 0.95rem;
-            white-space: nowrap;
-        }
+    .product-card__name {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--gradient-card);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 12px rgba(0, 112, 74, 0.4);
+    }
 
-        /* হিরো */
-        .hero {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.9)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
-            border-top: none !important; /* ⚠️ উপরের সাদা লাইন রিমুভ */
-        }
-        .hero h1 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #ff9800;
-            line-height: 1.3;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 15px;
-        }
-        .hero p {
-            font-size: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #ddd;
-            line-height: 1.6;
-            padding: 0 15px;
-        }
+    .product-card__tags {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px 6px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
 
-        /* প্ল্যাটফর্ম */
-        .platforms-section {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-            z-index: 1;
-        }
-        .platforms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        .platform-card {
-            background: rgba(20, 20, 40, 0.9);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: default;
-            border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .platform-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border-color: #ff9800;
-        }
-        .platform-header {
-            padding: 20px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            flex-shrink: 0;
-        }
-        .platform-icon {
-            width: auto;
-            height: 5rem;
-            margin-bottom: 10px;
-            object-fit: contain;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-        .platform-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .platform-description {
-            padding: 15px;
-            color: #b0bec5;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            flex: 1;
-        }
-        .platform-features {
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 8px;
-            color: #b0bec5;
-            font-size: 0.9rem;
-        }
-        .feature i {
-            color: #4caf50;
-            margin-right: 8px;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-            margin-top: 3px;
-        }
-        .platform-price {
-            padding: 15px;
-            text-align: center;
-            background: rgba(255, 152, 0, 0.1);
-            border-top: none !important; /* ⚠️ এখানেও সাদা লাইন রিমুভ করা হলো */
-            flex-shrink: 0;
-        }
-        .price {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #ff9800;
-            margin-bottom: 5px;
-        }
-        .price-desc {
-            color: #b0bec5;
-            font-size: 0.85rem;
-        }
-        .buy-button {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(45deg, #0008ff, #ff5722);
-            color: white;
-            border: none;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex-shrink: 0;
-        }
-        .buy-button:hover {
-            background: linear-gradient(45deg, #ff5722, #ff9800);
-        }
+    .product-card__tags span {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
 
-        /* ওভারলে (শুধু কুকি) */
-        .website-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .overlay-content {
-            max-width: 500px;
-            width: 100%;
-            background: rgba(20, 20, 40, 0.95);
-            padding: 40px 30px;
-            border-radius: 15px;
-            border: 2px solid #ff9800;
-            margin: 20px;
-        }
-        .overlay-message {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .cookie-link {
-            display: inline-block;
-            color: #00bcd4;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            margin-bottom: 20px;
-            transition: color 0.3s;
-        }
-        .cookie-link:hover {
-            color: #ff9800;
-        }
-        .accept-btn {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            width: 100%;
-            max-width: 250px;
-            margin: 0 auto;
-            background: linear-gradient(45deg, #fb00ff, #ff2222);
-            color: white;
-        }
-        .accept-btn:hover {
-            background: linear-gradient(45deg, #ff2222, #0008ff);
-            transform: translateY(-2px);
-        }
+    .product-card__tags em {
+      font-style: normal;
+      color: var(--color-primary);
+      font-weight: 700;
+      font-size: 14px;
+    }
 
-        .loading-spinner {
-            text-align: center;
-            padding: 40px 20px;
-            grid-column: 1 / -1;
-        }
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #ff9800;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+    .product-card__price {
+      padding: 4px 14px 12px;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      letter-spacing: 0.3px;
+    }
 
-        /* ফুটার */
-        .footer {
-            background: rgba(10, 10, 26, 0.95);
-            padding: 40px 20px 30px;
-            text-align: center;
-            width: 100%;
-            margin-top: 40px;
-            position: relative;
-            z-index: 1;
-        }
-        .footer-policy-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .footer-policy-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-        .footer-policy-links a:hover {
-            color: #ff9800;
-            background: rgba(255, 152, 0, 0.1);
-            border-color: #ff9800;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 0 auto 30px;
-            flex-wrap: wrap;
-            max-width: 500px;
-        }
-        .social-link {
-            color: #fff;
-            font-size: 1.5rem;
-            transition: all 0.3s;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            text-decoration: none;
-        }
-        .social-link:hover {
-            color: #ff9800;
-            background: rgba(255, 152, 0, 0.2);
-            transform: translateY(-5px) scale(1.1);
-        }
-        .social-link:nth-child(1) i {
-            color: #1877F2;
-        }
-        .social-link:nth-child(2) i {
-            color: #E4405F;
-        }
-        .social-link:nth-child(3) i {
-            color: #FF0000;
-        }
-        .social-link:nth-child(4) i {
-            color: #000000;
-        }
-        .social-link:nth-child(5) i {
-            color: #25D366;
-        }
-        .social-link:nth-child(6) i {
-            color: #0088cc;
-        }
-        .copyright {
-            color: #b0bec5;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+    .product-card__buy {
+      margin: 0 14px 14px;
+      padding: 12px;
+      background: var(--gradient-btn);
+      color: #fff;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 112, 74, 0.25);
+      transition: transform 0.15s;
+      user-select: none;
+    }
 
-        /* ফ্লোটিং মেসেঞ্জার */
-        .messenger-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #0084ff, #00b2ff);
-            border-radius: 50%;
-            box-shadow: 0 10px 25px rgba(0, 132, 255, 0.4);
-            transition: all 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            animation: messengerPulse 2s infinite;
-        }
-        .messenger-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(0, 132, 255, 0.6);
-        }
-        .messenger-float i {
-            color: white;
-            font-size: 2rem;
-        }
-        @keyframes messengerPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 132, 255, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(0, 132, 255, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 132, 255, 0);
-            }
-        }
+    .product-card__buy:active { transform: scale(0.97); }
 
-        /* ========== মোবাইল রেসপন্সিভ ========== */
-        @media (max-width: 768px) {
-            .search-container {
-                display: block !important;
-                max-width: 100%;
-                margin-left: 0;
-                margin-top: 5px;
-                width: 100%;
-                flex-basis: 100%;
-                order: 3;
-            }
-            .header {
-                flex-wrap: wrap;
-                padding: 10px 12px;
-            }
-            .header-left {
-                flex-wrap: wrap;
-                gap: 8px;
-                width: 100%;
-            }
-            .logo {
-                flex-shrink: 0;
-            }
-            .hero h1 {
-                font-size: 1.7rem;
-            }
-            .platforms-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 15px;
-            }
-        }
-        @media (max-width: 480px) {
-            .header {
-                padding: 8px 10px;
-            }
-            .logo-image-container {
-                width: 40px;
-                height: 40px;
-                min-width: 40px;
-            }
-            .logo-main {
-                font-size: 1.1rem;
-            }
-            .logo-sub {
-                font-size: 0.7rem;
-            }
-            .hero {
-                padding: 30px 15px;
-                min-height: 200px;
-            }
-            .hero h1 {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-            .hero p {
-                font-size: 0.9rem;
-            }
-            .platforms-section {
-                padding: 25px 12px;
-            }
-            .platforms-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .platform-header {
-                padding: 15px;
-            }
-            .platform-icon {
-                height: 4rem;
-            }
-            .platform-name {
-                font-size: 1.2rem;
-            }
-            .price {
-                font-size: 1.3rem;
-            }
-            .footer {
-                padding: 30px 15px 25px;
-            }
-            .footer-policy-links {
-                gap: 10px;
-                flex-direction: column;
-            }
-            .social-links {
-                gap: 10px;
-            }
-            .social-link {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-            .messenger-float {
-                bottom: 20px;
-                right: 20px;
-                width: 55px;
-                height: 55px;
-            }
-            .messenger-float i {
-                font-size: 1.8rem;
-            }
-            .search-container {
-                margin-top: 8px;
-                min-width: 100%;
-            }
-            .search-input {
-                font-size: 0.9rem;
-                padding: 10px 35px 10px 12px;
-            }
-        }
-    </style>
+    .product-card__buy svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+    }
 
-    <noscript>
-        <style>
-            body {
-                display: none !important;
-            }
-            html {
-                background: #000 !important;
-                height: 100% !important;
-                overflow: hidden !important;
-            }
-        </style>
-        <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:#ff0000;display:flex;align-items:center;justify-content:center;z-index:999999;font-family:monospace;text-align:center;flex-direction:column;">
-            <div style="animation: pulse 1s infinite;">
-                <h1 style="font-size:120px;margin:0;text-shadow:0 0 20px #ff0000;">We have an API key so JavaScript is disabled.</h1>
-                <h1 style="font-size:72px;margin:20px 0;letter-spacing:10px;">Please do not modify or use JavaScript.</h1>
-                <p style="font-size:24px;margin:20px 0;color:#fff;">JavaScript is DISABLED</p>
-                <p style="font-size:18px;color:#ff6666;">Nice try, script kiddie</p>
-                <p style="font-size:16px;color:#666;margin-top:30px;">Enable JavaScript to access this site</p>
-            </div>
-        </div>
-        <style>
-            @keyframes pulse {
-                0%,
-                100% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.1);
-                    opacity: 0.8;
-                }
-            }
-        </style>
-    </noscript>
+    /* ═══════════════════════════════════════════
+       TABBAR
+    ═══════════════════════════════════════════ */
+    .app-tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
+      background: var(--gradient-tabbar);
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .app-tabbar__track {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0 10px;
+    }
+
+    .app-tabbar__item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      opacity: 0.55;
+      transition: opacity 0.2s;
+      padding: 4px 0;
+    }
+
+    .app-tabbar__item--active { opacity: 1; }
+
+    .app-tabbar__icon-wrap {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-tabbar__icon {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .app-tabbar__item--active .app-tabbar__icon {
+      filter: none;
+    }
+
+    .app-tabbar__label {
+      font-size: 10px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════
+       NOTICE DIALOG / POPUP
+    ═══════════════════════════════════════════ */
+    .van-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .van-overlay--show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .van-popup--center {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -46%);
+      z-index: 2001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .van-popup--center--show {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+
+    .notice-dialog {
+      background: #fff;
+      border-radius: 20px;
+      width: 88vw;
+      max-width: 360px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .notice-dialog__title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .notice-dialog__body {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--color-text);
+      overflow-y: auto;
+      margin-bottom: 14px;
+      padding-right: 4px;
+    }
+
+    .notice-dialog__body p { margin: 0; }
+
+    .notice-dialog__cs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .notice-dialog__cs-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--gradient-actions);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--color-text);
+    }
+
+    .notice-dialog__cs-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .notice-dialog__cs-item .arrow {
+      margin-left: auto;
+      color: var(--color-text-muted);
+      font-size: 16px;
+    }
+
+    .notice-dialog__btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--gradient-btn);
+      color: #fff;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0, 112, 74, 0.3);
+    }
+
+    /* ═══════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120%);
+      background: var(--color-primary-dark);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 5000;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 88vw;
+      text-align: center;
+    }
+
+    .toast--show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast--error { background: var(--color-status-failed); }
+    .toast--success { background: var(--color-status-success); }
+
+    /* ═══════════════════════════════════════════
+       OTHER TABS (My Products / My Team / Me)
+    ═══════════════════════════════════════════ */
+    .tab-page {
+      display: none;
+      padding: 16px 12px;
+      min-height: calc(100vh - 52px);
+    }
+
+    .tab-page--active { display: block; }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      text-align: center;
+      color: var(--color-text-muted);
+    }
+
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-state p { font-size: 14px; }
+
+    .profile-card {
+      background: var(--gradient-card);
+      color: #fff;
+      padding: 24px 20px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::after {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      top: -50px;
+      right: -50px;
+    }
+
+    .profile-card__avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .profile-card__uid {
+      font-size: 11px;
+      opacity: 0.75;
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+
+    .profile-card__balance-label {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-bottom: 4px;
+    }
+
+    .profile-card__balance {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .menu-list {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06);
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--color-text);
+    }
+
+    .menu-item:last-child { border-bottom: none; }
+
+    .menu-item .arrow {
+      margin-left: auto;
+      color: var(--color-text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       LOADING
+    ═══════════════════════════════════════════ */
+    .loading-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--color-primary-soft);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
-    <!-- Website Overlay (Cookie Consent) -->
-    <div id="websiteOverlay" class="website-overlay">
-        <div class="overlay-content">
-            <div class="overlay-message">এই ওয়েবসাইট ব্যবহার করতে আপনাকে গোপনীয়তা নীতি সম্মতি প্রদান করতে হবে।</div>
-            <a href="https://www.easy-premium.com/privacy-refund-policy-terms-of-service.html" target="_blank" class="cookie-link">গোপনীয়তা নীতি দেখুন</a><br><br>
-            <button id="overlayAcceptBtn" class="accept-btn">সম্মতি দিন</button>
-        </div>
+  <div class="layout" id="app">
+    <!-- ═══════════════════════════════════════
+         NAVBAR
+    ═══════════════════════════════════════ -->
+    <div class="app-nav">
+      <div class="app-nav__bar">
+        <div class="app-nav__title" id="navTitle">প্রোডাক্ট</div>
+      </div>
     </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <a href="#" class="logo">
-                <div class="logo-image-container"><img src="https://cdn-icons-png.flaticon.com/512/8701/8701941.png" alt="Easy Premium Logo" class="logo-image"></div>
-                <div class="logo-text"><div class="logo-main">EASY PREMIUM</div><div class="logo-sub">Accessories Shop</div></div>
-            </a>
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <input type="text" id="searchInput" class="search-input" placeholder="সার্চ করুন...">
-                    <button id="searchBtn" class="search-btn"><i class="fas fa-search"></i></button>
-                    <div id="searchResults" class="search-results"></div>
-                </div>
+    <!-- ═══════════════════════════════════════
+         TAB 1: PRODUCT PAGE
+    ═══════════════════════════════════════ -->
+    <div class="tab-page tab-page--active" id="tab-product">
+      <div class="page">
+        <div class="product-page__banner-wrap">
+          <img
+            class="product-page__banner"
+            src="https://image.starbucksbd.com/images/95643beb86a1/media/1791027262964_cfe241e9b1a1584b.jpg"
+            alt="banner"
+            onerror="this.style.display='none'"
+          >
+        </div>
+
+        <div class="product-page__shortcuts">
+          <div class="product-page__shortcut" onclick="showToast('রিচার্জ ফিচার শীঘ্রই আসছে')">
+            <div class="product-page__shortcut-icon">
+              <img src="https://img.icons8.com/ios/100/00704A/money-transfer.png" alt="recharge">
             </div>
+            <span>রিচার্জ</span>
+          </div>
+          <div class="product-page__shortcut" onclick="showToast('উত্তোলন ফিচার শীঘ্রই আসছে')">
+            <div class="product-page__shortcut-icon">
+              <img src="https://img.icons8.com/ios/100/00704A/cash-in-hand.png" alt="withdraw">
+            </div>
+            <span>উত্তোলন</span>
+          </div>
+          <div class="product-page__shortcut" onclick="showToast('গ্রাহক সেবা শীঘ্রই আসছে')">
+            <div class="product-page__shortcut-icon">
+              <img src="https://img.icons8.com/ios/100/00704A/headset.png" alt="cs">
+            </div>
+            <span>গ্রাহক সেবা</span>
+          </div>
         </div>
-        <div class="header-right">
+
+        <div class="product-page__list" id="productList">
+          <div class="loading-screen"><div class="loading-spinner"></div></div>
         </div>
-    </header>
+      </div>
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>মোবাইল সার্ভিসিং ও এক্সেসরি</h1>
-        <p>সব ধরনের মোবাইল রিপেয়ার করা হয় ডিসপ্লে ব্যাটারি মাদারবোর্ড 🔹 অরিজিনাল ও উন্নত মানের এক্সেসরিজ পাইকারি ও খুচরা বিক্রয় 🔹 যেকোনো ফোনের লক ও FRP আনলক করা হয় </p>
-    </section>
+    <!-- ═══════════════════════════════════════
+         TAB 2: MY PRODUCTS
+    ═══════════════════════════════════════ -->
+    <div class="tab-page" id="tab-my-products">
+      <div class="empty-state" id="myProductsEmpty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 7l-8-4-8 4 8 4 8-4z"/>
+          <path d="M4 7v10l8 4 8-4V7"/>
+        </svg>
+        <p>আপনি এখনো কোনো প্রোডাক্ট কেনেননি</p>
+      </div>
+      <div id="myProductsList" style="display:none; display:flex; flex-direction:column; gap:12px;"></div>
+    </div>
 
-    <!-- Platforms Section -->
-    <section class="platforms-section">
-        <div id="platforms-grid" class="platforms-grid"><div class="loading-spinner"><div class="spinner"></div><p>প্ল্যাটফর্ম লোড হচ্ছে...</p></div></div>
-    </section>
+    <!-- ═══════════════════════════════════════
+         TAB 3: MY TEAM
+    ═══════════════════════════════════════ -->
+    <div class="tab-page" id="tab-my-team">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <p>আপনার রেফারেল লিংক শীঘ্রই যুক্ত হবে</p>
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-policy-links">
-            <a href="https://easy-premium.com/privacy-refund-policy-terms-of-service?data=PrivacyPolicy">Privacy Policy</a>
-            <a href="https://easy-premium.com/privacy-refund-policy-terms-of-service?data=PaymentSolutions">Payment Solutions</a>
-            <a href="https://easy-premium.com/privacy-refund-policy-terms-of-service?data=TermsandConditions">Terms and Conditions</a>
-            <a href="https://easy-premium.com/privacy-refund-policy-terms-of-service?data=RefundandReturnsPolicy">Refund and Returns Policy</a>
+    <!-- ═══════════════════════════════════════
+         TAB 4: ME
+    ═══════════════════════════════════════ -->
+    <div class="tab-page" id="tab-me">
+      <div class="profile-card">
+        <div class="profile-card__avatar" id="avatar">?</div>
+        <div class="profile-card__uid" id="uidText">সংযোগ হচ্ছে...</div>
+        <div class="profile-card__balance-label">ব্যালেন্স</div>
+        <div class="profile-card__balance" id="balanceText">৳ 0.00</div>
+      </div>
+
+      <div class="menu-list">
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
+          <span>আমার অর্ডার</span><span class="arrow">›</span>
         </div>
-        <div class="social-links">
-            <a href="https://m.me/906635592542978" class="social-link"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.instagram.com/easy__premium/" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.youtube.com/@Easy_Premium" class="social-link"><i class="fab fa-youtube"></i></a>
-            <a href="https://twitter.com/EasyPremium2026" class="social-link"><i class="fab fa-twitter"></i></a>
-            <a href="https://wa.me/1770584994" class="social-link"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://t.me/Easy_Pemium" class="social-link"><i class="fab fa-telegram"></i></a>
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
+          <span>রিচার্জ হিস্ট্রি</span><span class="arrow">›</span>
         </div>
-        <div class="copyright">
-            © 2026 Easy Premium. TIN : 478475635566<br>
-            কন্টাক্ট: support@easy-premium.com | হেল্পলাইন: +8801321782961
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
+          <span>উত্তোলন হিস্ট্রি</span><span class="arrow">›</span>
         </div>
-    </footer>
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
+          <span>সেটিংস</span><span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
 
-    <!-- Floating Messenger -->
-    <a href="https://wa.me/qr/D3HNIB5KS4VNM1" target="_blank" class="messenger-float" title="মেসেঞ্জারে কথা বলুন"><i class="fab fa-facebook-messenger"></i></a>
+    <!-- ═══════════════════════════════════════
+         TABBAR
+    ═══════════════════════════════════════ -->
+    <nav class="app-tabbar">
+      <div class="app-tabbar__track" id="tabbar"></div>
+    </nav>
 
-    <script>
-        // ================== FIREBASE INITIALIZATION ==================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBt9t6mcjUtXxX2igAJdseuIIc8pP_QPEw",
-            authDomain: "easy-premium.firebaseapp.com",
-            databaseURL: "https://easy-premium-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "easy-premium",
-            storageBucket: "easy-premium.firebasestorage.app",
-            messagingSenderId: "155891252265",
-            appId: "1:155891252265:web:77ab41de24231e8e5ef038",
-            measurementId: "G-CHL8K8HRPX"
-        };
+    <!-- ═══════════════════════════════════════
+         NOTICE DIALOG
+    ═══════════════════════════════════════ -->
+    <div class="van-overlay" id="overlay"></div>
+    <div class="van-popup--center" id="noticePopup">
+      <div class="notice-dialog">
+        <div class="notice-dialog__title">প্ল্যাটফর্মের বিবরণ</div>
+        <div class="notice-dialog__body">
+          <p>১. রেজিস্ট্রেশন বোনাস: ৩০০ টাকা</p>
+          <p><br></p>
+          <p>২. রেফারেল বোনাস: ৪০% (লেভেল ১), ১% (লেভেল ২), ১% (লেভেল ৩)</p>
+          <p><br></p>
+          <p>৩. জমা এবং উত্তোলন ২৪/৭ উপলব্ধ; দৈনিক উত্তোলনের কোনো সীমা নেই</p>
+          <p><br></p>
+          <p>৪. ভিআইপি টিয়ার সিস্টেম + দৈনিক বেতন</p>
+          <p><br></p>
+          <p>৫. ১,০০০ টাকা জমা দিন এবং সাথে সাথে ৩০০ টাকা উত্তোলন করুন</p>
+          <p><br></p>
+          <p>৬. আপনার নিজের তহবিল দিয়ে এখনই মুনাফা অর্জন শুরু করুন!</p>
+        </div>
+        <div class="notice-dialog__cs-list">
+          <div class="notice-dialog__cs-item" onclick="window.open('https://t.me/','_blank')">
+            <img class="notice-dialog__cs-icon" src="https://image.starbucksbd.com/images/1d731091f8bf/media/1790605083445_288c962c6723aeaa.png" alt="tg" onerror="this.src='https://img.icons8.com/color/96/telegram-app.png'">
+            <span>টেলিগ্রাম গ্রুপ</span>
+            <span class="arrow">›</span>
+          </div>
+          <div class="notice-dialog__cs-item" onclick="window.open('https://t.me/','_blank')">
+            <img class="notice-dialog__cs-icon" src="https://image.starbucksbd.com/images/3eccf22fc8bf/media/1789580245670_4d2afb62ba077f04.jpg" alt="tg-ch" onerror="this.src='https://img.icons8.com/color/96/telegram-app.png'">
+            <span>টেলিগ্রাম চ্যানেল</span>
+            <span class="arrow">›</span>
+          </div>
+        </div>
+        <button class="notice-dialog__btn" onclick="closeNotice()">ঠিক আছে</button>
+      </div>
+    </div>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    <div class="toast" id="toast"></div>
+  </div>
 
-        // ================== 🔥 JSON ফাইলের URL ==================
-        const JSON_DATA_URL = 'https://easy-premium.github.io/copyProdux/firebas_data.json';
+  <script type="module">
+    /* ═══════════════════════════════════════════════
+       FIREBASE INIT
+    ═══════════════════════════════════════════════ */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+    import {
+      getAuth,
+      signInAnonymously,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      set,
+      push,
+      onValue,
+      update
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        // ================== কুকি চেক ==================
-        function checkCookieConsent() {
-            if (localStorage.getItem('cookieAccepted') === 'true') {
-                document.getElementById('websiteOverlay').style.display = 'none';
-                return true;
-            }
-            document.getElementById('websiteOverlay').style.display = 'flex';
-            return false;
-        }
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJL3a4bZnXa_fRJEQsRK_aJecp36Vdx0I",
+      authDomain: "alamin-5f9c6.firebaseapp.com",
+      databaseURL: "https://alamin-5f9c6-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "alamin-5f9c6",
+      storageBucket: "alamin-5f9c6.firebasestorage.app",
+      messagingSenderId: "39062913891",
+      appId: "1:39062913891:web:1028fd48b0b50d609d8956",
+      measurementId: "G-B04QBWFZMY"
+    };
 
-        document.getElementById('overlayAcceptBtn').addEventListener('click', function() {
-            localStorage.setItem('cookieAccepted', 'true');
-            document.getElementById('websiteOverlay').style.display = 'none';
-            location.reload();
+    const firebaseApp = initializeApp(firebaseConfig);
+    try { getAnalytics(firebaseApp); } catch (e) {}
+    const auth = getAuth(firebaseApp);
+    const db = getDatabase(firebaseApp);
+
+    /* ═══════════════════════════════════════════════
+       FALLBACK PRODUCTS (Firebase খালি থাকলে ব্যবহার হবে)
+    ═══════════════════════════════════════════════ */
+    const FALLBACK_PRODUCTS = {
+      vip1: { name: 'VIP1', price: 1000, dailyIncome: 250, totalIncome: 25000,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg' },
+      vip2: { name: 'VIP2', price: 3000, dailyIncome: 789, totalIncome: 78900,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933228395_58268a000c479b3b.jpg' },
+      vip3: { name: 'VIP3', price: 6000, dailyIncome: 1666, totalIncome: 166600,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933220774_0f8a37f828535819.jpg' },
+      vip4: { name: 'VIP4', price: 12000, dailyIncome: 3530, totalIncome: 353000,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933210978_3b6653dcd035a83f.jpg' },
+      vip5: { name: 'VIP5', price: 25000, dailyIncome: 8333, totalIncome: 833300,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933255914_c90edbbc946f655b.jpg' },
+      vip6: { name: 'VIP6', price: 50000, dailyIncome: 17857, totalIncome: 1785700,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933263996_d5ff73a60df8bd47.jpg' },
+      vip7: { name: 'VIP7', price: 100000, dailyIncome: 38461, totalIncome: 3846100,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933247454_a36806e964eeb46b.jpg' },
+      vip8: { name: 'VIP8', price: 200000, dailyIncome: 83333, totalIncome: 8333300,
+        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933200577_5dcd1366bef8d7f6.jpg' }
+    };
+
+    /* ═══════════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════════ */
+    let currentUser = null;
+    let userData = { balance: 0, orders: {} };
+    let products = {};
+    let currentTab = 'product';
+
+    /* ═══════════════════════════════════════════════
+       DOM HELPERS
+    ═══════════════════════════════════════════════ */
+    const $ = (id) => document.getElementById(id);
+
+    const tabs = [
+      { id: 'product', label: 'প্রোডাক্ট', nav: 'প্রোডাক্ট',
+        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgN2wtOC00LTggNCA4IDQgOC00eiIvPjxwYXRoIGQ9Ik00IDd2MTBsOCA0IDgtNFY3Ii8+PC9zdmc+' },
+      { id: 'my-products', label: 'আমার প্রোডাক্ট', nav: 'আমার প্রোডাক্ট',
+        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTYgNEg4YTIgMiAwIDAgMC0yIDJ2MTRsNi00IDYgNFY2YTIgMiAwIDAgMC0yLTJ6Ii8+PC9zdmc+' },
+      { id: 'my-team', label: 'আমার টিম', nav: 'আমার টিম',
+        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjF2LTJhNCA0IDAgMCAwLTQtNEg1YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI3IiByPSI0Ii8+PHBhdGggZD0iTTIzIDIxdjJhNCA0IDAgMCAwLTMtMy44NyIvPjxwYXRoIGQ9Ik0xNiAzLjEzYTQgNCAwIDAgMSAwIDcuNzUiLz48L3N2Zz4=' },
+      { id: 'me', label: 'আমার', nav: 'আমার',
+        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==' }
+    ];
+
+    /* ═══════════════════════════════════════════════
+       TABBAR RENDER
+    ═══════════════════════════════════════════════ */
+    function renderTabbar() {
+      $('tabbar').innerHTML = tabs.map(t => `
+        <div class="app-tabbar__item ${currentTab === t.id ? 'app-tabbar__item--active' : ''}"
+             onclick="switchTab('${t.id}')">
+          <div class="app-tabbar__icon-wrap">
+            <img class="app-tabbar__icon" src="${t.icon}" alt="${t.label}">
+          </div>
+          <span class="app-tabbar__label">${t.label}</span>
+        </div>
+      `).join('');
+    }
+
+    window.switchTab = function (tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('tab-page--active'));
+      $('tab-' + tabId).classList.add('tab-page--active');
+      const tab = tabs.find(t => t.id === tabId);
+      $('navTitle').textContent = tab.nav;
+      renderTabbar();
+      if (tabId === 'my-products') renderMyProducts();
+      if (tabId === 'me') renderProfile();
+      window.scrollTo(0, 0);
+    };
+
+    /* ═══════════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════════ */
+    let toastTimer = null;
+    window.showToast = function (msg, type = '') {
+      const el = $('toast');
+      el.textContent = msg;
+      el.className = 'toast toast--show ' + (type ? 'toast--' + type : '');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { el.classList.remove('toast--show'); }, 2500);
+    };
+
+    /* ═══════════════════════════════════════════════
+       NOTICE POPUP
+    ═══════════════════════════════════════════════ */
+    window.closeNotice = function () {
+      $('noticePopup').classList.remove('van-popup--center--show');
+      $('overlay').classList.remove('van-overlay--show');
+      sessionStorage.setItem('noticeShown', '1');
+    };
+
+    function openNotice() {
+      $('noticePopup').classList.add('van-popup--center--show');
+      $('overlay').classList.add('van-overlay--show');
+    }
+
+    /* ═══════════════════════════════════════════════
+       PRODUCTS RENDER
+    ═══════════════════════════════════════════════ */
+    function renderProducts() {
+      const listEl = $('productList');
+      const entries = Object.entries(products);
+
+      if (!entries.length) {
+        listEl.innerHTML = `<div class="empty-state"><p>কোনো প্রোডাক্ট পাওয়া যায়নি</p></div>`;
+        return;
+      }
+
+      listEl.innerHTML = entries.map(([id, p]) => `
+        <div class="product-card">
+          <div class="product-card__img-box">
+            <img class="product-card__img" src="${p.image}" alt="${p.name}"
+                 onerror="this.src='https://via.placeholder.com/400x150/EAF3EF/00704A?text=${encodeURIComponent(p.name)}'">
+          </div>
+          <div class="product-card__name">${p.name}</div>
+          <div class="product-card__tags">
+            <span>দৈনিক আয় <em>৳ ${fmt(p.dailyIncome)}</em></span>
+            <span>মোট আয় <em>৳ ${fmt(p.totalIncome)}</em></span>
+          </div>
+          <div class="product-card__price">৳ ${fmt(p.price)}</div>
+          <div class="product-card__buy" onclick="buyProduct('${id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            কিনুন
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function fmt(n) {
+      return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    /* ═══════════════════════════════════════════════
+       BUY PRODUCT
+    ═══════════════════════════════════════════════ */
+    window.buyProduct = async function (productId) {
+      if (!currentUser) {
+        showToast('লোড হচ্ছে, অপেক্ষা করুন...', 'error');
+        return;
+      }
+
+      const p = products[productId];
+      if (!p) return;
+
+      if (!confirm(`${p.name} কিনতে চান? মূল্য ৳ ${fmt(p.price)}`)) return;
+
+      if (userData.balance < p.price) {
+        showToast(`ব্যালেন্স অপর্যাপ্ত। প্রয়োজন ৳ ${fmt(p.price)}`, 'error');
+        return;
+      }
+
+      try {
+        const newBalance = userData.balance - p.price;
+        const orderRef = push(ref(db, `users/${currentUser.uid}/orders`));
+        await set(orderRef, {
+          productId,
+          name: p.name,
+          price: p.price,
+          dailyIncome: p.dailyIncome,
+          totalIncome: p.totalIncome,
+          purchasedAt: Date.now()
         });
+        await update(ref(db, `users/${currentUser.uid}`), { balance: newBalance });
+        showToast(`${p.name} সফলভাবে কেনা হয়েছে!`, 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('কেনাকাটা ব্যর্থ হয়েছে', 'error');
+      }
+    };
 
-        // ================== এলিমেন্ট সিলেক্ট ==================
-        const platformsGrid = document.getElementById('platforms-grid');
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const searchResults = document.getElementById('searchResults');
-        let allPlatforms = [];
+    /* ═══════════════════════════════════════════════
+       MY PRODUCTS
+    ═══════════════════════════════════════════════ */
+    function renderMyProducts() {
+      const listEl = $('myProductsList');
+      const emptyEl = $('myProductsEmpty');
+      const orders = userData.orders ? Object.values(userData.orders) : [];
 
-        // ডিফল্ট ইমেজ
-        const DEFAULT_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"%3E%3Crect width="150" height="150" fill="%23333"/%3E%3Ctext x="75" y="75" font-family="Arial" font-size="16" fill="%23aaa" text-anchor="middle" dominant-baseline="central"%3ENo Image%3C/text%3E%3C/svg%3E';
+      if (!orders.length) {
+        listEl.style.display = 'none';
+        emptyEl.style.display = 'flex';
+        return;
+      }
 
-        // ================== 🌐 JSON ফাইল থেকে লোড ==================
-        async function loadFromJSON() {
-            try {
-                const res = await fetch(JSON_DATA_URL, { cache: 'no-store' });
-                if (!res.ok) return null;
-                const data = await res.json();
-                if (!data) return null;
+      emptyEl.style.display = 'none';
+      listEl.style.display = 'flex';
+      listEl.innerHTML = orders.map(o => `
+        <div class="product-card">
+          <div class="product-card__name">${o.name}</div>
+          <div class="product-card__tags">
+            <span>দৈনিক আয় <em>৳ ${fmt(o.dailyIncome)}</em></span>
+            <span>মোট আয় <em>৳ ${fmt(o.totalIncome)}</em></span>
+          </div>
+          <div class="product-card__price">৳ ${fmt(o.price)}</div>
+          <div style="padding: 0 14px 14px; font-size: 11px; color: var(--color-text-muted);">
+            কেনা: ${new Date(o.purchasedAt).toLocaleString('bn-BD')}
+          </div>
+        </div>
+      `).join('');
+    }
 
-                let pricingData = null;
-                if (Array.isArray(data)) {
-                    pricingData = data;
-                } else if (data.pricingPlans1) {
-                    pricingData = data.pricingPlans1;
-                } else {
-                    pricingData = data;
-                }
+    /* ═══════════════════════════════════════════════
+       PROFILE
+    ═══════════════════════════════════════════════ */
+    function renderProfile() {
+      if (!currentUser) return;
+      $('avatar').textContent = currentUser.uid.slice(0, 1).toUpperCase();
+      $('uidText').textContent = 'UID: ' + currentUser.uid;
+      $('balanceText').textContent = '৳ ' + fmt(userData.balance || 0);
+    }
 
-                if (!pricingData) return null;
-
-                const isEmpty = Array.isArray(pricingData)
-                    ? pricingData.filter(x => x && typeof x === 'object').length === 0
-                    : Object.keys(pricingData).length === 0;
-
-                if (isEmpty) return null;
-
-                return pricingData;
-            } catch (e) {
-                console.warn('JSON ফাইল থেকে ডেটা লোড ব্যর্থ:', e);
-                return null;
-            }
+    /* ═══════════════════════════════════════════════
+       LOAD PRODUCTS (Firebase → fallback)
+    ═══════════════════════════════════════════════ */
+    async function loadProducts() {
+      try {
+        const snap = await get(ref(db, 'products'));
+        if (snap.exists()) {
+          products = snap.val();
+        } else {
+          // Firebase খালি হলে fallback দেখাবো ও Firebase-এ সেভ করে দেবো
+          products = FALLBACK_PRODUCTS;
+          await set(ref(db, 'products'), FALLBACK_PRODUCTS).catch(() => {});
         }
+      } catch (err) {
+        console.warn('Products load failed, using fallback:', err);
+        products = FALLBACK_PRODUCTS;
+      }
+      renderProducts();
+    }
 
-        // ================== প্রোডাক্ট ডেটা রেন্ডার ==================
-        function renderPricingData(pricingData) {
-            platformsGrid.innerHTML = '';
-            allPlatforms = [];
-
-            Object.entries(pricingData).forEach(([id, platform]) => {
-                if (!platform || typeof platform !== 'object') return;
-
-                if (platform.status === undefined || platform.status === 'active') {
-                    let imageSrc = DEFAULT_IMAGE;
-                    if (platform.Products) {
-                        imageSrc = platform.Products;
-                    }
-
-                    allPlatforms.push({
-                        id: id,
-                        name: platform.name || 'প্ল্যাটফর্ম',
-                        description: platform.description || '',
-                        price: platform.price || '৳ 0',
-                        features: platform.features || [],
-                        icon: platform.icon || 'visa',
-                        link: platform.link || '#',
-                        image: imageSrc
-                    });
-                }
-            });
-
-            if (allPlatforms.length === 0) {
-                platformsGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center;">কোন প্ল্যাটফর্ম নেই</div>';
-                return;
-            }
-
-            displayPlatforms(allPlatforms);
-            attachBuyButtons();
+    /* ═══════════════════════════════════════════════
+       AUTH
+    ═══════════════════════════════════════════════ */
+    async function ensureUser() {
+      if (!auth.currentUser) {
+        try {
+          await signInAnonymously(auth);
+        } catch (err) {
+          console.error('Anonymous sign-in failed:', err);
+          showToast('Authentication ব্যর্থ', 'error');
         }
+      }
+    }
 
-        // ================== 🔥 Firebase Fallback ==================
-        function loadFromFirebase() {
-            const pricingRef = db.ref('pricingPlans1');
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      currentUser = user;
 
-            pricingRef.get().then((snapshot) => {
-                const pricingData = snapshot.val();
-
-                if (!pricingData) {
-                    platformsGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center;">কোন প্ল্যাটফর্ম নেই</div>';
-                    return;
-                }
-
-                renderPricingData(pricingData);
-            }).catch((error) => {
-                console.error('Firebase থেকে ডেটা লোড করতে ব্যর্থ:', error);
-                platformsGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:#ff9800;">❤❤ আমাদের সার্ভার এর কাজ চলিতেছে খুব শীঘ্রই চালু করা হবে ❤❤</div>';
-            });
-        }
-
-        // ================== মেইন লোডার ==================
-        async function loadPlatforms() {
-            const jsonData = await loadFromJSON();
-            if (jsonData) {
-                console.log('✅ JSON ফাইল থেকে প্রোডাক্ট লোড হয়েছে');
-                renderPricingData(jsonData);
-                return;
-            }
-            console.log('ℹ️ JSON ফাইলে ডেটা নেই, Firebase থেকে লোড করা হচ্ছে...');
-            loadFromFirebase();
-        }
-
-        function displayPlatforms(platforms) {
-            platformsGrid.innerHTML = '';
-            platforms.forEach(platform => {
-                const card = document.createElement('div');
-                card.className = 'platform-card';
-                card.dataset.id = platform.id;
-                card.dataset.name = platform.name;
-                card.dataset.price = platform.price;
-                card.dataset.link = platform.link;
-
-                card.innerHTML = `
-                        <div class="platform-header">
-                            <img src="${platform.image}" 
-                                 class="platform-icon" 
-                                 alt="${platform.name}"
-                                 loading="lazy"
-                                 onerror="this.onerror=null; this.src='${DEFAULT_IMAGE}';">
-                            <div class="platform-name">${platform.name}</div>
-                        </div>
-                        <div class="platform-description">${platform.description}</div>
-                        <div class="platform-features">
-                            ${platform.features.map(f => `<div class="feature"><i class="fas fa-check-circle"></i><span>${f}</span></div>`).join('')}
-                        </div>
-                        <div class="platform-price">
-                            <div class="price">${platform.price} ৳</div>
-                        </div>
-                        <button class="buy-button"> Click More Info</button>
-                    `;
-                platformsGrid.appendChild(card);
-            });
-        }
-
-        function attachBuyButtons() {
-            document.querySelectorAll('.buy-button').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const card = this.closest('.platform-card');
-                    if (!checkCookieConsent()) return;
-                    const link = card.dataset.link;
-                    if (link && link !== '#') {
-                        let url = link;
-                        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                            url = 'https://' + url;
-                        }
-                        window.open(url, '_blank');
-                    } else {
-                        alert('এই পণ্যের জন্য লিংক উপলব্ধ নয়।');
-                    }
-                });
-            });
-        }
-
-        // ================== সার্চ ==================
-        searchInput.addEventListener('input', function() {
-            const term = this.value.toLowerCase().trim();
-            if (term.length === 0) { searchResults.style.display = 'none'; return; }
-            const filtered = allPlatforms.filter(p =>
-                p.name.toLowerCase().includes(term) ||
-                p.description.toLowerCase().includes(term)
-            );
-            displaySearchResults(filtered);
+      // ইউজার ডেটা স্ট্রাকচার তৈরি (প্রথমবার)
+      const userRef = ref(db, `users/${user.uid}`);
+      const snap = await get(userRef);
+      if (!snap.exists()) {
+        await set(userRef, {
+          balance: 0,
+          orders: {},
+          createdAt: Date.now()
         });
+      }
 
-        searchBtn.addEventListener('click', () => searchInput.dispatchEvent(new Event('input')));
+      // রিয়েল-টাইম লিসেন
+      onValue(userRef, (s) => {
+        const v = s.val();
+        userData = v || { balance: 0, orders: {} };
+        if (currentTab === 'me') renderProfile();
+        if (currentTab === 'my-products') renderMyProducts();
+      });
+    });
 
-        function displaySearchResults(results) {
-            searchResults.innerHTML = '';
-            if (results.length === 0) {
-                searchResults.innerHTML = '<div style="padding:15px; text-align:center; color:#b0bec5;">কিছু পাওয়া যায়নি</div>';
-                searchResults.style.display = 'block';
-                return;
-            }
-            results.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'search-result-item';
-                item.innerHTML = `
-                        <img src="${p.image}" 
-                             class="search-result-icon" 
-                             loading="lazy"
-                             onerror="this.onerror=null; this.src='${DEFAULT_IMAGE}';">
-                        <div class="search-result-content">
-                            <div class="search-result-name">${p.name}</div>
-                            <div class="search-result-desc">${p.description}</div>
-                        </div>
-                        <div class="search-result-price">${p.price}</div>
-                    `;
-                item.addEventListener('click', () => {
-                    searchInput.value = '';
-                    searchResults.style.display = 'none';
-                    scrollToCard(p.name);
-                });
-                searchResults.appendChild(item);
-            });
-            searchResults.style.display = 'block';
+    /* ═══════════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════════ */
+    (async function init() {
+      renderTabbar();
+      await ensureUser();
+      await loadProducts();
+
+      // নোটিশ পপআপ
+      if (!sessionStorage.getItem('noticeShown')) {
+        setTimeout(openNotice, 400);
+      }
+
+      // ওভারলে ক্লিকে বন্ধ
+      $('overlay').addEventListener('click', () => {
+        if ($('noticePopup').classList.contains('van-popup--center--show')) {
+          closeNotice();
         }
-
-        function scrollToCard(name) {
-            const cards = document.querySelectorAll('.platform-card');
-            for (let card of cards) {
-                if (card.dataset.name === name) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    card.style.borderColor = '#ff9800';
-                    setTimeout(() => card.style.borderColor = 'transparent', 2000);
-                    break;
-                }
-            }
-        }
-
-        document.addEventListener('click', e => {
-            if (!searchResults.contains(e.target) && e.target !== searchInput) {
-                searchResults.style.display = 'none';
-            }
-        });
-
-        // ================== DOM রেডি হলে লোড ==================
-        document.addEventListener('DOMContentLoaded', function() {
-            checkCookieConsent();
-            loadPlatforms();
-        });
-    </script>
-
-    <!-- ================== সিকিউরিটি স্ক্রিপ্ট ================== -->
-    <script>
-        (function() {
-            'use strict';
-
-            const CONFIG = {
-                SESSION_TIMEOUT: 30 * 60 * 1000,
-                MAX_ATTEMPTS: 5,
-                RATE_LIMIT_WINDOW: 15 * 60 * 1000,
-                ALERT_ON_DEVTOOLS: false,
-                ENABLE_ACTIVITY_LOG: false,
-                ENFORCE_HTTPS: true,
-                REDIRECT_URL: 'https://www.easy-premium.com/privacy-refund-policy-terms-of-service'
-            };
-
-            if (CONFIG.ENFORCE_HTTPS && location.protocol !== 'https:' && location.hostname !== 'localhost' && !location
-                .hostname.includes('127.0.0.1')) {
-                location.replace('https://' + location.host + location.pathname + location.search);
-            }
-
-            if (self !== top) {
-                try { top.location.href = self.location.href; } catch (e) { document.body.innerHTML =
-                        '<h1 style="color:red;text-align:center;padding:50px;">Access Denied</h1>'; throw new Error(
-                        'Clickjacking protection'); }
-            }
-
-            let devToolsOpened = false;
-
-            function detectDevTools() {
-                const start = performance.now();
-                debugger;
-                const end = performance.now();
-                if (end - start > 100 && !devToolsOpened) {
-                    devToolsOpened = true;
-                    window.location.href = CONFIG.REDIRECT_URL;
-                }
-                return false;
-            }
-            setInterval(detectDevTools, 1000);
-            setTimeout(detectDevTools, 500);
-
-            window._rateLimitStore = window._rateLimitStore || { attempts: {}, blockUntil: {} };
-            window.checkRateLimit = function(action, userId = 'anonymous') {
-                const key = `${action}_${userId}`;
-                const now = Date.now();
-                if (window._rateLimitStore.blockUntil[key] && window._rateLimitStore.blockUntil[key] > now) {
-                    const remaining = Math.ceil((window._rateLimitStore.blockUntil[key] - now) / 1000 / 60);
-                    return { allowed: false, message: `অনেক চেষ্টা করেছেন। ${remaining} মিনিট পরে আবার চেষ্টা করুন।` };
-                }
-                if (!window._rateLimitStore.attempts[key]) window._rateLimitStore.attempts[key] = [];
-                window._rateLimitStore.attempts[key] = window._rateLimitStore.attempts[key].filter(t => t > now - CONFIG
-                    .RATE_LIMIT_WINDOW);
-                if (window._rateLimitStore.attempts[key].length >= CONFIG.MAX_ATTEMPTS) {
-                    window._rateLimitStore.blockUntil[key] = now + CONFIG.RATE_LIMIT_WINDOW;
-                    return { allowed: false, message: 'অনেক চেষ্টা করেছেন। ১৫ মিনিট পরে আবার চেষ্টা করুন।' };
-                }
-                window._rateLimitStore.attempts[key].push(now);
-                return { allowed: true };
-            };
-
-            let sessionTimer;
-
-            function resetSessionTimer() {
-                if (sessionTimer) clearTimeout(sessionTimer);
-                sessionTimer = setTimeout(() => {
-                    alert('আপনি দীর্ঘ সময় ধরে সক্রিয় নন। পৃষ্ঠা রিফ্রেশ করা হচ্ছে।');
-                    location.reload();
-                }, CONFIG.SESSION_TIMEOUT);
-            }
-            ['click', 'keypress', 'scroll', 'mousemove', 'touchstart'].forEach(event => document.addEventListener(event,
-                resetSessionTimer, { passive: true }));
-
-            function sanitizeInput(input) {
-                if (typeof input !== 'string') return input;
-                return input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#x27;').replace(/\//g, '&#x2F;').replace(/\\/g, '&#x5C;').replace(/`/g, '&#96;')
-                    .replace(/=/g, '&#61;');
-            }
-
-            function setupFormProtection() {
-                document.querySelectorAll('form').forEach(form => {
-                    if (form._protected) return;
-                    form._protected = true;
-                    form.addEventListener('submit', function() {
-                        this.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], textarea')
-                            .forEach(input => {
-                                if (input.value && typeof input.value === 'string' && /[<>"'`=]/.test(input
-                                    .value)) console.warn(
-                                    'সতর্কতা: ইনপুটে বিপজ্জনক ক্যারেক্টার পাওয়া গেছে');
-                            });
-                    }, true);
-                });
-            }
-            const formObserver = new MutationObserver(() => setupFormProtection());
-            formObserver.observe(document.body, { childList: true, subtree: true });
-
-            const originalSetItem = localStorage.setItem,
-                originalGetItem = localStorage.getItem;
-            const sensitiveKeys = ['user', 'session', 'token', 'auth'];
-            localStorage.setItem = function(key, value) {
-                if (sensitiveKeys.some(k => key.toLowerCase().includes(k))) {
-                    try { const encoded = btoa(encodeURIComponent(value)); return originalSetItem.call(this,
-                            `_sec_${key}`, encoded); } catch (e) { console.warn('LocalStorage encoding error'); }
-                }
-                return originalSetItem.call(this, key, value);
-            };
-            localStorage.getItem = function(key) {
-                if (sensitiveKeys.some(k => key.toLowerCase().includes(k))) {
-                    try { const encoded = originalGetItem.call(this, `_sec_${key}`); if (encoded) return decodeURIComponent(
-                            atob(encoded)); } catch (e) { console.warn('LocalStorage decoding error'); }
-                }
-                return originalGetItem.call(this, key);
-            };
-
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
-                if (e.ctrlKey && e.shiftKey && e.keyCode === 73) { e.preventDefault(); return false; }
-                if (e.keyCode === 123) { e.preventDefault(); return false; }
-            });
-
-            document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
-            document.addEventListener('mousedown', function(e) { if (e.button === 2) { e.preventDefault(); return false; } });
-            document.addEventListener('touchstart', function(e) {
-                let touchTimer;
-                const handleTouchEnd = function() { clearTimeout(touchTimer);
-                    document.removeEventListener('touchend', handleTouchEnd); };
-                if (e.touches.length === 1) { touchTimer = setTimeout(() => e.preventDefault(), 500);
-                    document.addEventListener('touchend', handleTouchEnd, { once: true }); }
-            }, { passive: false });
-
-            console.log('%c🔒 Easy Premium - উন্নত নিরাপত্তা সক্রিয়', 'color: #4caf50; font-size: 14px; font-weight: bold;');
-        })();
-    </script>
+      });
+    })();
+  </script>
 </body>
 </html>
