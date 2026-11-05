@@ -2,58 +2,58 @@
   "products": {
     "vip1": {
       "name": "VIP1",
-      "price": 1000,
-      "dailyIncome": 150,
-      "totalIncome": 25000,
+      "price": 600,
+      "dailyIncome": 90,
+      "totalIncome": 9000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg"
     },
     "vip2": {
       "name": "VIP2",
-      "price": 3000,
-      "dailyIncome": 789,
-      "totalIncome": 78900,
+      "price": 1200,
+      "dailyIncome": 190,
+      "totalIncome": 19000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933228395_58268a000c479b3b.jpg"
     },
     "vip3": {
       "name": "VIP3",
-      "price": 6000,
-      "dailyIncome": 1666,
-      "totalIncome": 166600,
+      "price": 2000,
+      "dailyIncome": 320,
+      "totalIncome": 32000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933220774_0f8a37f828535819.jpg"
     },
     "vip4": {
       "name": "VIP4",
-      "price": 12000,
-      "dailyIncome": 3530,
-      "totalIncome": 353000,
+      "price": 3000,
+      "dailyIncome": 600,
+      "totalIncome": 60000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933210978_3b6653dcd035a83f.jpg"
     },
     "vip5": {
       "name": "VIP5",
-      "price": 25000,
-      "dailyIncome": 8333,
-      "totalIncome": 833300,
+      "price": 6000,
+      "dailyIncome": 1250,
+      "totalIncome": 125000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933255914_c90edbbc946f655b.jpg"
     },
     "vip6": {
       "name": "VIP6",
-      "price": 50000,
-      "dailyIncome": 17857,
-      "totalIncome": 1785700,
+      "price": 12000,
+      "dailyIncome": 2550,
+      "totalIncome": 255000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933263996_d5ff73a60df8bd47.jpg"
     },
     "vip7": {
       "name": "VIP7",
-      "price": 100000,
-      "dailyIncome": 38461,
-      "totalIncome": 3846100,
+      "price": 25000,
+      "dailyIncome": 5200,
+      "totalIncome": 520000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933247454_a36806e964eeb46b.jpg"
     },
     "vip8": {
       "name": "VIP8",
-      "price": 200000,
-      "dailyIncome": 83333,
-      "totalIncome": 8333300,
+      "price": 100000,
+      "dailyIncome": 25000,
+      "totalIncome": 2500000,
       "image": "https://image.starbucksbd.com/images/95643beb86a1/media/1790933200577_5dcd1366bef8d7f6.jpg"
     }
   }
