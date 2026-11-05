@@ -6,9 +6,6 @@
   <title>Starbucks</title>
   <link rel="icon" href="https://image.starbucksbd.com/images/95643beb86a1/logo.jpg" type="image/jpeg">
   <style>
-    /* ═══════════════════════════════════════════
-       ROOT VARIABLES (হুবহু আপনার দেওয়া)
-    ═══════════════════════════════════════════ */
     :root {
       --color-status-success: #2d6a4f;
       --color-status-failed: #c1121f;
@@ -17,636 +14,188 @@
       --color-primary-dark: #1E3932;
       --color-secondary: #006241;
       --color-accent: #C8A96A;
-      --color-tab-active: #C8A96A;
       --color-page-bg: #F2F0EB;
       --color-card-bg: #ffffff;
       --color-text: #1E3932;
       --color-text-muted: #8A8A8A;
       --color-app-bg: #ffffff;
-      --color-bg: #6B7A73;
-      --color-success-btn: #1E3932;
-      --color-btn-text: #1E3932;
       --gradient-btn: linear-gradient(135deg, #00704A 0%, #1E3932 100%);
       --gradient-tabbar: linear-gradient(180deg, #1E3932 0%, #0F2A24 100%);
       --gradient-card: linear-gradient(180deg, #1E3932 0%, #00704A 100%);
-      --gradient-card-overlay: linear-gradient(180deg, #1E393299 0%, #00704A99 100%);
       --gradient-actions: linear-gradient(135deg, #FFFFFF 0%, #EAF3EF 100%);
-      --gradient-menu-accent: linear-gradient(to right, #F2F0EB 82%, #C8A96A 18%);
-      --gradient-success: linear-gradient(180deg, #1E3932 0%, #00704A 100%);
-      --gradient-login: linear-gradient(180deg, #FFFFFF 0%, #F2F0EB 100%);
-      --gradient-page-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%);
       --page-surface-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%), #F2F0EB;
       --color-primary-soft: rgba(0, 112, 74, 0.08);
-      --color-primary-soft-active: rgba(0, 112, 74, 0.14);
-      --van-primary-color: #00704A;
-      --van-button-primary-background: #00704A;
-      --van-button-primary-border-color: #00704A;
       font-size: 17.0667px;
     }
 
-    /* ═══════════════════════════════════════════
-       RESET + BASE
-    ═══════════════════════════════════════════ */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SoDo Sans', 'Pike',
-        'Helvetica Neue', 'Noto Sans Bengali', Arial, sans-serif;
-      background: var(--color-page-bg);
-      color: var(--color-text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-    }
-
-    .layout {
-      width: 100%;
-      max-width: 400px;
-      min-height: 100vh;
-      background: var(--page-surface-bg);
-      position: relative;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif; background: var(--color-page-bg); color: var(--color-text); min-height: 100vh; }
+    body { display: flex; justify-content: center; }
     img { display: block; max-width: 100%; }
     button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
-    /* ═══════════════════════════════════════════
-       NAVBAR
-    ═══════════════════════════════════════════ */
-    .app-nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
+    .layout { width: 100%; max-width: 400px; min-height: 100vh; background: var(--page-surface-bg); position: relative; box-shadow: 0 0 40px rgba(0, 0, 0, 0.05); }
 
-    .app-nav__bar {
-      background: var(--gradient-tabbar);
-      color: #fff;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 16px;
-    }
+    /* NAVBAR */
+    .app-nav { position: sticky; top: 0; z-index: 50; }
+    .app-nav__bar { background: var(--gradient-tabbar); color: #fff; height: 52px; display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+    .app-nav__title { font-size: 17px; font-weight: 700; }
 
-    .app-nav__title {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
+    .page { padding-bottom: 90px; min-height: calc(100vh - 52px); }
+    
+    /* BANNER & SHORTCUTS */
+    .product-page__banner-wrap { padding: 12px; }
+    .product-page__banner { width: 100%; height: 140px; object-fit: cover; border-radius: 14px; box-shadow: 0 4px 14px rgba(30, 57, 50, 0.15); }
+    .product-page__shortcuts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 14px 12px; margin: 0 12px; background: var(--color-app-bg); border-radius: 14px; box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06); }
+    .product-page__shortcut { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--color-text); cursor: pointer; }
+    .product-page__shortcut-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--color-primary-soft); display: flex; align-items: center; justify-content: center; }
+    .product-page__shortcut-icon img { width: 26px; height: 26px; object-fit: contain; }
 
-    /* ═══════════════════════════════════════════
-       PAGE
-    ═══════════════════════════════════════════ */
-    .page {
-      padding-bottom: 90px;
-      min-height: calc(100vh - 52px);
-    }
+    /* PRODUCT CARD */
+    .product-page__list { padding: 14px 12px; display: flex; flex-direction: column; gap: 14px; }
+    .product-card { background: var(--color-card-bg); border-radius: 16px; overflow: hidden; box-shadow: 0 3px 12px rgba(30, 57, 50, 0.08); position: relative; }
+    .product-card__img-box { width: 100%; height: 150px; overflow: hidden; background: linear-gradient(135deg, #EAF3EF, #F2F0EB); }
+    .product-card__img { width: 100%; height: 100%; object-fit: cover; }
+    .product-card__name { position: absolute; top: 12px; left: 12px; background: var(--gradient-card); color: #fff; padding: 5px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 112, 74, 0.4); }
+    .product-card__tags { display: flex; justify-content: space-between; padding: 12px 14px 6px; font-size: 12px; color: var(--color-text-muted); }
+    .product-card__tags span { display: flex; flex-direction: column; gap: 2px; }
+    .product-card__tags em { font-style: normal; color: var(--color-primary); font-weight: 700; font-size: 14px; }
+    .product-card__price { padding: 4px 14px 12px; font-size: 20px; font-weight: 800; color: var(--color-primary-dark); }
+    .product-card__buy { margin: 0 14px 14px; padding: 12px; background: var(--gradient-btn); color: #fff; border-radius: 10px; text-align: center; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .product-card__buy svg { width: 18px; height: 18px; stroke: #fff; }
 
-    /* Banner */
-    .product-page__banner-wrap {
-      padding: 12px;
-    }
-
-    .product-page__banner {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(30, 57, 50, 0.15);
-    }
-
-    /* Shortcuts */
-    .product-page__shortcuts {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      padding: 14px 12px;
-      margin: 0 12px;
-      background: var(--color-app-bg);
-      border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06);
-    }
-
-    .product-page__shortcut {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--color-text);
-      cursor: pointer;
-      padding: 4px 0;
-    }
-
-    .product-page__shortcut-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: var(--color-primary-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-
-    .product-page__shortcut:active .product-page__shortcut-icon {
-      background: var(--color-primary-soft-active);
-    }
-
-    .product-page__shortcut-icon img {
-      width: 26px;
-      height: 26px;
-      object-fit: contain;
-    }
-
-    /* Product list */
-    .product-page__list {
-      padding: 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* ═══════════════════════════════════════════
-       PRODUCT CARD
-    ═══════════════════════════════════════════ */
-    .product-card {
-      background: var(--color-card-bg);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 3px 12px rgba(30, 57, 50, 0.08);
-      position: relative;
-      transition: transform 0.15s;
-    }
-
-    .product-card:active { transform: scale(0.99); }
-
-    .product-card__img-box {
-      width: 100%;
-      height: 150px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #EAF3EF, #F2F0EB);
-    }
-
-    .product-card__img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-card__name {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--gradient-card);
-      color: #fff;
-      padding: 5px 14px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      box-shadow: 0 4px 12px rgba(0, 112, 74, 0.4);
-    }
-
-    .product-card__tags {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 12px 14px 6px;
-      font-size: 12px;
-      color: var(--color-text-muted);
-    }
-
-    .product-card__tags span {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .product-card__tags em {
-      font-style: normal;
-      color: var(--color-primary);
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .product-card__price {
-      padding: 4px 14px 12px;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--color-primary-dark);
-      letter-spacing: 0.3px;
-    }
-
-    .product-card__buy {
-      margin: 0 14px 14px;
-      padding: 12px;
-      background: var(--gradient-btn);
-      color: #fff;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(0, 112, 74, 0.25);
-      transition: transform 0.15s;
-      user-select: none;
-    }
-
-    .product-card__buy:active { transform: scale(0.97); }
-
-    .product-card__buy svg {
-      width: 18px;
-      height: 18px;
-      stroke: #fff;
-    }
-
-    /* ═══════════════════════════════════════════
-       TABBAR
-    ═══════════════════════════════════════════ */
-    .app-tabbar {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 400px;
-      background: var(--gradient-tabbar);
-      z-index: 100;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .app-tabbar__track {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 8px 0 10px;
-    }
-
-    .app-tabbar__item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      cursor: pointer;
-      opacity: 0.55;
-      transition: opacity 0.2s;
-      padding: 4px 0;
-    }
-
+    /* TABBAR */
+    .app-tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; background: var(--gradient-tabbar); z-index: 100; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12); }
+    .app-tabbar__track { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 10px; }
+    .app-tabbar__item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; opacity: 0.55; }
     .app-tabbar__item--active { opacity: 1; }
+    .app-tabbar__icon-wrap { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+    .app-tabbar__icon { width: 24px; height: 24px; filter: brightness(0) invert(1); }
+    .app-tabbar__item--active .app-tabbar__icon { filter: none; }
+    .app-tabbar__label { font-size: 10px; color: #fff; font-weight: 500; }
 
-    .app-tabbar__icon-wrap {
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    /* OTHER TABS */
+    .tab-page { display: none; padding: 16px 12px; min-height: calc(100vh - 52px); }
+    .tab-page--active { display: block; }
+    .profile-card { background: var(--gradient-card); color: #fff; padding: 24px 20px; border-radius: 20px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25); }
+    .profile-card__avatar { width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
+    .profile-card__uid { font-size: 11px; opacity: 0.75; word-break: break-all; margin-bottom: 12px; }
+    .profile-card__balance-label { font-size: 12px; opacity: 0.75; margin-bottom: 4px; }
+    .profile-card__balance { font-size: 28px; font-weight: 800; }
+    .menu-list { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06); margin-bottom: 16px; }
+    .menu-item { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; font-weight: 500; cursor: pointer; color: var(--color-text); }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item .arrow { margin-left: auto; color: var(--color-text-muted); font-size: 18px; }
 
-    .app-tabbar__icon {
-      width: 24px;
-      height: 24px;
-      filter: brightness(0) invert(1);
-    }
+    /* POPUP */
+    .van-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .van-overlay--show { opacity: 1; pointer-events: auto; }
+    .van-popup--center { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -46%); z-index: 2001; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
+    .van-popup--center--show { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+    .notice-dialog { background: #fff; border-radius: 20px; width: 88vw; max-width: 360px; padding: 24px 20px 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25); max-height: 85vh; display: flex; flex-direction: column; }
+    .notice-dialog__title { font-size: 18px; font-weight: 800; color: var(--color-primary-dark); text-align: center; margin-bottom: 14px; }
+    .notice-dialog__body { font-size: 13px; line-height: 1.8; color: var(--color-text); overflow-y: auto; margin-bottom: 14px; }
+    .notice-dialog__btn { width: 100%; padding: 13px; background: var(--gradient-btn); color: #fff; border-radius: 30px; font-size: 15px; font-weight: 700; }
 
-    .app-tabbar__item--active .app-tabbar__icon {
-      filter: none;
-    }
-
-    .app-tabbar__label {
-      font-size: 10px;
-      color: #fff;
-      font-weight: 500;
-    }
-
-    /* ═══════════════════════════════════════════
-       NOTICE DIALOG / POPUP
-    ═══════════════════════════════════════════ */
-    .van-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 2000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-
-    .van-overlay--show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .van-popup--center {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -46%);
-      z-index: 2001;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s, transform 0.25s;
-    }
-
-    .van-popup--center--show {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-      pointer-events: auto;
-    }
-
-    .notice-dialog {
-      background: #fff;
-      border-radius: 20px;
-      width: 88vw;
-      max-width: 360px;
-      padding: 24px 20px 20px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .notice-dialog__title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--color-primary-dark);
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .notice-dialog__body {
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--color-text);
-      overflow-y: auto;
-      margin-bottom: 14px;
-      padding-right: 4px;
-    }
-
-    .notice-dialog__body p { margin: 0; }
-
-    .notice-dialog__cs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .notice-dialog__cs-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      background: var(--gradient-actions);
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--color-text);
-    }
-
-    .notice-dialog__cs-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .notice-dialog__cs-item .arrow {
-      margin-left: auto;
-      color: var(--color-text-muted);
-      font-size: 16px;
-    }
-
-    .notice-dialog__btn {
-      width: 100%;
-      padding: 13px;
-      background: var(--gradient-btn);
-      color: #fff;
-      border-radius: 30px;
-      font-size: 15px;
-      font-weight: 700;
-      box-shadow: 0 4px 14px rgba(0, 112, 74, 0.3);
-    }
-
-    /* ═══════════════════════════════════════════
-       TOAST
-    ═══════════════════════════════════════════ */
-    .toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-120%);
-      background: var(--color-primary-dark);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 600;
-      z-index: 5000;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      max-width: 88vw;
-      text-align: center;
-    }
-
-    .toast--show {
-      transform: translateX(-50%) translateY(0);
-    }
-
+    /* TOAST */
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120%); background: var(--color-primary-dark); color: #fff; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 5000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); transition: transform 0.3s; max-width: 88vw; text-align: center; }
+    .toast--show { transform: translateX(-50%) translateY(0); }
     .toast--error { background: var(--color-status-failed); }
     .toast--success { background: var(--color-status-success); }
 
-    /* ═══════════════════════════════════════════
-       OTHER TABS (My Products / My Team / Me)
-    ═══════════════════════════════════════════ */
-    .tab-page {
-      display: none;
-      padding: 16px 12px;
-      min-height: calc(100vh - 52px);
-    }
-
-    .tab-page--active { display: block; }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 20px;
-      text-align: center;
-      color: var(--color-text-muted);
-    }
-
-    .empty-state svg {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 16px;
-      opacity: 0.4;
-    }
-
-    .empty-state p { font-size: 14px; }
-
-    .profile-card {
-      background: var(--gradient-card);
-      color: #fff;
-      padding: 24px 20px;
-      border-radius: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .profile-card::after {
-      content: '';
-      position: absolute;
-      width: 160px;
-      height: 160px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      top: -50px;
-      right: -50px;
-    }
-
-    .profile-card__avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    .profile-card__uid {
-      font-size: 11px;
-      opacity: 0.75;
-      word-break: break-all;
-      margin-bottom: 12px;
-    }
-
-    .profile-card__balance-label {
-      font-size: 12px;
-      opacity: 0.75;
-      margin-bottom: 4px;
-    }
-
-    .profile-card__balance {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .menu-list {
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(30, 57, 50, 0.06);
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      padding: 14px 16px;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      color: var(--color-text);
-    }
-
-    .menu-item:last-child { border-bottom: none; }
-
-    .menu-item .arrow {
-      margin-left: auto;
-      color: var(--color-text-muted);
-    }
-
-    /* ═══════════════════════════════════════════
-       LOADING
-    ═══════════════════════════════════════════ */
-    .loading-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 60vh;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--color-primary-soft);
-      border-top-color: var(--color-primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
+    /* LOGIN/REGISTER SCREEN */
+    .auth-screen { position: fixed; inset: 0; background: var(--page-surface-bg); z-index: 3000; display: none; flex-direction: column; justify-content: center; padding: 20px; }
+    .auth-screen--show { display: flex; }
+    .auth-card { background: #fff; border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 360px; margin: 0 auto; }
+    .auth-logo { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; background: var(--gradient-card); display: flex; align-items: center; justify-content: center; }
+    .auth-logo img { width: 50px; height: 50px; object-fit: contain; filter: brightness(0) invert(1); }
+    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+    .auth-tab { flex: 1; text-align: center; padding: 10px; font-weight: 700; color: var(--color-text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .auth-tab--active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .auth-form { display: none; flex-direction: column; gap: 14px; }
+    .auth-form--active { display: flex; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { font-size: 12px; font-weight: 600; color: var(--color-text); }
+    .input-group input { padding: 12px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; }
+    .input-group input:focus { border-color: var(--color-primary); }
+    .auth-btn { background: var(--gradient-btn); color: #fff; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; margin-top: 10px; }
+    .loading-screen { display: flex; align-items: center; justify-content: center; height: 60vh; }
+    .loading-spinner { width: 40px; height: 40px; border: 4px solid var(--color-primary-soft); border-top-color: var(--color-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state { display: flex; flex-direction: column; align-items: center; padding: 60px 20px; color: var(--color-text-muted); }
+    .empty-state svg { width: 80px; height: 80px; margin-bottom: 16px; opacity: 0.4; }
   </style>
 </head>
 <body>
   <div class="layout" id="app">
-    <!-- ═══════════════════════════════════════
-         NAVBAR
-    ═══════════════════════════════════════ -->
+    <!-- LOGIN / REGISTER SCREEN -->
+    <div class="auth-screen" id="authScreen">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <img src="https://img.icons8.com/ios-filled/100/ffffff/starbucks.png" alt="logo">
+        </div>
+        <div class="auth-tabs">
+          <div class="auth-tab auth-tab--active" onclick="switchAuthTab('login')" id="tabLoginBtn">লগইন</div>
+          <div class="auth-tab" onclick="switchAuthTab('register')" id="tabRegBtn">রেজিস্টার</div>
+        </div>
+        
+        <!-- LOGIN FORM -->
+        <form class="auth-form auth-form--active" id="loginForm" onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label>ইমেইল</label>
+            <input type="email" id="loginEmail" required placeholder="example@mail.com">
+          </div>
+          <div class="input-group">
+            <label>পাসওয়ার্ড</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="auth-btn" id="loginBtn">লগইন করুন</button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+          <div class="input-group">
+            <label>ইমেইল</label>
+            <input type="email" id="regEmail" required placeholder="example@mail.com">
+          </div>
+          <div class="input-group">
+            <label>পাসওয়ার্ড</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" minlength="6">
+          </div>
+          <div class="input-group">
+            <label>রেফারেল কোড (ঐচ্ছিক)</label>
+            <input type="text" id="regRefCode" placeholder="বন্ধুর রেফারেল কোড দিন">
+          </div>
+          <button type="submit" class="auth-btn" id="regBtn">রেজিস্টার করুন</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
     <div class="app-nav">
       <div class="app-nav__bar">
         <div class="app-nav__title" id="navTitle">প্রোডাক্ট</div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         TAB 1: PRODUCT PAGE
-    ═══════════════════════════════════════ -->
+    <!-- TAB 1: PRODUCT PAGE -->
     <div class="tab-page tab-page--active" id="tab-product">
       <div class="page">
         <div class="product-page__banner-wrap">
-          <img
-            class="product-page__banner"
-            src="https://image.starbucksbd.com/images/95643beb86a1/media/1791027262964_cfe241e9b1a1584b.jpg"
-            alt="banner"
-            onerror="this.style.display='none'"
-          >
+          <img class="product-page__banner" src="https://image.starbucksbd.com/images/95643beb86a1/media/1791027262964_cfe241e9b1a1584b.jpg" alt="banner" onerror="this.src='https://via.placeholder.com/400x150/00704A/FFFFFF?text=Starbucks'">
         </div>
 
         <div class="product-page__shortcuts">
           <div class="product-page__shortcut" onclick="showToast('রিচার্জ ফিচার শীঘ্রই আসছে')">
-            <div class="product-page__shortcut-icon">
-              <img src="https://img.icons8.com/ios/100/00704A/money-transfer.png" alt="recharge">
-            </div>
+            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios/100/00704A/money-transfer.png" alt="recharge"></div>
             <span>রিচার্জ</span>
           </div>
           <div class="product-page__shortcut" onclick="showToast('উত্তোলন ফিচার শীঘ্রই আসছে')">
-            <div class="product-page__shortcut-icon">
-              <img src="https://img.icons8.com/ios/100/00704A/cash-in-hand.png" alt="withdraw">
-            </div>
+            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios/100/00704A/cash-in-hand.png" alt="withdraw"></div>
             <span>উত্তোলন</span>
           </div>
           <div class="product-page__shortcut" onclick="showToast('গ্রাহক সেবা শীঘ্রই আসছে')">
-            <div class="product-page__shortcut-icon">
-              <img src="https://img.icons8.com/ios/100/00704A/headset.png" alt="cs">
-            </div>
+            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios/100/00704A/headset.png" alt="cs"></div>
             <span>গ্রাহক সেবা</span>
           </div>
         </div>
@@ -657,100 +206,66 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         TAB 2: MY PRODUCTS
-    ═══════════════════════════════════════ -->
+    <!-- TAB 2: MY PRODUCTS -->
     <div class="tab-page" id="tab-my-products">
       <div class="empty-state" id="myProductsEmpty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M20 7l-8-4-8 4 8 4 8-4z"/>
-          <path d="M4 7v10l8 4 8-4V7"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 7v10l8 4 8-4V7"/></svg>
         <p>আপনি এখনো কোনো প্রোডাক্ট কেনেননি</p>
       </div>
-      <div id="myProductsList" style="display:none; display:flex; flex-direction:column; gap:12px;"></div>
+      <div id="myProductsList" style="display:none; flex-direction:column; gap:12px;"></div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         TAB 3: MY TEAM
-    ═══════════════════════════════════════ -->
+    <!-- TAB 3: MY TEAM -->
     <div class="tab-page" id="tab-my-team">
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <p>আপনার রেফারেল লিংক শীঘ্রই যুক্ত হবে</p>
+      <div class="profile-card" style="margin-bottom: 20px;">
+        <div class="profile-card__balance-label">আপনার রেফারেল কোড</div>
+        <div class="profile-card__balance" id="myRefCode" style="font-size: 24px; letter-spacing: 2px;">---</div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button onclick="copyReferral()" style="flex:1; padding: 10px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 8px; font-weight: 600;">লিংক কপি করুন</button>
+        </div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-item"><span>মোট টিম সদস্য</span><span class="arrow" id="teamCount">0</span></div>
+        <div class="menu-item"><span>লেভেল ১ কমিশন (৪০%)</span><span class="arrow" id="teamL1">0</span></div>
+        <div class="menu-item"><span>লেভেল ২ কমিশন (১%)</span><span class="arrow" id="teamL2">0</span></div>
+        <div class="menu-item"><span>লেভেল ৩ কমিশন (১%)</span><span class="arrow" id="teamL3">0</span></div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         TAB 4: ME
-    ═══════════════════════════════════════ -->
+    <!-- TAB 4: ME -->
     <div class="tab-page" id="tab-me">
       <div class="profile-card">
         <div class="profile-card__avatar" id="avatar">?</div>
-        <div class="profile-card__uid" id="uidText">সংযোগ হচ্ছে...</div>
+        <div class="profile-card__uid" id="uidText">লোড হচ্ছে...</div>
         <div class="profile-card__balance-label">ব্যালেন্স</div>
         <div class="profile-card__balance" id="balanceText">৳ 0.00</div>
       </div>
 
       <div class="menu-list">
-        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
-          <span>আমার অর্ডার</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
-          <span>রিচার্জ হিস্ট্রি</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
-          <span>উত্তোলন হিস্ট্রি</span><span class="arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')">
-          <span>সেটিংস</span><span class="arrow">›</span>
-        </div>
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')"><span>আমার অর্ডার</span><span class="arrow">›</span></div>
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')"><span>রিচার্জ হিস্ট্রি</span><span class="arrow">›</span></div>
+        <div class="menu-item" onclick="showToast('শীঘ্রই আসছে')"><span>উত্তোলন হিস্ট্রি</span><span class="arrow">›</span></div>
+        <div class="menu-item" onclick="logout()" style="color: var(--color-status-failed); font-weight: bold;"><span>লগআউট</span></div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════
-         TABBAR
-    ═══════════════════════════════════════ -->
+    <!-- TABBAR -->
     <nav class="app-tabbar">
       <div class="app-tabbar__track" id="tabbar"></div>
     </nav>
 
-    <!-- ═══════════════════════════════════════
-         NOTICE DIALOG
-    ═══════════════════════════════════════ -->
+    <!-- NOTICE DIALOG -->
     <div class="van-overlay" id="overlay"></div>
     <div class="van-popup--center" id="noticePopup">
       <div class="notice-dialog">
         <div class="notice-dialog__title">প্ল্যাটফর্মের বিবরণ</div>
         <div class="notice-dialog__body">
           <p>১. রেজিস্ট্রেশন বোনাস: ৩০০ টাকা</p>
-          <p><br></p>
           <p>২. রেফারেল বোনাস: ৪০% (লেভেল ১), ১% (লেভেল ২), ১% (লেভেল ৩)</p>
-          <p><br></p>
-          <p>৩. জমা এবং উত্তোলন ২৪/৭ উপলব্ধ; দৈনিক উত্তোলনের কোনো সীমা নেই</p>
-          <p><br></p>
+          <p>৩. জমা এবং উত্তোলন ২৪/৭ উপলব্ধ</p>
           <p>৪. ভিআইপি টিয়ার সিস্টেম + দৈনিক বেতন</p>
-          <p><br></p>
           <p>৫. ১,০০০ টাকা জমা দিন এবং সাথে সাথে ৩০০ টাকা উত্তোলন করুন</p>
-          <p><br></p>
           <p>৬. আপনার নিজের তহবিল দিয়ে এখনই মুনাফা অর্জন শুরু করুন!</p>
-        </div>
-        <div class="notice-dialog__cs-list">
-          <div class="notice-dialog__cs-item" onclick="window.open('https://t.me/','_blank')">
-            <img class="notice-dialog__cs-icon" src="https://image.starbucksbd.com/images/1d731091f8bf/media/1790605083445_288c962c6723aeaa.png" alt="tg" onerror="this.src='https://img.icons8.com/color/96/telegram-app.png'">
-            <span>টেলিগ্রাম গ্রুপ</span>
-            <span class="arrow">›</span>
-          </div>
-          <div class="notice-dialog__cs-item" onclick="window.open('https://t.me/','_blank')">
-            <img class="notice-dialog__cs-icon" src="https://image.starbucksbd.com/images/3eccf22fc8bf/media/1789580245670_4d2afb62ba077f04.jpg" alt="tg-ch" onerror="this.src='https://img.icons8.com/color/96/telegram-app.png'">
-            <span>টেলিগ্রাম চ্যানেল</span>
-            <span class="arrow">›</span>
-          </div>
         </div>
         <button class="notice-dialog__btn" onclick="closeNotice()">ঠিক আছে</button>
       </div>
@@ -760,26 +275,11 @@
   </div>
 
   <script type="module">
-    /* ═══════════════════════════════════════════════
-       FIREBASE INIT
-    ═══════════════════════════════════════════════ */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-    import {
-      getAuth,
-      signInAnonymously,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import {
-      getDatabase,
-      ref,
-      get,
-      set,
-      push,
-      onValue,
-      update
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, get, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+    // আপনার ফায়ারবেস কনফিগারেশন
     const firebaseConfig = {
       apiKey: "AIzaSyBJL3a4bZnXa_fRJEQsRK_aJecp36Vdx0I",
       authDomain: "alamin-5f9c6.firebaseapp.com",
@@ -787,71 +287,42 @@
       projectId: "alamin-5f9c6",
       storageBucket: "alamin-5f9c6.firebasestorage.app",
       messagingSenderId: "39062913891",
-      appId: "1:39062913891:web:1028fd48b0b50d609d8956",
-      measurementId: "G-B04QBWFZMY"
+      appId: "1:39062913891:web:1028fd48b0b50d609d8956"
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-    try { getAnalytics(firebaseApp); } catch (e) {}
-    const auth = getAuth(firebaseApp);
-    const db = getDatabase(firebaseApp);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
-    /* ═══════════════════════════════════════════════
-       FALLBACK PRODUCTS (Firebase খালি থাকলে ব্যবহার হবে)
-    ═══════════════════════════════════════════════ */
     const FALLBACK_PRODUCTS = {
-      vip1: { name: 'VIP1', price: 1000, dailyIncome: 250, totalIncome: 25000,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg' },
-      vip2: { name: 'VIP2', price: 3000, dailyIncome: 789, totalIncome: 78900,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933228395_58268a000c479b3b.jpg' },
-      vip3: { name: 'VIP3', price: 6000, dailyIncome: 1666, totalIncome: 166600,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933220774_0f8a37f828535819.jpg' },
-      vip4: { name: 'VIP4', price: 12000, dailyIncome: 3530, totalIncome: 353000,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933210978_3b6653dcd035a83f.jpg' },
-      vip5: { name: 'VIP5', price: 25000, dailyIncome: 8333, totalIncome: 833300,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933255914_c90edbbc946f655b.jpg' },
-      vip6: { name: 'VIP6', price: 50000, dailyIncome: 17857, totalIncome: 1785700,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933263996_d5ff73a60df8bd47.jpg' },
-      vip7: { name: 'VIP7', price: 100000, dailyIncome: 38461, totalIncome: 3846100,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933247454_a36806e964eeb46b.jpg' },
-      vip8: { name: 'VIP8', price: 200000, dailyIncome: 83333, totalIncome: 8333300,
-        image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933200577_5dcd1366bef8d7f6.jpg' }
+      vip1: { name: 'VIP1', price: 1000, dailyIncome: 250, totalIncome: 25000, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg' },
+      vip2: { name: 'VIP2', price: 3000, dailyIncome: 789, totalIncome: 78900, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933228395_58268a000c479b3b.jpg' },
+      vip3: { name: 'VIP3', price: 6000, dailyIncome: 1666, totalIncome: 166600, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933220774_0f8a37f828535819.jpg' },
+      vip4: { name: 'VIP4', price: 12000, dailyIncome: 3530, totalIncome: 353000, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933210978_3b6653dcd035a83f.jpg' },
+      vip5: { name: 'VIP5', price: 25000, dailyIncome: 8333, totalIncome: 833300, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933255914_c90edbbc946f655b.jpg' },
+      vip6: { name: 'VIP6', price: 50000, dailyIncome: 17857, totalIncome: 1785700, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933263996_d5ff73a60df8bd47.jpg' },
+      vip7: { name: 'VIP7', price: 100000, dailyIncome: 38461, totalIncome: 3846100, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933247454_a36806e964eeb46b.jpg' },
+      vip8: { name: 'VIP8', price: 200000, dailyIncome: 83333, totalIncome: 8333300, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933200577_5dcd1366bef8d7f6.jpg' }
     };
 
-    /* ═══════════════════════════════════════════════
-       STATE
-    ═══════════════════════════════════════════════ */
     let currentUser = null;
-    let userData = { balance: 0, orders: {} };
+    let userData = { balance: 0, orders: {}, myReferralCode: '', referredBy: '' };
     let products = {};
     let currentTab = 'product';
 
-    /* ═══════════════════════════════════════════════
-       DOM HELPERS
-    ═══════════════════════════════════════════════ */
     const $ = (id) => document.getElementById(id);
-
     const tabs = [
-      { id: 'product', label: 'প্রোডাক্ট', nav: 'প্রোডাক্ট',
-        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgN2wtOC00LTggNCA4IDQgOC00eiIvPjxwYXRoIGQ9Ik00IDd2MTBsOCA0IDgtNFY3Ii8+PC9zdmc+' },
-      { id: 'my-products', label: 'আমার প্রোডাক্ট', nav: 'আমার প্রোডাক্ট',
-        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTYgNEg4YTIgMiAwIDAgMC0yIDJ2MTRsNi00IDYgNFY2YTIgMiAwIDAgMC0yLTJ6Ii8+PC9zdmc+' },
-      { id: 'my-team', label: 'আমার টিম', nav: 'আমার টিম',
-        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjF2LTJhNCA0IDAgMCAwLTQtNEg1YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI3IiByPSI0Ii8+PHBhdGggZD0iTTIzIDIxdjJhNCA0IDAgMCAwLTMtMy44NyIvPjxwYXRoIGQ9Ik0xNiAzLjEzYTQgNCAwIDAgMSAwIDcuNzUiLz48L3N2Zz4=' },
-      { id: 'me', label: 'আমার', nav: 'আমার',
-        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==' }
+      { id: 'product', label: 'প্রোডাক্ট', nav: 'প্রোডাক্ট', icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgN2wtOC00LTggNCA4IDQgOC00eiIvPjxwYXRoIGQ9Ik00IDd2MTBsOCA0IDgtNFY3Ii8+PC9zdmc+' },
+      { id: 'my-products', label: 'আমার প্রোডাক্ট', nav: 'আমার প্রোডাক্ট', icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTYgNEg4YTIgMiAwIDAgMC0yIDJ2MTRsNi00IDYgNFY2YTIgMiAwIDAgMC0yLTJ6Ii8+PC9zdmc+' },
+      { id: 'my-team', label: 'আমার টিম', nav: 'আমার টিম', icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjF2LTJhNCA0IDAgMCAwLTQtNEg1YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI3IiByPSI0Ii8+PHBhdGggZD0iTTIzIDIxdjJhNCA0IDAgMCAwLTMtMy44NyIvPjxwYXRoIGQ9Ik0xNiAzLjEzYTQgNCAwIDAgMSAwIDcuNzUiLz48L3N2Zz4=' },
+      { id: 'me', label: 'আমার', nav: 'আমার', icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==' }
     ];
 
-    /* ═══════════════════════════════════════════════
-       TABBAR RENDER
-    ═══════════════════════════════════════════════ */
+    // UI Functions
     function renderTabbar() {
       $('tabbar').innerHTML = tabs.map(t => `
-        <div class="app-tabbar__item ${currentTab === t.id ? 'app-tabbar__item--active' : ''}"
-             onclick="switchTab('${t.id}')">
-          <div class="app-tabbar__icon-wrap">
-            <img class="app-tabbar__icon" src="${t.icon}" alt="${t.label}">
-          </div>
+        <div class="app-tabbar__item ${currentTab === t.id ? 'app-tabbar__item--active' : ''}" onclick="switchTab('${t.id}')">
+          <div class="app-tabbar__icon-wrap"><img class="app-tabbar__icon" src="${t.icon}" alt="${t.label}"></div>
           <span class="app-tabbar__label">${t.label}</span>
         </div>
       `).join('');
@@ -861,58 +332,177 @@
       currentTab = tabId;
       document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('tab-page--active'));
       $('tab-' + tabId).classList.add('tab-page--active');
-      const tab = tabs.find(t => t.id === tabId);
-      $('navTitle').textContent = tab.nav;
+      $('navTitle').textContent = tabs.find(t => t.id === tabId).nav;
       renderTabbar();
       if (tabId === 'my-products') renderMyProducts();
+      if (tabId === 'my-team') renderTeam();
       if (tabId === 'me') renderProfile();
       window.scrollTo(0, 0);
     };
 
-    /* ═══════════════════════════════════════════════
-       TOAST
-    ═══════════════════════════════════════════════ */
     let toastTimer = null;
     window.showToast = function (msg, type = '') {
       const el = $('toast');
       el.textContent = msg;
       el.className = 'toast toast--show ' + (type ? 'toast--' + type : '');
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { el.classList.remove('toast--show'); }, 2500);
+      toastTimer = setTimeout(() => { el.classList.remove('toast--show'); }, 3000);
     };
 
-    /* ═══════════════════════════════════════════════
-       NOTICE POPUP
-    ═══════════════════════════════════════════════ */
     window.closeNotice = function () {
       $('noticePopup').classList.remove('van-popup--center--show');
       $('overlay').classList.remove('van-overlay--show');
       sessionStorage.setItem('noticeShown', '1');
     };
 
-    function openNotice() {
-      $('noticePopup').classList.add('van-popup--center--show');
-      $('overlay').classList.add('van-overlay--show');
+    function fmt(n) { return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    // AUTH LOGIC
+    window.switchAuthTab = function (tab) {
+      document.querySelectorAll('.auth-tab').forEach(el => el.classList.remove('auth-tab--active'));
+      document.querySelectorAll('.auth-form').forEach(el => el.classList.remove('auth-form--active'));
+      if (tab === 'login') {
+        $('tabLoginBtn').classList.add('auth-tab--active');
+        $('loginForm').classList.add('auth-form--active');
+      } else {
+        $('tabRegBtn').classList.add('auth-tab--active');
+        $('registerForm').classList.add('auth-form--active');
+      }
+    };
+
+    window.handleLogin = async function (e) {
+      e.preventDefault();
+      const email = $('loginEmail').value;
+      const pass = $('loginPassword').value;
+      const btn = $('loginBtn');
+      btn.textContent = 'অপেক্ষা করুন...'; btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        showToast('সফলভাবে লগইন হয়েছে', 'success');
+      } catch (err) {
+        showToast('লগইন ব্যর্থ: ' + (err.code === 'auth/invalid-credential' ? 'ভুল ইমেইল বা পাসওয়ার্ড' : err.message), 'error');
+      }
+      btn.textContent = 'লগইন করুন'; btn.disabled = false;
+    };
+
+    window.handleRegister = async function (e) {
+      e.preventDefault();
+      const email = $('regEmail').value;
+      const pass = $('regPassword').value;
+      const refCodeInput = $('regRefCode').value.trim().toUpperCase();
+      const btn = $('regBtn');
+      btn.textContent = 'অপেক্ষা করুন...'; btn.disabled = true;
+
+      try {
+        let referrerUid = null;
+        if (refCodeInput) {
+          const refQuery = await get(ref(db, 'referralCodes/' + refCodeInput));
+          if (refQuery.exists()) referrerUid = refQuery.val();
+          else throw new Error('রেফারেল কোডটি সঠিক নয়');
+        }
+
+        const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+        const uid = userCred.user.uid;
+        
+        // Generate new referral code
+        const newRefCode = uid.substring(0, 6).toUpperCase();
+
+        // Save user data
+        await set(ref(db, `users/${uid}`), {
+          email: email,
+          balance: 300, // Registration Bonus
+          orders: {},
+          myReferralCode: newRefCode,
+          referredBy: referrerUid || null,
+          createdAt: Date.now()
+        });
+
+        // Save referral code mapping
+        await set(ref(db, `referralCodes/${newRefCode}`), uid);
+
+        // If referred, add to referrer's team list
+        if (referrerUid) {
+          await update(ref(db, `users/${referrerUid}/team`), { [uid]: true });
+        }
+
+        showToast('রেজিস্ট্রেশন সফল! ৩০০ টাকা বোনাস পেয়েছেন।', 'success');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+      btn.textContent = 'রেজিস্টার করুন'; btn.disabled = false;
+    };
+
+    window.logout = async function () {
+      if(confirm('আপনি কি লগআউট করতে চান?')) {
+        await signOut(auth);
+        location.reload();
+      }
+    };
+
+    // REFERRAL SYSTEM
+    window.copyReferral = function () {
+      const link = window.location.origin + window.location.pathname + '?ref=' + userData.myReferralCode;
+      navigator.clipboard.writeText(link).then(() => showToast('রেফারেল লিংক কপি হয়েছে!', 'success'));
+    };
+
+    function checkUrlRef() {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      if (ref) {
+        $('regRefCode').value = ref;
+        switchAuthTab('register'); // Auto switch to register if ref code in URL
+      }
     }
 
-    /* ═══════════════════════════════════════════════
-       PRODUCTS RENDER
-    ═══════════════════════════════════════════════ */
-    function renderProducts() {
-      const listEl = $('productList');
-      const entries = Object.entries(products);
+    // BUY & COMMISSION LOGIC
+    window.buyProduct = async function (productId) {
+      if (!currentUser) return;
+      const p = products[productId];
+      if (!confirm(`${p.name} কিনতে চান? মূল্য ৳ ${fmt(p.price)}`)) return;
 
-      if (!entries.length) {
-        listEl.innerHTML = `<div class="empty-state"><p>কোনো প্রোডাক্ট পাওয়া যায়নি</p></div>`;
+      if (userData.balance < p.price) {
+        showToast(`ব্যালেন্স অপর্যাপ্ত। প্রয়োজন ৳ ${fmt(p.price)}`, 'error');
         return;
       }
 
-      listEl.innerHTML = entries.map(([id, p]) => `
+      try {
+        const newBalance = userData.balance - p.price;
+        const orderRef = push(ref(db, `users/${currentUser.uid}/orders`));
+        await set(orderRef, { productId, name: p.name, price: p.price, dailyIncome: p.dailyIncome, purchasedAt: Date.now() });
+        await update(ref(db, `users/${currentUser.uid}`), { balance: newBalance });
+        
+        // DISTRIBUTE COMMISSIONS (40%, 1%, 1%)
+        let currentRefUid = userData.referredBy;
+        const rates = [0.40, 0.01, 0.01]; 
+        
+        for (let i = 0; i < 3; i++) {
+          if (!currentRefUid) break;
+          const refSnap = await get(ref(db, `users/${currentRefUid}`));
+          if (refSnap.exists()) {
+            const refData = refSnap.val();
+            const comm = p.price * rates[i];
+            if (comm > 0) {
+              await update(ref(db, `users/${currentRefUid}`), { balance: (refData.balance || 0) + comm });
+            }
+            currentRefUid = refData.referredBy; // Go up the chain
+          } else {
+            break;
+          }
+        }
+
+        showToast(`${p.name} কেনা সফল হয়েছে!`, 'success');
+      } catch (err) {
+        showToast('কেনাকাটা ব্যর্থ হয়েছে', 'error');
+      }
+    };
+
+    // RENDER DATA
+    function renderProducts() {
+      const entries = Object.entries(products);
+      if (!entries.length) return $('productList').innerHTML = `<div class="empty-state"><p>কোনো প্রোডাক্ট নেই</p></div>`;
+      $('productList').innerHTML = entries.map(([id, p]) => `
         <div class="product-card">
-          <div class="product-card__img-box">
-            <img class="product-card__img" src="${p.image}" alt="${p.name}"
-                 onerror="this.src='https://via.placeholder.com/400x150/EAF3EF/00704A?text=${encodeURIComponent(p.name)}'">
-          </div>
+          <div class="product-card__img-box"><img class="product-card__img" src="${p.image}" alt="${p.name}"></div>
           <div class="product-card__name">${p.name}</div>
           <div class="product-card__tags">
             <span>দৈনিক আয় <em>৳ ${fmt(p.dailyIncome)}</em></span>
@@ -920,178 +510,81 @@
           </div>
           <div class="product-card__price">৳ ${fmt(p.price)}</div>
           <div class="product-card__buy" onclick="buyProduct('${id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="9" cy="21" r="1"/>
-              <circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             কিনুন
           </div>
         </div>
       `).join('');
     }
 
-    function fmt(n) {
-      return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    /* ═══════════════════════════════════════════════
-       BUY PRODUCT
-    ═══════════════════════════════════════════════ */
-    window.buyProduct = async function (productId) {
-      if (!currentUser) {
-        showToast('লোড হচ্ছে, অপেক্ষা করুন...', 'error');
-        return;
-      }
-
-      const p = products[productId];
-      if (!p) return;
-
-      if (!confirm(`${p.name} কিনতে চান? মূল্য ৳ ${fmt(p.price)}`)) return;
-
-      if (userData.balance < p.price) {
-        showToast(`ব্যালেন্স অপর্যাপ্ত। প্রয়োজন ৳ ${fmt(p.price)}`, 'error');
-        return;
-      }
-
-      try {
-        const newBalance = userData.balance - p.price;
-        const orderRef = push(ref(db, `users/${currentUser.uid}/orders`));
-        await set(orderRef, {
-          productId,
-          name: p.name,
-          price: p.price,
-          dailyIncome: p.dailyIncome,
-          totalIncome: p.totalIncome,
-          purchasedAt: Date.now()
-        });
-        await update(ref(db, `users/${currentUser.uid}`), { balance: newBalance });
-        showToast(`${p.name} সফলভাবে কেনা হয়েছে!`, 'success');
-      } catch (err) {
-        console.error(err);
-        showToast('কেনাকাটা ব্যর্থ হয়েছে', 'error');
-      }
-    };
-
-    /* ═══════════════════════════════════════════════
-       MY PRODUCTS
-    ═══════════════════════════════════════════════ */
     function renderMyProducts() {
-      const listEl = $('myProductsList');
-      const emptyEl = $('myProductsEmpty');
       const orders = userData.orders ? Object.values(userData.orders) : [];
-
       if (!orders.length) {
-        listEl.style.display = 'none';
-        emptyEl.style.display = 'flex';
-        return;
+        $('myProductsList').style.display = 'none'; $('myProductsEmpty').style.display = 'flex';
+      } else {
+        $('myProductsEmpty').style.display = 'none'; $('myProductsList').style.display = 'flex';
+        $('myProductsList').innerHTML = orders.map(o => `
+          <div class="product-card">
+            <div class="product-card__name">${o.name}</div>
+            <div class="product-card__tags"><span>দৈনিক <em>৳ ${fmt(o.dailyIncome)}</em></span></div>
+            <div class="product-card__price">৳ ${fmt(o.price)}</div>
+          </div>
+        `).join('');
       }
-
-      emptyEl.style.display = 'none';
-      listEl.style.display = 'flex';
-      listEl.innerHTML = orders.map(o => `
-        <div class="product-card">
-          <div class="product-card__name">${o.name}</div>
-          <div class="product-card__tags">
-            <span>দৈনিক আয় <em>৳ ${fmt(o.dailyIncome)}</em></span>
-            <span>মোট আয় <em>৳ ${fmt(o.totalIncome)}</em></span>
-          </div>
-          <div class="product-card__price">৳ ${fmt(o.price)}</div>
-          <div style="padding: 0 14px 14px; font-size: 11px; color: var(--color-text-muted);">
-            কেনা: ${new Date(o.purchasedAt).toLocaleString('bn-BD')}
-          </div>
-        </div>
-      `).join('');
     }
 
-    /* ═══════════════════════════════════════════════
-       PROFILE
-    ═══════════════════════════════════════════════ */
+    function renderTeam() {
+      $('myRefCode').textContent = userData.myReferralCode || '---';
+      $('teamCount').textContent = userData.team ? Object.keys(userData.team).length : 0;
+      // Dummy static data for level commissions display
+      $('teamL1').textContent = userData.team ? Object.keys(userData.team).length : 0;
+      $('teamL2').textContent = '0';
+      $('teamL3').textContent = '0';
+    }
+
     function renderProfile() {
       if (!currentUser) return;
-      $('avatar').textContent = currentUser.uid.slice(0, 1).toUpperCase();
-      $('uidText').textContent = 'UID: ' + currentUser.uid;
+      $('avatar').textContent = currentUser.email.slice(0, 1);
+      $('uidText').textContent = currentUser.email;
       $('balanceText').textContent = '৳ ' + fmt(userData.balance || 0);
     }
 
-    /* ═══════════════════════════════════════════════
-       LOAD PRODUCTS (Firebase → fallback)
-    ═══════════════════════════════════════════════ */
-    async function loadProducts() {
-      try {
-        const snap = await get(ref(db, 'products'));
-        if (snap.exists()) {
-          products = snap.val();
-        } else {
-          // Firebase খালি হলে fallback দেখাবো ও Firebase-এ সেভ করে দেবো
-          products = FALLBACK_PRODUCTS;
-          await set(ref(db, 'products'), FALLBACK_PRODUCTS).catch(() => {});
-        }
-      } catch (err) {
-        console.warn('Products load failed, using fallback:', err);
-        products = FALLBACK_PRODUCTS;
-      }
+    // INIT APP
+    async function initApp() {
+      const snap = await get(ref(db, 'products'));
+      if (snap.exists()) products = snap.val();
+      else { products = FALLBACK_PRODUCTS; set(ref(db, 'products'), FALLBACK_PRODUCTS).catch(()=>{}); }
+      
       renderProducts();
-    }
-
-    /* ═══════════════════════════════════════════════
-       AUTH
-    ═══════════════════════════════════════════════ */
-    async function ensureUser() {
-      if (!auth.currentUser) {
-        try {
-          await signInAnonymously(auth);
-        } catch (err) {
-          console.error('Anonymous sign-in failed:', err);
-          showToast('Authentication ব্যর্থ', 'error');
-        }
-      }
+      renderTabbar();
+      checkUrlRef();
+      if (!sessionStorage.getItem('noticeShown')) setTimeout(() => {
+        $('noticePopup').classList.add('van-popup--center--show');
+        $('overlay').classList.add('van-overlay--show');
+      }, 400);
     }
 
     onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
-      currentUser = user;
-
-      // ইউজার ডেটা স্ট্রাকচার তৈরি (প্রথমবার)
-      const userRef = ref(db, `users/${user.uid}`);
-      const snap = await get(userRef);
-      if (!snap.exists()) {
-        await set(userRef, {
-          balance: 0,
-          orders: {},
-          createdAt: Date.now()
+      if (user) {
+        currentUser = user;
+        $('authScreen').classList.remove('auth-screen--show');
+        
+        onValue(ref(db, `users/${user.uid}`), (s) => {
+          const v = s.val();
+          if (v) {
+            userData = v;
+            if (currentTab === 'me') renderProfile();
+            if (currentTab === 'my-products') renderMyProducts();
+            if (currentTab === 'my-team') renderTeam();
+          }
         });
+      } else {
+        currentUser = null;
+        $('authScreen').classList.add('auth-screen--show');
       }
-
-      // রিয়েল-টাইম লিসেন
-      onValue(userRef, (s) => {
-        const v = s.val();
-        userData = v || { balance: 0, orders: {} };
-        if (currentTab === 'me') renderProfile();
-        if (currentTab === 'my-products') renderMyProducts();
-      });
     });
 
-    /* ═══════════════════════════════════════════════
-       INIT
-    ═══════════════════════════════════════════════ */
-    (async function init() {
-      renderTabbar();
-      await ensureUser();
-      await loadProducts();
-
-      // নোটিশ পপআপ
-      if (!sessionStorage.getItem('noticeShown')) {
-        setTimeout(openNotice, 400);
-      }
-
-      // ওভারলে ক্লিকে বন্ধ
-      $('overlay').addEventListener('click', () => {
-        if ($('noticePopup').classList.contains('van-popup--center--show')) {
-          closeNotice();
-        }
-      });
-    })();
+    initApp();
   </script>
 </body>
 </html>
