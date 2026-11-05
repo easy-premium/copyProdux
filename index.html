@@ -226,9 +226,9 @@
       </div>
       <div class="menu-list">
         <div class="menu-item"><span>মোট টিম সদস্য</span><span class="arrow" id="teamCount">0</span></div>
-        <div class="menu-item"><span>লেভেল ১ কমিশন (৪০%)</span><span class="arrow" id="teamL1">0</span></div>
-        <div class="menu-item"><span>লেভেল ২ কমিশন (১%)</span><span class="arrow" id="teamL2">0</span></div>
-        <div class="menu-item"><span>লেভেল ৩ কমিশন (১%)</span><span class="arrow" id="teamL3">0</span></div>
+        <div class="menu-item"><span>লেভেল ১ কমিশন</span><span class="arrow" id="teamL1Rate">0%</span></div>
+        <div class="menu-item"><span>লেভেল ২ কমিশন</span><span class="arrow" id="teamL2Rate">0%</span></div>
+        <div class="menu-item"><span>লেভেল ৩ কমিশন</span><span class="arrow" id="teamL3Rate">0%</span></div>
       </div>
     </div>
 
@@ -260,8 +260,8 @@
       <div class="notice-dialog">
         <div class="notice-dialog__title">প্ল্যাটফর্মের বিবরণ</div>
         <div class="notice-dialog__body">
-          <p>১. রেজিস্ট্রেশন বোনাস: ৩০০ টাকা</p>
-          <p>২. রেফারেল বোনাস: ৪০% (লেভেল ১), ১% (লেভেল ২), ১% (লেভেল ৩)</p>
+          <p>১. রেজিস্ট্রেশন বোনাস: <span id="noticeRegBonus">৩০০</span> টাকা</p>
+          <p>২. রেফারেল বোনাস: <span id="noticeL1">৪০</span>% (লেভেল ১), <span id="noticeL2">১</span>% (লেভেল ২), <span id="noticeL3">১</span>% (লেভেল ৩)</p>
           <p>৩. জমা এবং উত্তোলন ২৪/৭ উপলব্ধ</p>
           <p>৪. ভিআইপি টিয়ার সিস্টেম + দৈনিক বেতন</p>
           <p>৫. ১,০০০ টাকা জমা দিন এবং সাথে সাথে ৩০০ টাকা উত্তোলন করুন</p>
@@ -294,19 +294,20 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    const FALLBACK_PRODUCTS = {
-      vip1: { name: 'VIP1', price: 1000, dailyIncome: 250, totalIncome: 25000, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg' },
-      vip2: { name: 'VIP2', price: 3000, dailyIncome: 789, totalIncome: 78900, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933228395_58268a000c479b3b.jpg' },
-      vip3: { name: 'VIP3', price: 6000, dailyIncome: 1666, totalIncome: 166600, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933220774_0f8a37f828535819.jpg' },
-      vip4: { name: 'VIP4', price: 12000, dailyIncome: 3530, totalIncome: 353000, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933210978_3b6653dcd035a83f.jpg' },
-      vip5: { name: 'VIP5', price: 25000, dailyIncome: 8333, totalIncome: 833300, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933255914_c90edbbc946f655b.jpg' },
-      vip6: { name: 'VIP6', price: 50000, dailyIncome: 17857, totalIncome: 1785700, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933263996_d5ff73a60df8bd47.jpg' },
-      vip7: { name: 'VIP7', price: 100000, dailyIncome: 38461, totalIncome: 3846100, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933247454_a36806e964eeb46b.jpg' },
-      vip8: { name: 'VIP8', price: 200000, dailyIncome: 83333, totalIncome: 8333300, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933200577_5dcd1366bef8d7f6.jpg' }
+    // আপনার দেওয়া JSON লিংক
+    const JSON_URL = 'https://easy-premium.github.io/copyProdux/produx.json';
+
+    // ডিফল্ট কনফিগ (যদি ডাটাবেজে config না থাকে)
+    const DEFAULT_CONFIG = {
+      registrationBonus: 300,
+      level1Rate: 0.40,
+      level2Rate: 0.01,
+      level3Rate: 0.01
     };
 
     let currentUser = null;
     let userData = { balance: 0, orders: {}, myReferralCode: '', referredBy: '' };
+    let appConfig = { ...DEFAULT_CONFIG };
     let products = {};
     let currentTab = 'product';
 
@@ -407,10 +408,10 @@
         // Generate new referral code
         const newRefCode = uid.substring(0, 6).toUpperCase();
 
-        // Save user data
+        // Save user data with dynamic registration bonus
         await set(ref(db, `users/${uid}`), {
           email: email,
-          balance: 300, // Registration Bonus
+          balance: appConfig.registrationBonus, 
           orders: {},
           myReferralCode: newRefCode,
           referredBy: referrerUid || null,
@@ -425,7 +426,7 @@
           await update(ref(db, `users/${referrerUid}/team`), { [uid]: true });
         }
 
-        showToast('রেজিস্ট্রেশন সফল! ৩০০ টাকা বোনাস পেয়েছেন।', 'success');
+        showToast(`রেজিস্ট্রেশন সফল! ${appConfig.registrationBonus} টাকা বোনাস পেয়েছেন।`, 'success');
       } catch (err) {
         showToast(err.message, 'error');
       }
@@ -450,15 +451,16 @@
       const ref = params.get('ref');
       if (ref) {
         $('regRefCode').value = ref;
-        switchAuthTab('register'); // Auto switch to register if ref code in URL
+        switchAuthTab('register');
       }
     }
 
-    // BUY & COMMISSION LOGIC
+    // BUY & COMMISSION LOGIC (কোনো confirm() পপআপ নেই)
     window.buyProduct = async function (productId) {
       if (!currentUser) return;
+      
       const p = products[productId];
-      if (!confirm(`${p.name} কিনতে চান? মূল্য ৳ ${fmt(p.price)}`)) return;
+      if (!p) return;
 
       if (userData.balance < p.price) {
         showToast(`ব্যালেন্স অপর্যাপ্ত। প্রয়োজন ৳ ${fmt(p.price)}`, 'error');
@@ -468,12 +470,22 @@
       try {
         const newBalance = userData.balance - p.price;
         const orderRef = push(ref(db, `users/${currentUser.uid}/orders`));
-        await set(orderRef, { productId, name: p.name, price: p.price, dailyIncome: p.dailyIncome, purchasedAt: Date.now() });
+        
+        // ১. অর্ডার সেভ করা
+        await set(orderRef, { 
+          productId, 
+          name: p.name, 
+          price: p.price, 
+          dailyIncome: p.dailyIncome, 
+          purchasedAt: Date.now() 
+        });
+        
+        // ২. ইউজারের ব্যালেন্স কাটা
         await update(ref(db, `users/${currentUser.uid}`), { balance: newBalance });
         
-        // DISTRIBUTE COMMISSIONS (40%, 1%, 1%)
+        // ৩. ডাইনামিক রেট অনুযায়ী কমিশন বিতরণ
         let currentRefUid = userData.referredBy;
-        const rates = [0.40, 0.01, 0.01]; 
+        const rates = [appConfig.level1Rate, appConfig.level2Rate, appConfig.level3Rate]; 
         
         for (let i = 0; i < 3; i++) {
           if (!currentRefUid) break;
@@ -484,7 +496,7 @@
             if (comm > 0) {
               await update(ref(db, `users/${currentRefUid}`), { balance: (refData.balance || 0) + comm });
             }
-            currentRefUid = refData.referredBy; // Go up the chain
+            currentRefUid = refData.referredBy; 
           } else {
             break;
           }
@@ -492,6 +504,7 @@
 
         showToast(`${p.name} কেনা সফল হয়েছে!`, 'success');
       } catch (err) {
+        console.error(err);
         showToast('কেনাকাটা ব্যর্থ হয়েছে', 'error');
       }
     };
@@ -502,7 +515,7 @@
       if (!entries.length) return $('productList').innerHTML = `<div class="empty-state"><p>কোনো প্রোডাক্ট নেই</p></div>`;
       $('productList').innerHTML = entries.map(([id, p]) => `
         <div class="product-card">
-          <div class="product-card__img-box"><img class="product-card__img" src="${p.image}" alt="${p.name}"></div>
+          <div class="product-card__img-box"><img class="product-card__img" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x150/EAF3EF/00704A?text=${encodeURIComponent(p.name)}'"></div>
           <div class="product-card__name">${p.name}</div>
           <div class="product-card__tags">
             <span>দৈনিক আয় <em>৳ ${fmt(p.dailyIncome)}</em></span>
@@ -536,10 +549,10 @@
     function renderTeam() {
       $('myRefCode').textContent = userData.myReferralCode || '---';
       $('teamCount').textContent = userData.team ? Object.keys(userData.team).length : 0;
-      // Dummy static data for level commissions display
-      $('teamL1').textContent = userData.team ? Object.keys(userData.team).length : 0;
-      $('teamL2').textContent = '0';
-      $('teamL3').textContent = '0';
+      // ডাইনামিক রেট দেখানো
+      $('teamL1Rate').textContent = (appConfig.level1Rate * 100) + '%';
+      $('teamL2Rate').textContent = (appConfig.level2Rate * 100) + '%';
+      $('teamL3Rate').textContent = (appConfig.level3Rate * 100) + '%';
     }
 
     function renderProfile() {
@@ -549,15 +562,48 @@
       $('balanceText').textContent = '৳ ' + fmt(userData.balance || 0);
     }
 
+    // LOAD PRODUCTS FROM JSON URL
+    async function loadProductsFromJSON() {
+      try {
+        const res = await fetch(JSON_URL);
+        const data = await res.json();
+        if (data.products) {
+          products = data.products;
+        } else {
+          products = data; // যদি সরাসরি প্রোডাক্ট অবজেক্ট থাকে
+        }
+      } catch (err) {
+        console.warn('JSON লোড ব্যর্থ, ফলব্যাক ব্যবহার করা হচ্ছে', err);
+        // ফলব্যাক
+        products = {
+          vip1: { name: 'VIP1', price: 1000, dailyIncome: 250, totalIncome: 25000, image: 'https://image.starbucksbd.com/images/95643beb86a1/media/1790933236339_c7372fe874e6e6cc.jpg' }
+        };
+      }
+      renderProducts();
+    }
+
+    // LOAD CONFIG FROM FIREBASE
+    function loadConfig() {
+      onValue(ref(db, 'config'), (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          appConfig = { ...DEFAULT_CONFIG, ...val };
+        }
+        // নোটিশ পপআপে ডাইনামিক মান বসানো
+        $('noticeRegBonus').textContent = appConfig.registrationBonus;
+        $('noticeL1').textContent = appConfig.level1Rate * 100;
+        $('noticeL2').textContent = appConfig.level2Rate * 100;
+        $('noticeL3').textContent = appConfig.level3Rate * 100;
+      });
+    }
+
     // INIT APP
     async function initApp() {
-      const snap = await get(ref(db, 'products'));
-      if (snap.exists()) products = snap.val();
-      else { products = FALLBACK_PRODUCTS; set(ref(db, 'products'), FALLBACK_PRODUCTS).catch(()=>{}); }
-      
-      renderProducts();
+      loadConfig(); // কনফিগ লোড করা
+      await loadProductsFromJSON(); // JSON থেকে প্রোডাক্ট লোড করা
       renderTabbar();
       checkUrlRef();
+      
       if (!sessionStorage.getItem('noticeShown')) setTimeout(() => {
         $('noticePopup').classList.add('van-popup--center--show');
         $('overlay').classList.add('van-overlay--show');
