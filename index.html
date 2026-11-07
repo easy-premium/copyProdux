@@ -99,7 +99,8 @@
     .app-tabbar__label { font-size: 10px; color: #fff; font-weight: 500; }
 
     /* OTHER TABS */
-    .tab-page { display: none; padding: 16px 12px; min-height: calc(100vh - 52px); }
+    /* 🌟 এখানে নিচের দিকে ৯০ পিক্সেল প্যাডিং যোগ করা হয়েছে যাতে স্ক্রল করে নিচের সবকিছু দেখা যায় */
+    .tab-page { display: none; padding: 16px 12px 90px 12px; min-height: calc(100vh - 52px); }
     .tab-page--active { display: block; }
     .profile-card { background: var(--gradient-card); color: #fff; padding: 24px 20px; border-radius: 20px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25); }
     .profile-card__avatar { width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
@@ -639,7 +640,7 @@
       }
     }
 
-    // 🌟 নতুন আপডেট করা renderTeam() ফাংশন
+    // 🌟 আপডেট করা renderTeam() ফাংশন
     function renderTeam() {
       $('myRefCode').textContent = userData.myReferralCode || '---';
       $('teamCount').textContent = userData.team ? Object.keys(userData.team).length : 0;
