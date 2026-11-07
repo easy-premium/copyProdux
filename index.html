@@ -554,9 +554,9 @@
       const params = new URLSearchParams(window.location.search);
       const ref = params.get('ref');
       if (ref) {
+        // রেফারেল কোড থাকলে শুধু ইনপুট বক্সে বসবে, কোনো পপআপ আসবে না
         $('regRefCode').value = ref;
         switchAuthTab('register');
-        $('authScreen').classList.add('auth-screen--show');
       }
     }
 
@@ -721,8 +721,14 @@
       } else {
         $('teamMembersList').innerHTML = teamUids.map(uid => {
           const member = team[uid];
-          // পুরাতন ডেটা স্ট্রাকচার (boolean) এবং নতুন ডেটা স্ট্রাকচার (object) উভয়টি হ্যান্ডেল করা
-          const mobile = typeof member === 'object' ? member.mobile : 'Unknown';
+          
+          let mobile = typeof member === 'object' ? member.mobile : 'Unknown';
+          
+          // 🟢 মোবাইল নম্বরের প্রথম ৬টি ডিজিট দেখাবে, বাকিগুলো ***** দিয়ে হাইড করবে
+          if (mobile !== 'Unknown' && mobile.length > 6) {
+            mobile = mobile.substring(0, 6) + '*****';
+          }
+
           const commission = typeof member === 'object' ? (member.commissionEarned || 0) : 0;
           const joinedAt = typeof member === 'object' ? member.joinedAt : Date.now();
           const dateStr = new Date(joinedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -790,7 +796,7 @@
       loadConfig();
       await loadProductsFromJSON();
       renderTabbar();
-      checkUrlRef();
+      checkUrlRef(); // এখানে এখন আর পপআপ আসবে না, শুধু ভ্যালু সেট হবে
       
       if (!sessionStorage.getItem('noticeShown')) setTimeout(() => {
         $('noticePopup').classList.add('van-popup--center--show');
