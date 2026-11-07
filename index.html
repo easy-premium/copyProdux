@@ -88,6 +88,16 @@
     .commission-rules { background: #F8F9FA; border-radius: 12px; padding: 14px; font-size: 12px; color: var(--color-text); line-height: 1.7; margin-top: 14px; }
     .commission-rules strong { color: var(--color-primary-dark); }
 
+    /* 🟢 TEAM MEMBERS LIST 🟢 */
+    .team-members-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 3px 12px rgba(30,57,50,0.06); margin-bottom: 14px; }
+    .team-members-title { font-size: 15px; font-weight: 800; color: var(--color-primary-dark); margin-bottom: 12px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+    .team-member-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f9f9f9; }
+    .team-member-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .team-member-info { display: flex; flex-direction: column; gap: 2px; }
+    .team-member-name { font-size: 14px; font-weight: 700; color: var(--color-text); }
+    .team-member-date { font-size: 11px; color: var(--color-text-muted); }
+    .team-member-bonus { font-size: 14px; font-weight: 700; color: var(--color-primary); background: var(--color-primary-soft); padding: 4px 10px; border-radius: 20px; }
+
     /* TABBAR */
     .app-tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; background: var(--gradient-tabbar); z-index: 100; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12); }
     .app-tabbar__track { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 10px; }
@@ -99,7 +109,6 @@
     .app-tabbar__label { font-size: 10px; color: #fff; font-weight: 500; }
 
     /* OTHER TABS */
-    /* 🌟 এখানে নিচের দিকে ৯০ পিক্সেল প্যাডিং যোগ করা হয়েছে যাতে স্ক্রল করে নিচের সবকিছু দেখা যায় */
     .tab-page { display: none; padding: 16px 12px 90px 12px; min-height: calc(100vh - 52px); }
     .tab-page--active { display: block; }
     .profile-card { background: var(--gradient-card); color: #fff; padding: 24px 20px; border-radius: 20px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25); }
@@ -170,11 +179,11 @@
           <div class="auth-tab" onclick="switchAuthTab('register')" id="tabRegBtn">রেজিস্টার</div>
         </div>
         
-        <!-- LOGIN FORM -->
+        <!-- LOGIN FORM (Mobile Number) -->
         <form class="auth-form auth-form--active" id="loginForm" onsubmit="handleLogin(event)">
           <div class="input-group">
-            <label>ইমেইল</label>
-            <input type="email" id="loginEmail" required placeholder="example@mail.com">
+            <label>মোবাইল নম্বর</label>
+            <input type="tel" id="loginMobile" required placeholder="01XXXXXXXXX">
           </div>
           <div class="input-group">
             <label>পাসওয়ার্ড</label>
@@ -183,11 +192,11 @@
           <button type="submit" class="auth-btn" id="loginBtn">লগইন করুন</button>
         </form>
 
-        <!-- REGISTER FORM -->
+        <!-- REGISTER FORM (Mobile Number) -->
         <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
           <div class="input-group">
-            <label>ইমেইল</label>
-            <input type="email" id="regEmail" required placeholder="example@mail.com">
+            <label>মোবাইল নম্বর</label>
+            <input type="tel" id="regMobile" required placeholder="01XXXXXXXXX">
           </div>
           <div class="input-group">
             <label>পাসওয়ার্ড</label>
@@ -253,11 +262,11 @@
         <div class="profile-card__balance-label">আপনার রেফারেল কোড</div>
         <div class="profile-card__balance" id="myRefCode" style="font-size: 24px; letter-spacing: 2px;">---</div>
         <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <button onclick="copyReferral()" style="flex:1; padding: 10px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 8px; font-weight: 600;">লিংক কপি করুন</button>
+          <button onclick="copyReferral()" style="flex:1; padding: 10px; background: rgba(255,255,255,0.2); color: #fff; border-radius: 8px; font-weight: 600;" id="btnCopyRef">লিংক কপি করুন</button>
         </div>
       </div>
 
-      <!-- কমিশন ডিটেইলস কার্ড -->
+      <!-- কমিশন ডিটেইলস কার্ড (লগইন ছাড়াও দেখা যাবে) -->
       <div class="commission-info-card">
         <div class="commission-title">📊 কমিশন সিস্টেম (বিস্তারিত)</div>
         
@@ -280,12 +289,16 @@
           <strong>কিভাবে কাজ করে?</strong><br>
           যখন আপনার টিমের কোনো সদস্য (লেভেল ১, ২ বা ৩) সাইট থেকে কোনো প্রোডাক্ট (যেমন VIP1, VIP2) কেনেন, তখন তার কেনা প্রোডাক্টের মূল্য থেকে নির্ধারিত শতাংশ (%) কমিশন হিসেবে সরাসরি আপনার ব্যালেন্সে যোগ হয়ে যাবে। 
           <br><br>
-          <strong>উদাহরণ:</strong> ধরুন আপনার লেভেল ১ এর কমিশন ২০%। আপনার রেফারেল করা একজন সদস্য ১০০০ টাকার একটি প্রোডাক্ট কিনলে, আপনি সরাসরি ২০০ টাকা কমিশন পাবেন। এই কমিশন ইনকাম সম্পূর্ণ অটোমেটিক আপনার অ্যাকাউন্টে যুক্ত হবে।
+          <strong>উদাহরণ:</strong> ধরুন আপনার লেভেল ১ এর কমিশন ২০%। আপনার রেফারেল করা একজন সদস্য ১০০০ টাকার একটি প্রোডাক্ট কিনলে, আপনি সরাসরি ২০০ টাকা কমিশন পাবেন।
         </div>
       </div>
 
-      <div class="menu-list">
-        <div class="menu-item"><span>মোট টিম সদস্য</span><span class="arrow" id="teamCount" style="font-weight: bold; color: var(--color-primary);">0</span></div>
+      <!-- টিম সদস্যদের লিস্ট (লগইন করলেই দেখা যাবে) -->
+      <div class="team-members-card" id="teamMembersCard">
+        <div class="team-members-title">👥 আমার টিম সদস্যবৃন্দ</div>
+        <div id="teamMembersList">
+          <p style="text-align: center; font-size: 13px; color: var(--color-text-muted); padding: 10px 0;">টিম সদস্যদের বিস্তারিত দেখতে লগইন করুন</p>
+        </div>
       </div>
     </div>
 
@@ -354,7 +367,7 @@
     // আপনার দেওয়া JSON লিংক
     const JSON_URL = 'https://easy-premium.github.io/copyProdux/produx.json';
 
-    // ডিফল্ট কনফিগ (যদি ডাটাবেজে config না থাকে)
+    // ডিফল্ট কনফিগ
     const DEFAULT_CONFIG = {
       registrationBonus: 100,
       level1Rate: 0.20,
@@ -363,10 +376,10 @@
     };
 
     let currentUser = null;
-    let userData = { balance: 0, orders: {}, myReferralCode: '', referredBy: '' };
+    let userData = { balance: 0, orders: {}, myReferralCode: '', referredBy: '', team: {} };
     let appConfig = { ...DEFAULT_CONFIG };
     let products = {};
-    let defaultProductImage = ""; // 🌟 নতুন ভেরিয়েবল: ডিফল্ট ইমেজের জন্য
+    let defaultProductImage = ""; 
     let currentTab = 'product';
 
     const $ = (id) => document.getElementById(id);
@@ -388,8 +401,9 @@
     }
 
     window.switchTab = function (tabId) {
-      // 🔒 মাই প্রোডাক্ট, মাই টিম এবং মাই প্রোফাইলে যেতে লগইন বাধ্যতামূলক
-      if ((tabId === 'my-products' || tabId === 'my-team' || tabId === 'me') && !currentUser) {
+      // 🔒 মাই প্রোডাক্ট এবং মাই প্রোফাইলে যেতে লগইন বাধ্যতামূলক
+      // কিন্তু মাই টিম সেকশনে গেস্টরাও যেতে পারবে (কমিশন রেট দেখতে)
+      if ((tabId === 'my-products' || tabId === 'me') && !currentUser) {
         $('authScreen').classList.add('auth-screen--show');
         return;
       }
@@ -426,7 +440,15 @@
 
     function fmt(n) { return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-    // AUTH LOGIC
+    // ==========================================
+    // AUTH LOGIC (Mobile Number based)
+    // ==========================================
+    
+    // মোবাইল নাম্বারকে ফায়ারবেস ইমেইল ফরম্যাটে রূপান্তর (যেমন: 01712345678@sharemarket.app)
+    function getAuthEmail(mobile) {
+      return mobile.trim() + "@sharemarket.app";
+    }
+
     window.switchAuthTab = function (tab) {
       document.querySelectorAll('.auth-tab').forEach(el => el.classList.remove('auth-tab--active'));
       document.querySelectorAll('.auth-form').forEach(el => el.classList.remove('auth-form--active'));
@@ -441,26 +463,30 @@
 
     window.handleLogin = async function (e) {
       e.preventDefault();
-      const email = $('loginEmail').value;
+      const mobile = $('loginMobile').value;
       const pass = $('loginPassword').value;
+      const email = getAuthEmail(mobile);
       const btn = $('loginBtn');
+      
       btn.textContent = 'অপেক্ষা করুন...'; btn.disabled = true;
       try {
         await signInWithEmailAndPassword(auth, email, pass);
         showToast('সফলভাবে লগইন হয়েছে', 'success');
         closeAuthScreen();
       } catch (err) {
-        showToast('লগইন ব্যর্থ: ' + (err.code === 'auth/invalid-credential' ? 'ভুল ইমেইল বা পাসওয়ার্ড' : err.message), 'error');
+        showToast('লগইন ব্যর্থ: ' + (err.code === 'auth/invalid-credential' ? 'ভুল মোবাইল নম্বর বা পাসওয়ার্ড' : err.message), 'error');
       }
       btn.textContent = 'লগইন করুন'; btn.disabled = false;
     };
 
     window.handleRegister = async function (e) {
       e.preventDefault();
-      const email = $('regEmail').value;
+      const mobile = $('regMobile').value;
       const pass = $('regPassword').value;
       const refCodeInput = $('regRefCode').value.trim().toUpperCase();
+      const email = getAuthEmail(mobile);
       const btn = $('regBtn');
+      
       btn.textContent = 'অপেক্ষা করুন...'; btn.disabled = true;
 
       try {
@@ -476,19 +502,26 @@
         
         const newRefCode = uid.substring(0, 6).toUpperCase();
 
+        // ডাটাবেজে ইউজার সেভ করা (email এর জায়গায় mobile সেভ করা হচ্ছে)
         await set(ref(db, `users/${uid}`), {
-          email: email,
+          mobile: mobile,
           balance: appConfig.registrationBonus, 
           orders: {},
           myReferralCode: newRefCode,
           referredBy: referrerUid || null,
-          createdAt: Date.now()
+          createdAt: Date.now(),
+          team: {}
         });
 
         await set(ref(db, `referralCodes/${newRefCode}`), uid);
 
+        // রেফারার থাকলে তার টিম লিস্টে নতুন ইউজারের ডিটেইলস সেভ করা
         if (referrerUid) {
-          await update(ref(db, `users/${referrerUid}/team`), { [uid]: true });
+          await update(ref(db, `users/${referrerUid}/team/${uid}`), { 
+            mobile: mobile,
+            joinedAt: Date.now(),
+            commissionEarned: 0
+          });
         }
 
         showToast(`রেজিস্ট্রেশন সফল! ${appConfig.registrationBonus} টাকা বোনাস পেয়েছেন।`, 'success');
@@ -509,6 +542,10 @@
 
     // REFERRAL SYSTEM
     window.copyReferral = function () {
+      if (!currentUser) {
+        showToast('লিংক কপি করতে লগইন করুন', 'error');
+        return;
+      }
       const link = window.location.origin + window.location.pathname + '?ref=' + userData.myReferralCode;
       navigator.clipboard.writeText(link).then(() => showToast('রেফারেল লিংক কপি হয়েছে!', 'success'));
     };
@@ -542,6 +579,7 @@
         const newBalance = userData.balance - p.price;
         const orderRef = push(ref(db, `users/${currentUser.uid}/orders`));
         
+        // ১. অর্ডার সেভ করা
         await set(orderRef, { 
           productId, 
           name: p.name, 
@@ -550,19 +588,35 @@
           purchasedAt: Date.now() 
         });
         
+        // ২. ইউজারের ব্যালেন্স কাটা
         await update(ref(db, `users/${currentUser.uid}`), { balance: newBalance });
         
+        // ৩. ডাইনামিক রেট অনুযায়ী কমিশন বিতরণ এবং টিম লিস্টে আপডেট
         let currentRefUid = userData.referredBy;
         const rates = [appConfig.level1Rate, appConfig.level2Rate, appConfig.level3Rate]; 
         
         for (let i = 0; i < 3; i++) {
           if (!currentRefUid) break;
           const refSnap = await get(ref(db, `users/${currentRefUid}`));
+          
           if (refSnap.exists()) {
             const refData = refSnap.val();
             const comm = p.price * rates[i];
+            
             if (comm > 0) {
+              // রেফারারের ব্যালেন্স বাড়ানো
               await update(ref(db, `users/${currentRefUid}`), { balance: (refData.balance || 0) + comm });
+              
+              // লেভেল ১ এর ক্ষেত্রে, রেফারারের টিম লিস্টে এই ইউজারের জেনারেট করা কমিশন আপডেট করা
+              if (i === 0) {
+                const memberSnap = await get(ref(db, `users/${currentRefUid}/team/${currentUser.uid}`));
+                if (memberSnap.exists()) {
+                   const currentEarned = memberSnap.val().commissionEarned || 0;
+                   await update(ref(db, `users/${currentRefUid}/team/${currentUser.uid}`), {
+                     commissionEarned: currentEarned + comm
+                   });
+                }
+              }
             }
             currentRefUid = refData.referredBy; 
           } else {
@@ -583,7 +637,6 @@
       if (!entries.length) return $('productList').innerHTML = `<div class="empty-state"><p>কোনো প্রোডাক্ট নেই</p></div>`;
       
       $('productList').innerHTML = entries.map(([id, p]) => {
-        // 🌟 এখানে ডিফল্ট ইমেজ ব্যবহার করা হচ্ছে
         const imgSrc = p.image || defaultProductImage || 'https://via.placeholder.com/400x150/EAF3EF/00704A?text=No+Image';
         
         return `
@@ -642,19 +695,57 @@
 
     // 🌟 আপডেট করা renderTeam() ফাংশন
     function renderTeam() {
-      $('myRefCode').textContent = userData.myReferralCode || '---';
-      $('teamCount').textContent = userData.team ? Object.keys(userData.team).length : 0;
-      
-      // ডাইনামিক কমিশন রেট আপডেট
+      // কমিশন রেট সবসময় দেখাবে (গেস্টরাও দেখতে পারবে)
       $('teamL1Rate').textContent = (appConfig.level1Rate * 100) + '%';
       $('teamL2Rate').textContent = (appConfig.level2Rate * 100) + '%';
       $('teamL3Rate').textContent = (appConfig.level3Rate * 100) + '%';
+
+      if (!currentUser) {
+        // গেস্ট হলে রেফারেল কোড ও লিস্ট লুকানো থাকবে
+        $('myRefCode').textContent = '---';
+        $('btnCopyRef').style.display = 'none';
+        $('teamMembersList').innerHTML = `<p style="text-align: center; font-size: 13px; color: var(--color-text-muted); padding: 10px 0;">টিম সদস্যদের বিস্তারিত দেখতে লগইন করুন</p>`;
+        return;
+      }
+
+      // লগইন থাকলে রেফারেল কোড ও লিস্ট দেখাবে
+      $('myRefCode').textContent = userData.myReferralCode || '---';
+      $('btnCopyRef').style.display = 'block';
+
+      // টিম সদস্যদের লিস্ট রেন্ডার করা
+      const team = userData.team || {};
+      const teamUids = Object.keys(team);
+      
+      if (teamUids.length === 0) {
+        $('teamMembersList').innerHTML = `<p style="text-align: center; font-size: 13px; color: var(--color-text-muted); padding: 10px 0;">আপনার এখনো কোনো টিম সদস্য নেই।</p>`;
+      } else {
+        $('teamMembersList').innerHTML = teamUids.map(uid => {
+          const member = team[uid];
+          // পুরাতন ডেটা স্ট্রাকচার (boolean) এবং নতুন ডেটা স্ট্রাকচার (object) উভয়টি হ্যান্ডেল করা
+          const mobile = typeof member === 'object' ? member.mobile : 'Unknown';
+          const commission = typeof member === 'object' ? (member.commissionEarned || 0) : 0;
+          const joinedAt = typeof member === 'object' ? member.joinedAt : Date.now();
+          const dateStr = new Date(joinedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+          return `
+            <div class="team-member-item">
+              <div class="team-member-info">
+                <div class="team-member-name">${mobile}</div>
+                <div class="team-member-date">জয়েন: ${dateStr}</div>
+              </div>
+              <div class="team-member-bonus">৳ ${fmt(commission)}</div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function renderProfile() {
       if (!currentUser) return;
-      $('avatar').textContent = currentUser.email.slice(0, 1);
-      $('uidText').textContent = currentUser.email;
+      // মোবাইল নম্বরের প্রথম অক্ষর বা ডিফল্ট 'U' দেখাবে
+      const name = userData.mobile || currentUser.email.split('@')[0];
+      $('avatar').textContent = name.charAt(0);
+      $('uidText').textContent = name;
       $('balanceText').textContent = '৳ ' + fmt(userData.balance || 0);
     }
 
@@ -664,7 +755,6 @@
         const res = await fetch(JSON_URL);
         const data = await res.json();
         
-        // 🌟 ডিফল্ট ইমেজ সেভ করা
         defaultProductImage = data.defaultProductImage || "";
         
         if (data.products) {
@@ -691,7 +781,6 @@
         $('noticeL2').textContent = appConfig.level2Rate * 100;
         $('noticeL3').textContent = appConfig.level3Rate * 100;
         
-        // Config লোড হলে টিম সেকশন রিফ্রেশ করা
         if(currentTab === 'my-team') renderTeam();
       });
     }
@@ -725,7 +814,8 @@
         });
       } else {
         currentUser = null;
-        // ইউজার ফ্রি-তে ঘুরে বেড়াতে পারবে, অটো লগইন পেজ আসবে না
+        // লগআউট অবস্থায় থাকলে "আমার টিম" পেজটি আপডেট করা (যাতে গেস্ট ভিউ দেখায়)
+        if (currentTab === 'my-team') renderTeam();
       }
     });
 
