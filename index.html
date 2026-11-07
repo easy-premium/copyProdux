@@ -2,7 +2,11 @@
 <html lang="bn" data-skin="starbucks" data-layout="skinOne">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- 🌟 ১. viewport-fit=cover যোগ করা হয়েছে (সাদা অংশ দূর করার জন্য) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <!-- 🌟 ২. theme-color সেট করা হয়েছে (উপরের স্ট্যাটাস বার কালো/সবুজ করার জন্য) -->
+  <meta name="theme-color" content="#1E3932">
+  
   <title>Share Market BD</title>
   <link rel="icon" href="https://img.icons8.com/ios-filled/100/00704A/financial-growth-analysis.png" type="image/png">
   <style>
@@ -29,12 +33,30 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif; background: var(--color-page-bg); color: var(--color-text); min-height: 100vh; }
+    
+    /* 🌟 ৩. body এর ব্যাকগ্রাউন্ড কালো/সবুজ করা হয়েছে যাতে নিচের সাদা অংশ না আসে */
+    html, body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif; 
+      background: var(--color-primary-dark); /* সাদা অংশ দূর করার জন্য */
+      color: var(--color-text); 
+      min-height: 100vh; 
+    }
+    
     body { display: flex; justify-content: center; }
     img { display: block; max-width: 100%; }
     button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
-    .layout { width: 100%; max-width: 400px; min-height: 100vh; background: var(--page-surface-bg); position: relative; box-shadow: 0 0 40px rgba(0, 0, 0, 0.05); }
+    .layout { 
+      width: 100%; 
+      max-width: 400px; 
+      min-height: 100vh; 
+      background: var(--page-surface-bg); 
+      position: relative; 
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.05); 
+      /* 🌟 ৪. উপরে ও নিচে সেফ এরিয়া প্যাডিং যোগ করা হয়েছে */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
 
     /* NAVBAR */
     .app-nav { position: sticky; top: 0; z-index: 50; }
@@ -99,7 +121,19 @@
     .team-member-bonus { font-size: 14px; font-weight: 700; color: var(--color-primary); background: var(--color-primary-soft); padding: 4px 10px; border-radius: 20px; }
 
     /* TABBAR */
-    .app-tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; background: var(--gradient-tabbar); z-index: 100; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12); }
+    .app-tabbar { 
+      position: fixed; 
+      bottom: 0; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      width: 100%; 
+      max-width: 400px; 
+      background: var(--gradient-tabbar); 
+      z-index: 100; 
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12); 
+      /* 🌟 ৫. ট্যাববারের নিচে সেফ এরিয়া প্যাডিং যোগ করা হয়েছে */
+      padding-bottom: env(safe-area-inset-bottom);
+    }
     .app-tabbar__track { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 10px; }
     .app-tabbar__item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; opacity: 0.55; }
     .app-tabbar__item--active { opacity: 1; }
@@ -138,7 +172,7 @@
     .toast--success { background: rgba(45, 106, 79, 0.95); }
 
     /* LOGIN/REGISTER SCREEN */
-    .auth-screen { position: fixed; inset: 0; background: var(--page-surface-bg); z-index: 3000; display: none; flex-direction: column; justify-content: center; padding: 20px; }
+    .auth-screen { position: fixed; inset: 0; background: var(--page-surface-bg); z-index: 3000; display: none; flex-direction: column; justify-content: center; padding: 20px; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
     .auth-screen--show { display: flex; }
     .auth-card { background: #fff; border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 360px; margin: 0 auto; position: relative; }
     
@@ -693,7 +727,6 @@
       }
     }
 
-    // 🌟 আপডেট করা renderTeam() ফাংশন
     function renderTeam() {
       // কমিশন রেট সবসময় দেখাবে (গেস্টরাও দেখতে পারবে)
       $('teamL1Rate').textContent = (appConfig.level1Rate * 100) + '%';
