@@ -2,7 +2,6 @@
 <html lang="bn" data-skin="starbucks" data-layout="skinOne">
 <head>
   <meta charset="UTF-8">
-  <!-- 🌟 ১. viewport-fit=cover যোগ করা হয়েছে (সাদা অংশ দূর করার জন্য) -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <!-- 🌟 ২. theme-color সেট করা হয়েছে (উপরের স্ট্যাটাস বার কালো/সবুজ করার জন্য) -->
   <meta name="theme-color" content="#1E3932">
@@ -131,7 +130,7 @@
       background: var(--gradient-tabbar); 
       z-index: 100; 
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12); 
-      /* 🌟 ৫. ট্যাববারের নিচে সেফ এরিয়া প্যাডিং যোগ করা হয়েছে */
+     
       padding-bottom: env(safe-area-inset-bottom);
     }
     .app-tabbar__track { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 10px; }
@@ -145,7 +144,7 @@
     /* OTHER TABS */
     .tab-page { display: none; padding: 16px 12px 90px 12px; min-height: calc(100vh - 52px); }
     .tab-page--active { display: block; }
-    .profile-card { background: var(--gradient-card); color: #fff; padding: 24px 20px; border-radius: 20px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25); }
+    .profile-card { background: #006241; color: #fff; padding: 24px 20px; border-radius: 20px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0, 112, 74, 0.25); }
     .profile-card__avatar { width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
     .profile-card__uid { font-size: 11px; opacity: 0.75; word-break: break-all; margin-bottom: 12px; }
     .profile-card__balance-label { font-size: 12px; opacity: 0.75; margin-bottom: 4px; }
