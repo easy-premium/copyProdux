@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Payment</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: #e8ebef;
+            color: #111111;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .payment-wrapper {
+            width: 100%;
+            max-width: 470px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background: #f1f1f1;
+            border-right: 1px solid #b9bec3;
+            border-left: 1px solid #b9bec3;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Header
+        |--------------------------------------------------------------------------
+        */
+
+        .payment-header {
+            min-height: 74px;
+            padding: 15px 27px 12px;
+            background: #067a54;
+            color: #ffffff;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .header-amount {
+            margin-bottom: 3px;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .header-warning {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .pay-service {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 2px;
+            white-space: nowrap;
+        }
+
+        .pay-badge {
+            padding: 4px 7px;
+            border-radius: 4px;
+            background: #ffffff;
+            color: #087453;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .service-text {
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 3px;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Main content
+        |--------------------------------------------------------------------------
+        */
+
+        .payment-content {
+            padding: 27px 27px 32px;
+        }
+
+        .amount-notice {
+            margin: 0 0 4px;
+            color: #ff1414;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.55;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment method
+        |--------------------------------------------------------------------------
+        */
+
+        .method-card {
+            display: flex;
+            min-height: 76px;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 12px;
+            padding: 8px 13px;
+            border-radius: 8px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .method-logo-circle {
+            display: flex;
+            width: 58px;
+            height: 58px;
+            flex: 0 0 58px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 50%;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .method-logo-circle img {
+            display: block;
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .method-name {
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Wallet area
+        |--------------------------------------------------------------------------
+        */
+
+        .field-label {
+            display: block;
+            margin-bottom: 4px;
+            color: #000000;
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .required-star {
+            color: #7d24e8;
+        }
+
+        .wallet-instruction {
+            margin-bottom: 8px;
+            color: #111111;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        .instruction-highlight {
+            color: #ff1515;
+            font-weight: 700;
+        }
+
+        .wallet-box {
+            display: flex;
+            width: 100%;
+            height: 50px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 17px;
+            padding: 0 14px 0 32px;
+            border-radius: 8px;
+            background: #e9e9e9;
+        }
+
+        .wallet-number {
+            color: #111111;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .copy-button {
+            display: flex;
+            width: 38px;
+            height: 38px;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .copy-button svg {
+            width: 29px;
+            height: 29px;
+            stroke: #007858;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Transaction form
+        |--------------------------------------------------------------------------
+        */
+
+        .trx-label {
+            margin-bottom: 8px;
+            color: #000000;
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        .trx-required {
+            color: #ff1515;
+        }
+
+        .trx-input {
+            width: 100%;
+            height: 51px;
+            padding: 0 18px;
+            border: 2px solid #ff2020;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #222222;
+            outline: none;
+            font-size: 16px;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .trx-input::placeholder {
+            color: #777777;
+        }
+
+        .trx-input:focus {
+            border-color: #e80000;
+            box-shadow: 0 0 0 3px rgba(255, 32, 32, 0.09);
+        }
+
+        .submit-area {
+            margin: 16px 0 3px;
+            text-align: center;
+        }
+
+        .submit-button {
+            min-width: 150px;
+            height: 44px;
+            padding: 0 25px;
+            border: 1px solid #8d8d8d;
+            border-radius: 9px;
+            background: #f1f1f1;
+            color: #777777;
+            font-size: 17px;
+            cursor: not-allowed;
+            opacity: 0.78;
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.2s ease;
+        }
+
+        .submit-button.ready {
+            border-color: #087a58;
+            background: #087a58;
+            color: #ffffff;
+            cursor: pointer;
+            opacity: 1;
+            box-shadow: 0 5px 14px rgba(8, 122, 88, 0.24);
+        }
+
+        .submit-button.ready:hover {
+            background: #066c4d;
+        }
+
+        .submit-button.ready:active {
+            transform: scale(0.98);
+        }
+
+        .submit-button.submitting {
+            border-color: #087a58;
+            background: #087a58;
+            color: #ffffff;
+            cursor: wait;
+            opacity: 0.75;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Warning
+        |--------------------------------------------------------------------------
+        */
+
+        .warning-heading {
+            margin-top: 0;
+            color: #000000;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .animated-warning {
+            display: block;
+            width: 100%;
+            margin: 0 0 17px;
+            color: #ff1212;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.45;
+            transform-origin: left center;
+            animation: warningPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.045);
+            }
+        }
+
+        .bottom-description {
+            color: #969696;
+            font-size: 14px;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        /* New Legal Notice Style */
+
+        .gateway-disclaimer-box {
+            margin-top: 25px;
+            padding: 12px;
+            background: #e3e7ec;
+            border-left: 4px solid #555555;
+            border-radius: 4px;
+            color: #555555;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .gateway-disclaimer-box strong {
+            display: block;
+            color: #111111;
+            margin-bottom: 4px;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status card
+        |--------------------------------------------------------------------------
+        */
+
+        .status-card {
+            padding: 28px 18px;
+            border-radius: 11px;
+            background: #ffffff;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .status-icon {
+            display: flex;
+            width: 64px;
+            height: 64px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #e8f8f1;
+            color: #087a58;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .status-icon.processing {
+            animation: statusPulse 1.3s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 0.8;
+            }
+        }
+
+        .status-title {
+            margin-bottom: 9px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .status-description {
+            color: #555555;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .return-message {
+            margin-top: 17px;
+            padding-top: 15px;
+            border-top: 1px solid #eeeeee;
+            color: #777777;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .return-countdown {
+            color: #087a58;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .return-link {
+            display: inline-block;
+            margin-top: 13px;
+            color: #087a58;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Responsive
+        |--------------------------------------------------------------------------
+        */
+
+        @media (max-width: 480px) {
+            .payment-header {
+                padding-right: 28px;
+                padding-left: 28px;
+            }
+
+            .payment-content {
+                padding-right: 27px;
+                padding-left: 27px;
+            }
+
+            .header-amount {
+                font-size: 19px;
+            }
+
+            .header-warning {
+                font-size: 15px;
+            }
+
+            .service-text {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animated-warning,
+            .status-icon.processing {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="payment-wrapper">
+
+    <header class="payment-header">
+        <div class="header-row">
+
+            <div>
+                <div class="header-amount">
+                    BDT 200
+                </div>
+
+                <div class="header-warning">
+                    কম বা বেশি টাকা পাঠাবেন না
+                </div>
+            </div>
+
+            <div class="pay-service">
+                <span class="pay-badge">
+                    PAY
+                </span>
+
+                <span class="service-text">
+                    SERVICE
+                </span>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="payment-content">
+
+        <p class="amount-notice">
+            আপনি যদি টাকার পরিমাণ পরিবর্তন করেন
+            (BDT 200),
+            আপনি ক্রেডিট পেতে সক্ষম হবেন না।
+        </p>
+
+        <section
+            class="method-card"
+            style="background: linear-gradient(135deg, #f15a24 0%, #e31e24 100%);"
+        >
+
+            <div class="method-logo-circle">
+
+                <img
+                    src="https://gateway.play2win5.com/assets/payment/nagad.png"
+                    alt="NAGAD Deposit"
+                >
+
+            </div>
+
+            <div class="method-name">
+                NAGAD Deposit
+            </div>
+
+        </section>
+
+        <section>
+
+            <label class="field-label">
+                Wallet No
+
+                <span class="required-star">
+                    *
+                </span>
+            </label>
+
+            <div class="wallet-instruction">
+                এই নাম্বারে শুধুমাত্র
+
+                <span class="instruction-highlight">
+                    সেন্ড মানি
+                </span>
+
+                গ্রহণ করা হয়
+            </div>
+
+            <div class="wallet-box">
+
+                <span
+                    class="wallet-number"
+                    id="walletNumber"
+                >
+                    01714553550
+                </span>
+
+                <button
+                    type="button"
+                    class="copy-button"
+                    aria-label="Copy wallet number"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke-width="1.8"
+                    >
+
+                        <rect
+                            x="8"
+                            y="3"
+                            width="11"
+                            height="14"
+                            rx="2"
+                        ></rect>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"
+                        ></path>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M11 7h5M11 10h5M11 13h3"
+                        ></path>
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <div class="trx-label">
+            সেন্ড মানির TrxID নাম্বারটি লিখুন
+
+            <span class="trx-required">
+                (প্রয়োজন)
+            </span>
+        </div>
+
+        <input
+            type="text"
+            name="trx_id"
+            id="trxInput"
+            class="trx-input"
+            value=""
+            placeholder="TrxID অবশ্যই পূরণ করতে হবে।"
+            autocomplete="off"
+            minlength="6"
+            maxlength="100"
+        >
+
+        <div class="submit-area">
+
+            <button
+                type="button"
+                id="submitButton"
+                class="submit-button"
+                disabled
+            >
+                নিশ্চিত
+            </button>
+
+        </div>
+
+        <div class="warning-heading">
+            সতর্কতা:
+        </div>
+
+        <div class="animated-warning">
+            লেনদেন আইডি সঠিকভাবে পূরণ করতে হবে,
+            অন্যথায় ক্রেডিট ব্যর্থ হবে !
+        </div>
+
+        <div class="bottom-description">
+            অনুগ্রহ করে নিশ্চিত হয়ে নিন যে আপনি
+            NAGAD deposit ওয়ালেট নাম্বারে
+            সেন্ড মানি করেছেন।
+
+            এই নাম্বারের জন্য অন্য কোনো পদ্ধতিতে টাকা পাঠালে
+            সেই টাকা পাওয়ার কোনো সম্ভাবনা নেই।
+        </div>
+
+        <!-- LEGAL SAFE DISCLAIMER SECTION FOR LAW ENFORCEMENT -->
+
+        <div class="gateway-disclaimer-box">
+            <strong>
+                🛡️ আইনি নোটিশ ও ব্যবহার বিধি:
+            </strong>
+
+            এই গেটওয়ে অ্যাপ্লিকেশনটি সম্পূর্ণ সলিড ই-কমার্স ও ডিজিটাল আইটি সার্ভিস প্রোভাইডার হিসেবে কাজ করে। আমরা কোনো ধরনের অবৈধ বেটিং, অনলাইন জুয়া বা মানি লন্ডারিং অ্যাপ্লিকেশন সমর্থন করি না এবং এর সাথে আমাদের কোনো সংযোগ নেই। যদি কোনো ব্যবহারকারী আইনবহির্ভূত কাজে এই পেমেন্ট সার্ভিস অপব্যবহার করার চেষ্টা করে, তবে তার তথ্য আইন প্রয়োগকারী সংস্থার কাছে সাথে সাথে হস্তান্তর করা হবে।
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
