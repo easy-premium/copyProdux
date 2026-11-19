@@ -391,6 +391,9 @@ const TAB_TITLES = {
   profile: 'প্রোফাইল'
 };
 
+/* রেফারেল লিংকের বেস URL — এখানে আপনার ডোমেইন/পেজের লিংক দিন */
+const REF_BASE_URL = 'https://yourdomain.com/';
+
 /* =========================================================
    2) UTILS
    ========================================================= */
@@ -942,15 +945,34 @@ function shortcutAction(type){
 
   if (type === 'invite') {
     if (!u) { openAuthScreen('login'); return; }
-    const code = u.mobile;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(code).then(
-        () => showToast('রেফারেল কোড কপি হয়েছে', 'success'),
-        () => showDialog('আপনার রেফারেল কোড', '<div style="text-align:center;font-size:20px;font-weight:800;color:#006241">' + code + '</div>', 'ঠিক আছে')
-      );
-    } else {
-      showDialog('আপনার রেফারেল কোড', '<div style="text-align:center;font-size:20px;font-weight:800;color:#006241">' + code + '</div>', 'ঠিক আছে');
-    }
+
+    /* রেফারেল লিংক তৈরি: base URL + ?ref=MOBILE */
+    const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(u.mobile);
+
+    const copyLink = () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(refLink);
+      }
+      /* ফলব্যাক: পুরনো ব্রাউজারের জন্য */
+      return new Promise((resolve, reject) => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = refLink;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          resolve();
+        } catch (err) { reject(err); }
+      });
+    };
+
+    copyLink().then(
+      () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
+      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
+    );
     return;
   }
 
