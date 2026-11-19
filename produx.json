@@ -1,1 +1,61 @@
-rgt
+{
+  "defaultProductImage": "",
+  "products": {
+    "vip1": {
+      "name": "VIP1",
+      "price": 1000,
+      "dailyIncome": 250,
+      "totalIncome": 25000,
+      "image": ""
+    },
+    "vip2": {
+      "name": "VIP2",
+      "price": 3000,
+      "dailyIncome": 789,
+      "totalIncome": 78900,
+      "image": ""
+    },
+    "vip3": {
+      "name": "VIP3",
+      "price": 6000,
+      "dailyIncome": 1666,
+      "totalIncome": 166600,
+      "image": ""
+    },
+    "vip4": {
+      "name": "VIP4",
+      "price": 12000,
+      "dailyIncome": 3530,
+      "totalIncome": 353000,
+      "image": ""
+    },
+    "vip5": {
+      "name": "VIP5",
+      "price": 25000,
+      "dailyIncome": 8333,
+      "totalIncome": 833300,
+      "image": ""
+    },
+    "vip6": {
+      "name": "VIP6",
+      "price": 50000,
+      "dailyIncome": 17857,
+      "totalIncome": 1785700,
+      "image": ""
+    },
+    "vip7": {
+      "name": "VIP7",
+      "price": 100000,
+      "dailyIncome": 38461,
+      "totalIncome": 3846100,
+      "image": ""
+    },
+    "vip8": {
+      "name": "VIP8",
+      "price": 200000,
+      "dailyIncome": 83333,
+      "totalIncome": 8333300,
+      "image": ""
+    }
+  }
+}
