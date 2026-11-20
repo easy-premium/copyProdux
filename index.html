@@ -128,7 +128,6 @@
       background: var(--gradient-tabbar);
       z-index: 100;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-
       padding-bottom: env(safe-area-inset-bottom);
     }
     .app-tabbar__track { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 10px; }
@@ -372,6 +371,36 @@
 
 <script>
 /* =========================================================
+   FIREBASE REST API & VERCEL ENVIRONMENT CONFIGURATION
+   ========================================================= */
+// ⚠️ আপনার Vercel Dashboard -> Settings -> Environment Variables এ নিচের ভেরিয়েবলগুলো সেট করুন
+// তবে সরাসরি ডেমো দেওয়ার জন্য আমি এখানে আপনার JSON এর ডেটা বসিয়ে দিচ্ছি।
+
+const FIREBASE_CONFIG = {
+  // আপনার Firebase Realtime Database URL (শেষে .firebaseio.com বা আপনার রিজিওন URL)
+  databaseURL: "https://alamin-5f9c6-default-rtdb.firebaseio.com", 
+  
+  // ⚠️ এখানে ছবিতে থাকা Database Secret টি বসান। (Vercel Env: FIREBASE_DB_SECRET)
+  // নিরাপত্তার জন্য প্রোডাকশনে এটি সরাসরি কোডে না রেখে ব্যাকএন্ড (API) দিয়ে কল করুন।
+  databaseSecret: "YOUR_DATABASE_SECRET_HERE" 
+};
+
+const FIREBASE_API = {
+  // REST API: auth=<secret> দিয়ে ডেটা রিড/রাইট করা হয়
+  get: (path) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`).then(res => res.json()),
+  put: (path, data) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(res => res.json()),
+  patch: (path, data) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(res => res.json())
+};
+
+/* =========================================================
    1) PRODUCT DATA
    ========================================================= */
 const PRODUCTS = {
@@ -391,7 +420,7 @@ const TAB_TITLES = {
   profile: 'প্রোফাইল'
 };
 
-/* রেফারেল লিংকের বেস URL — এখানে আপনার ডোমেইন/পেজের লিংক দিন */
+/* রেফারেল লিংকের বেস URL */
 const REF_BASE_URL = 'https://yourdomain.com/';
 
 /* =========================================================
@@ -440,7 +469,6 @@ function confirmDialog(){
 const IMG_CACHE   = {};
 const IMG_PENDING = {};
 
-/* base64 এর ধরন বুঝে mime বের করা */
 function guessMime(b64){
   if (b64.startsWith('iVBORw0KGgo')) return 'image/png';
   if (b64.startsWith('/9j/'))        return 'image/jpeg';
@@ -450,22 +478,13 @@ function guessMime(b64){
   return 'image/jpeg';
 }
 
-/* ফাইলের ভেতরের টেক্সট → ব্যবহারযোগ্য image src */
 function normalizeImagePayload(raw){
   if (!raw) return null;
   let txt = String(raw).trim();
-
-  /* ১) ভেতরে সম্পূর্ণ data URI থাকলে সেটাই নিন */
   const m = txt.match(/data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+/);
   if (m) return m[0].replace(/\s+/g, '');
-
-  /* ২) কোট / নতুন লাইন / স্পেস পরিষ্কার */
   txt = txt.replace(/^["']+/, '').replace(/["']+$/, '').replace(/\s+/g, '');
-
-  /* ৩) সরাসরি কোনো ইমেজ লিংক হলে */
   if (/^https?:\/\//i.test(txt)) return txt;
-
-  /* ৪) কাঁচা base64 হলে */
   if (txt && /^[A-Za-z0-9+/=]+$/.test(txt)) {
     return 'data:' + guessMime(txt) + ';base64,' + txt;
   }
@@ -475,16 +494,12 @@ function normalizeImagePayload(raw){
 async function fetchImageSource(url){
   const clean = String(url || '').trim();
   if (!clean) return null;
-
-  /* .txt না হলে সরাসরি ইমেজ লিংক হিসেবে ব্যবহার */
   if (!/\.txt(\?|$)/i.test(clean) && /^https?:\/\//i.test(clean)) return clean;
-
   try {
     const res = await fetch(clean, { cache: 'force-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const raw = await res.text();
     const src = normalizeImagePayload(raw);
-    if (!src) console.warn('[IMG] base64 পাওয়া যায়নি:', clean);
     return src;
   } catch (err) {
     console.warn('[IMG] লোড ব্যর্থ:', clean, err);
@@ -496,7 +511,6 @@ function resolveImage(url){
   if (!url) return Promise.resolve(null);
   if (IMG_CACHE[url]) return Promise.resolve(IMG_CACHE[url]);
   if (IMG_PENDING[url]) return IMG_PENDING[url];
-
   IMG_PENDING[url] = fetchImageSource(url).then(src => {
     IMG_CACHE[url] = src || null;
     delete IMG_PENDING[url];
@@ -505,7 +519,6 @@ function resolveImage(url){
   return IMG_PENDING[url];
 }
 
-/* ইমেজ লোড না হলে সুন্দর ফলব্যাক */
 function fallbackImage(label){
   const svg =
     '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" viewBox="0 0 640 320">' +
@@ -520,18 +533,15 @@ function fallbackImage(label){
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
-/* img ট্যাগে ইমেজ বসানো */
 function loadImageInto(imgEl, url, label){
   if (!imgEl) return;
   imgEl.classList.remove('product-card__img--loaded');
-
   resolveImage(url).then(src => {
     const finish = () => {
       imgEl.classList.add('product-card__img--loaded');
       imgEl.onload = null;
       imgEl.onerror = null;
     };
-
     if (src) {
       imgEl.onload  = finish;
       imgEl.onerror = () => { imgEl.src = fallbackImage(label || ''); finish(); };
@@ -544,7 +554,6 @@ function loadImageInto(imgEl, url, label){
   });
 }
 
-/* ---- ব্যানার (SVG data URI) ---- */
 const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="280" viewBox="0 0 800 280">' +
     '<defs>' +
@@ -566,31 +575,120 @@ const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
 );
 
 /* =========================================================
-   4) DATABASE (localStorage)
+   4) FIREBASE DATABASE LOGIC (Replacing localStorage)
    ========================================================= */
-const DB_KEY = 'smbd_db_v1';
-let DB = { users: {}, session: null };
+let CURRENT_USER = null;
 
-function loadDB(){
+// লগইন ফাংশন
+async function handleLogin(e){
+  e.preventDefault();
+  const mobile = document.getElementById('loginMobile').value.trim();
+  const pass   = document.getElementById('loginPassword').value;
+
+  if (!/^01\d{9}$/.test(mobile)) { showToast('সঠিক মোবাইল নম্বর দিন', 'error'); return; }
+
   try {
-    const raw = localStorage.getItem(DB_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && parsed.users) DB = parsed;
+    // ফায়ারবেস থেকে ইউজার খোঁজা (JSON স্ট্রাকচার অনুযায়ী)
+    const user = await FIREBASE_API.get(`user/${mobile}`);
+    
+    // যদি ইউজার না থাকে অথবা পাসওয়ার্ড না মিলে (যদিও আপনার JSON এ পাসওয়ার্ড নেই, তাই ডেমো হিসেবে যেকোনো পাসওয়ার্ড কাজ করবে)
+    // রিয়েল অ্যাপে পাসওয়ার্ড হ্যাশ করে রাখতে হবে।
+    if (!user) { showToast('এই মোবাইল নম্বরে অ্যাকাউন্ট নেই', 'error'); return; }
+
+    // ✅ সেশন সেভ করা
+    CURRENT_USER = { mobile, ...user };
+    localStorage.setItem('smbd_session', mobile); // ব্রাউজার সেশন
+
+    closeAuthScreen();
+    renderAll();
+    showToast('স্বাগতম!', 'success');
+  } catch (error) {
+    showToast('লগইন ব্যর্থ হয়েছে', 'error');
+    console.error(error);
+  }
+}
+
+// রেজিস্ট্রেশন ফাংশন
+async function handleRegister(e){
+  e.preventDefault();
+  const mobile = document.getElementById('regMobile').value.trim();
+  const pass   = document.getElementById('regPassword').value;
+  const ref    = document.getElementById('regRefCode').value.trim();
+
+  if (!/^01\d{9}$/.test(mobile)) { showToast('সঠিক মোবাইল নম্বর দিন', 'error'); return; }
+  if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
+
+  try {
+    const existingUser = await FIREBASE_API.get(`user/${mobile}`);
+    if (existingUser) { showToast('এই নম্বরে অ্যাকাউন্ট আছে', 'error'); return; }
+
+    // নতুন ইউজার ডেটা JSON স্ট্রাকচার অনুযায়ী তৈরি
+    const newUser = {
+      "acount-balance": 0,
+      "amount-history": {
+        "time": new Date().toISOString(),
+        "transactionuid": {
+          "amount": 0,
+          "info": "Account Created"
+        }
+      },
+      "product": {
+        "product-total-income": 0,
+        "order-end-time": "",
+        "order-id": "",
+        "order-start-time": "",
+        "product-daly-income": 0,
+        "product-price": 0
+      },
+      "uid": "UID_" + Date.now()
+    };
+
+    await FIREBASE_API.put(`user/${mobile}`, newUser);
+
+    // রেফারেল লজিক (যদি থাকে)
+    if (ref) {
+      // এখানে রেফারেল সিস্টেমের জন্য ডেটাবেসে স্টোর করা যেতে পারে
+      console.log("Referred by:", ref);
     }
-  } catch (e) { console.warn('DB load error', e); }
-  if (!DB.users) DB.users = {};
+
+    CURRENT_USER = { mobile, ...newUser };
+    localStorage.setItem('smbd_session', mobile);
+
+    closeAuthScreen();
+    renderAll();
+    showToast('রেজিস্ট্রেশন সফল হয়েছে', 'success');
+  } catch (error) {
+    showToast('রেজিস্ট্রেশন ব্যর্থ', 'error');
+    console.error(error);
+  }
 }
-function saveDB(){
-  try { localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
-  catch (e) { console.warn('DB save error', e); }
+
+// লগআউট ফাংশন
+function handleLogout(){
+  showDialog('লগআউট', 'আপনি কি লগআউট করতে চান?', 'লগআউট', () => {
+    CURRENT_USER = null;
+    localStorage.removeItem('smbd_session');
+    renderAll();
+    openAuthScreen('login');
+    showToast('লগআউট হয়েছে', 'success');
+  });
 }
-function getUser(){
-  return DB.session ? (DB.users[DB.session] || null) : null;
+
+// ইউজার ডেটা রিফ্রেশ
+async function refreshUserData() {
+  if (!CURRENT_USER) return;
+  try {
+    const user = await FIREBASE_API.get(`user/${CURRENT_USER.mobile}`);
+    if (user) {
+      CURRENT_USER = { mobile: CURRENT_USER.mobile, ...user };
+      renderOrders();
+      renderProfile();
+    }
+  } catch (err) { console.error(err); }
 }
 
 /* =========================================================
-   5) RENDER
+   5) RENDER (UI আপডেট)
    ========================================================= */
 function emptyState(text){
   return '<div class="empty-state">' +
@@ -601,9 +699,7 @@ function emptyState(text){
   '</div>';
 }
 
-/* ---- PRODUCT LIST ---- */
 let productsRendered = false;
-
 function renderProducts(){
   if (productsRendered) return;
   const list = document.getElementById('productList');
@@ -633,7 +729,6 @@ function renderProducts(){
       '</div>';
   }).join('');
 
-  /* প্রতিটি প্রোডাক্টের base64 ইমেজ লোড */
   list.querySelectorAll('img[data-img]').forEach(img => {
     loadImageInto(img, img.getAttribute('data-img'), img.getAttribute('data-label'));
   });
@@ -641,85 +736,64 @@ function renderProducts(){
   productsRendered = true;
 }
 
-/* ---- MY ORDERS ---- */
 function renderOrders(){
   const box = document.getElementById('ordersList');
   if (!box) return;
-  const u = getUser();
+  
+  if (!CURRENT_USER) { box.innerHTML = emptyState('প্রোডাক্ট দেখতে লগইন করুন'); return; }
+  
+  // আপনার JSON স্ট্রাকচারে একটি ইউজারের একটি মাত্র প্রোডাক্ট অবজেক্ট আছে। 
+  // তাই আমরা সরাসরি CURRENT_USER.product চেক করছি।
+  const productData = CURRENT_USER.product || {};
+  
+  if (!productData["order-id"]) { 
+    box.innerHTML = emptyState('আপনার কোনো প্রোডাক্ট নেই'); 
+    return; 
+  }
 
-  if (!u) { box.innerHTML = emptyState('প্রোডাক্ট দেখতে লগইন করুন'); return; }
-  if (!u.orders || !u.orders.length) { box.innerHTML = emptyState('আপনার কোনো প্রোডাক্ট নেই'); return; }
-
-  box.innerHTML = u.orders.map(o => {
-    const done = (o.earned || 0) >= o.totalIncome;
-    return '' +
-      '<div class="my-order-card">' +
-        '<div class="my-order-card__header">' +
-          '<div class="my-order-card__title">' + o.name + '</div>' +
-          '<div class="my-order-card__date">' + dateStr(o.createdAt) + '</div>' +
+  const done = (productData["product-total-income"] || 0) > 0;
+  
+  box.innerHTML = '' +
+    '<div class="my-order-card">' +
+      '<div class="my-order-card__header">' +
+        '<div class="my-order-card__title">VIP Product</div>' +
+        '<div class="my-order-card__date">' + dateStr(productData["order-start-time"]) + '</div>' +
+      '</div>' +
+      '<div class="my-order-card__details">' +
+        '<div class="my-order-card__detail-item">' +
+          '<div class="my-order-card__detail-label">বিনিয়োগ</div>' +
+          '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-price"]) + '</div>' +
         '</div>' +
-        '<div class="my-order-card__details">' +
-          '<div class="my-order-card__detail-item">' +
-            '<div class="my-order-card__detail-label">বিনিয়োগ</div>' +
-            '<div class="my-order-card__detail-value">৳ ' + fmt(o.price) + '</div>' +
-          '</div>' +
-          '<div class="my-order-card__detail-item">' +
-            '<div class="my-order-card__detail-label">দৈনিক আয়</div>' +
-            '<div class="my-order-card__detail-value my-order-card__detail-value--green">৳ ' + fmt(o.dailyIncome) + '</div>' +
-          '</div>' +
-          '<div class="my-order-card__detail-item">' +
-            '<div class="my-order-card__detail-label">মোট আয়</div>' +
-            '<div class="my-order-card__detail-value">৳ ' + fmt(o.totalIncome) + '</div>' +
-          '</div>' +
-          '<div class="my-order-card__detail-item">' +
-            '<div class="my-order-card__detail-label">অর্জিত আয়</div>' +
-            '<div class="my-order-card__detail-value my-order-card__detail-value--green">৳ ' + fmt(o.earned || 0) + '</div>' +
-          '</div>' +
+        '<div class="my-order-card__detail-item">' +
+          '<div class="my-order-card__detail-label">দৈনিক আয়</div>' +
+          '<div class="my-order-card__detail-value my-order-card__detail-value--green">৳ ' + fmt(productData["product-daly-income"]) + '</div>' +
         '</div>' +
-        '<div class="my-order-card__footer">' +
-          '<span>অবস্থা</span>' +
-          '<span>' + (done ? 'সম্পন্ন' : 'চলমান') + '</span>' +
+        '<div class="my-order-card__detail-item">' +
+          '<div class="my-order-card__detail-label">মোট আয়</div>' +
+          '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-total-income"]) + '</div>' +
         '</div>' +
-      '</div>';
-  }).join('');
+        '<div class="my-order-card__detail-item">' +
+          '<div class="my-order-card__detail-label">অবস্থা</div>' +
+          '<div class="my-order-card__detail-value my-order-card__detail-value--green">' + (done ? 'সম্পন্ন' : 'চলমান') + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
 }
 
-/* ---- MY TEAM ---- */
 function renderTeam(){
   const box = document.getElementById('teamList');
   if (!box) return;
-  const u = getUser();
-
-  if (!u) { box.innerHTML = emptyState('টিম দেখতে লগইন করুন'); return; }
-
-  const members = Object.values(DB.users)
-    .filter(x => x.refBy === u.mobile)
-    .sort((a, b) => b.createdAt - a.createdAt);
-
-  if (!members.length) { box.innerHTML = emptyState('এখনো কোনো টিম সদস্য নেই'); return; }
-
-  box.innerHTML = members.map(m => {
-    const masked = m.mobile.slice(0, 4) + '****' + m.mobile.slice(-3);
-    return '' +
-      '<div class="team-member-item">' +
-        '<div class="team-member-info">' +
-          '<div class="team-member-name">' + masked + '</div>' +
-          '<div class="team-member-date">' + dateStr(m.createdAt) + '</div>' +
-        '</div>' +
-        '<div class="team-member-bonus">৳ ' + fmt(m.teamBonus || 0) + '</div>' +
-      '</div>';
-  }).join('');
+  if (!CURRENT_USER) { box.innerHTML = emptyState('টিম দেখতে লগইন করুন'); return; }
+  box.innerHTML = emptyState('এখনো কোনো টিম সদস্য নেই'); // ডেমো টিম
 }
 
-/* ---- PROFILE ---- */
 function renderProfile(){
-  const u = getUser();
   const avatar  = document.getElementById('profileAvatar');
   const uid     = document.getElementById('profileUid');
   const balance = document.getElementById('profileBalance');
   const menu    = document.getElementById('profileMenu');
 
-  if (!u) {
+  if (!CURRENT_USER) {
     avatar.textContent  = '?';
     uid.textContent     = 'লগইন করা নেই';
     balance.textContent = '৳ 0';
@@ -729,9 +803,9 @@ function renderProfile(){
     return;
   }
 
-  avatar.textContent  = u.mobile.slice(-2);
-  uid.textContent     = 'UID: ' + u.mobile + '  •  রেফারেল: ' + u.mobile;
-  balance.textContent = '৳ ' + fmt(u.balance);
+  avatar.textContent  = CURRENT_USER.mobile.slice(-2);
+  uid.textContent     = 'UID: ' + (CURRENT_USER.uid || 'N/A') + '  •  মোবাইল: ' + CURRENT_USER.mobile;
+  balance.textContent = '৳ ' + fmt(CURRENT_USER["acount-balance"]);
 
   menu.innerHTML =
     '<div class="menu-item" onclick="shortcutAction(\'deposit\')">ডিপোজিট<span class="arrow">›</span></div>' +
@@ -750,37 +824,7 @@ function renderAll(){
 }
 
 /* =========================================================
-   6) DAILY INCOME ACCRUAL
-   ========================================================= */
-function accrueAll(){
-  let changed = false;
-  const now = Date.now();
-  const DAY = 86400000;
-
-  Object.values(DB.users).forEach(u => {
-    if (!u.orders) u.orders = [];
-    u.orders.forEach(o => {
-      if (!o.lastClaim) o.lastClaim = now;
-      if (!o.earned) o.earned = 0;
-      const days = Math.floor((now - o.lastClaim) / DAY);
-      if (days > 0) {
-        const remain = o.totalIncome - o.earned;
-        const add = Math.min(remain, days * o.dailyIncome);
-        if (add > 0) {
-          o.earned += add;
-          o.lastClaim += days * DAY;
-          u.balance = (u.balance || 0) + add;
-          changed = true;
-        }
-      }
-    });
-  });
-
-  if (changed) saveDB();
-}
-
-/* =========================================================
-   7) AUTH
+   6) AUTH SCREEN & TABS
    ========================================================= */
 function openAuthScreen(tab){
   switchAuthTab(tab || 'login');
@@ -797,136 +841,6 @@ function switchAuthTab(which){
   document.getElementById('registerForm').classList.toggle('auth-form--active', !isLogin);
 }
 
-function handleLogin(e){
-  e.preventDefault();
-  const mobile = document.getElementById('loginMobile').value.trim();
-  const pass   = document.getElementById('loginPassword').value;
-
-  if (!/^01\d{9}$/.test(mobile)) { showToast('সঠিক মোবাইল নম্বর দিন', 'error'); return; }
-
-  const user = DB.users[mobile];
-  if (!user || user.password !== pass) { showToast('মোবাইল বা পাসওয়ার্ড ভুল', 'error'); return; }
-
-  DB.session = mobile;
-  saveDB();
-  closeAuthScreen();
-  renderAll();
-  showToast('স্বাগতম!', 'success');
-}
-
-function handleRegister(e){
-  e.preventDefault();
-  const mobile = document.getElementById('regMobile').value.trim();
-  const pass   = document.getElementById('regPassword').value;
-  const ref    = document.getElementById('regRefCode').value.trim();
-
-  if (!/^01\d{9}$/.test(mobile)) { showToast('সঠিক মোবাইল নম্বর দিন', 'error'); return; }
-  if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
-  if (DB.users[mobile]) { showToast('এই নম্বরে অ্যাকাউন্ট আছে', 'error'); return; }
-
-  let refBy = null;
-  if (ref) {
-    if (ref === mobile) { showToast('নিজের কোড ব্যবহার করা যাবে না', 'error'); return; }
-    const upline = DB.users[ref];
-    if (!upline) { showToast('রেফারেল কোড সঠিক নয়', 'error'); return; }
-    refBy = upline.mobile;
-  }
-
-  DB.users[mobile] = {
-    mobile: mobile,
-    password: pass,
-    refCode: mobile,
-    refBy: refBy,
-    createdAt: Date.now(),
-    balance: 0,
-    orders: [],
-    teamBonus: 0
-  };
-
-  DB.session = mobile;
-  saveDB();
-  closeAuthScreen();
-  renderAll();
-  showToast('রেজিস্ট্রেশন সফল হয়েছে', 'success');
-}
-
-function handleLogout(){
-  showDialog('লগআউট', 'আপনি কি লগআউট করতে চান?', 'লগআউট', () => {
-    DB.session = null;
-    saveDB();
-    renderAll();
-    openAuthScreen('login');
-    showToast('লগআউট হয়েছে', 'success');
-  });
-}
-
-/* =========================================================
-   8) PURCHASE
-   ========================================================= */
-function payCommissions(buyer, amount){
-  let current = buyer;
-  let level = 0;
-
-  while (current && current.refBy && level < LEVEL_RATES.length) {
-    const up = DB.users[current.refBy];
-    if (!up) break;
-
-    const bonus = Math.round(amount * LEVEL_RATES[level]);
-    if (bonus > 0) {
-      up.balance = (up.balance || 0) + bonus;
-      up.teamBonus = (up.teamBonus || 0) + bonus;
-    }
-    current = up;
-    level++;
-  }
-}
-
-function buyProduct(key){
-  const p = PRODUCTS[key];
-  if (!p) return;
-
-  const u = getUser();
-  if (!u) { openAuthScreen('login'); showToast('অনুগ্রহ করে লগইন করুন', 'error'); return; }
-
-  const body =
-    '<div style="text-align:center;margin-bottom:10px;font-size:15px;font-weight:800;color:#006241">' + p.name + '</div>' +
-    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>মূল্য</span><b>৳ ' + fmt(p.price) + '</b></div>' +
-    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>দৈনিক আয়</span><b>৳ ' + fmt(p.dailyIncome) + '</b></div>' +
-    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>মোট আয়</span><b>৳ ' + fmt(p.totalIncome) + '</b></div>' +
-    '<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px dashed #ddd;margin-top:6px"><span>আপনার ব্যালেন্স</span><b>৳ ' + fmt(u.balance) + '</b></div>';
-
-  showDialog('কনফার্ম করুন', body, 'কনফার্ম', () => {
-    const user = getUser();
-    if (!user) return;
-
-    if ((user.balance || 0) < p.price) {
-      showToast('পর্যাপ্ত ব্যালেন্স নেই', 'error');
-      return;
-    }
-
-    user.balance -= p.price;
-    if (!user.orders) user.orders = [];
-    user.orders.push({
-      key: key,
-      name: p.name,
-      price: p.price,
-      dailyIncome: p.dailyIncome,
-      totalIncome: p.totalIncome,
-      earned: 0,
-      lastClaim: Date.now(),
-      createdAt: Date.now()
-    });
-
-    payCommissions(user, p.price);
-    saveDB();
-    renderAll();
-    showToast('সফলভাবে কেনা হয়েছে', 'success');
-  });
-}
-
-/* =========================================================
-   9) TABS & SHORTCUTS
-   ========================================================= */
 function switchTab(tab){
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('tab-page--active'));
   const page = document.getElementById('tab-' + tab);
@@ -940,20 +854,79 @@ function switchTab(tab){
   window.scrollTo(0, 0);
 }
 
+/* =========================================================
+   7) PURCHASE (Firebase Write Logic)
+   ========================================================= */
+async function buyProduct(key){
+  const p = PRODUCTS[key];
+  if (!p) return;
+
+  if (!CURRENT_USER) { openAuthScreen('login'); showToast('অনুগ্রহ করে লগইন করুন', 'error'); return; }
+
+  const body =
+    '<div style="text-align:center;margin-bottom:10px;font-size:15px;font-weight:800;color:#006241">' + p.name + '</div>' +
+    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>মূল্য</span><b>৳ ' + fmt(p.price) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>দৈনিক আয়</span><b>৳ ' + fmt(p.dailyIncome) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:6px 0"><span>মোট আয়</span><b>৳ ' + fmt(p.totalIncome) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px dashed #ddd;margin-top:6px"><span>আপনার ব্যালেন্স</span><b>৳ ' + fmt(CURRENT_USER["acount-balance"]) + '</b></div>';
+
+  showDialog('কনফার্ম করুন', body, 'কনফার্ম', async () => {
+    if ((CURRENT_USER["acount-balance"] || 0) < p.price) {
+      showToast('পর্যাপ্ত ব্যালেন্স নেই', 'error');
+      return;
+    }
+
+    try {
+      const newBalance = CURRENT_USER["acount-balance"] - p.price;
+      
+      // ১. ব্যালেন্স কাটা
+      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}`, { "acount-balance": newBalance });
+
+      // ২. প্রোডাক্ট ইনফো আপডেট (JSON স্ট্রাকচার অনুযায়ী)
+      const productData = {
+        "product-total-income": p.totalIncome,
+        "order-end-time": new Date(Date.now() + 30*24*60*60*1000).toISOString(), // ৩০ দিনের মেয়াদ
+        "order-id": "ORD_" + Date.now(),
+        "order-start-time": new Date().toISOString(),
+        "product-daly-income": p.dailyIncome,
+        "product-price": p.price
+      };
+      
+      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}/product`, productData);
+
+      // ৩. হিস্টোরি আপডেট
+      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}/amount-history`, {
+        "time": new Date().toISOString(),
+        "transactionuid": {
+          "amount": p.price,
+          "info": "Purchased " + p.name
+        }
+      });
+
+      // লোকাল ডেটা আপডেট
+      CURRENT_USER["acount-balance"] = newBalance;
+      CURRENT_USER.product = productData;
+      
+      renderAll();
+      showToast('সফলভাবে কেনা হয়েছে', 'success');
+    } catch (err) {
+      showToast('ক্রয় ব্যর্থ হয়েছে', 'error');
+      console.error(err);
+    }
+  });
+}
+
+/* =========================================================
+   8) SHORTCUTS & INIT
+   ========================================================= */
 function shortcutAction(type){
-  const u = getUser();
-
   if (type === 'invite') {
-    if (!u) { openAuthScreen('login'); return; }
-
-    /* রেফারেল লিংক তৈরি: base URL + ?ref=MOBILE */
-    const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(u.mobile);
-
+    if (!CURRENT_USER) { openAuthScreen('login'); return; }
+    const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(CURRENT_USER.mobile);
     const copyLink = () => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         return navigator.clipboard.writeText(refLink);
       }
-      /* ফলব্যাক: পুরনো ব্রাউজারের জন্য */
       return new Promise((resolve, reject) => {
         try {
           const ta = document.createElement('textarea');
@@ -968,7 +941,6 @@ function shortcutAction(type){
         } catch (err) { reject(err); }
       });
     };
-
     copyLink().then(
       () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
       () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
@@ -977,12 +949,8 @@ function shortcutAction(type){
   }
 
   if (type === 'deposit' || type === 'withdraw') {
-    if (!u) { openAuthScreen('login'); return; }
-    showDialog(
-      type === 'deposit' ? 'ডিপোজিট' : 'উইথড্র',
-      'এই ফিচারটি খুব শীঘ্রই চালু হবে। অনুগ্রহ করে অপেক্ষা করুন।',
-      'ঠিক আছে'
-    );
+    if (!CURRENT_USER) { openAuthScreen('login'); return; }
+    showDialog(type === 'deposit' ? 'ডিপোজিট' : 'উইথড্র', 'এই ফিচারটি খুব শীঘ্রই চালু হবে।', 'ঠিক আছে');
     return;
   }
 
@@ -997,9 +965,6 @@ function shortcutAction(type){
   }
 }
 
-/* =========================================================
-   10) EVENT DELEGATION
-   ========================================================= */
 document.addEventListener('click', function (e) {
   const buyBtn = e.target.closest('[data-buy]');
   if (buyBtn) {
@@ -1007,35 +972,33 @@ document.addEventListener('click', function (e) {
   }
 });
 
-/* =========================================================
-   11) INIT
-   ========================================================= */
 (function init(){
-  /* ব্যানার */
   const banner = document.getElementById('pageBanner');
   if (banner) banner.src = BANNER_SRC;
 
-  /* ডাটাবেস */
-  loadDB();
-  accrueAll();
-
-  /* প্রোডাক্ট রেন্ডার (base64 ইমেজ লোডসহ) */
   renderProducts();
-  renderAll();
 
-  /* লগইন চেক */
-  if (!getUser()) {
-    openAuthScreen('login');
+  // চেক করুন সেশন আছে কিনা
+  const savedMobile = localStorage.getItem('smbd_session');
+  if (savedMobile) {
+    // ফায়ারবেস থেকে ডেটা আনুন
+    FIREBASE_API.get(`user/${savedMobile}`).then(user => {
+      if (user) {
+        CURRENT_USER = { mobile: savedMobile, ...user };
+        closeAuthScreen();
+        renderAll();
+        // প্রতি ৬০ সেকেন্ডে ডেটা রিফ্রেশ
+        setInterval(refreshUserData, 60000);
+      } else {
+        localStorage.removeItem('smbd_session');
+        openAuthScreen('login');
+      }
+    }).catch(() => {
+      openAuthScreen('login');
+    });
   } else {
-    closeAuthScreen();
+    openAuthScreen('login');
   }
-
-  /* প্রতি ৬০ সেকেন্ডে আয় আপডেট */
-  setInterval(() => {
-    accrueAll();
-    renderOrders();
-    renderProfile();
-  }, 60000);
 })();
 </script>
 </body>
