@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#1E3932">
-
   <title>Share Market BD</title>
   <link rel="icon" href="https://img.icons8.com/ios-filled/100/00704A/financial-growth-analysis.png" type="image/png">
   <style>
@@ -84,7 +83,7 @@
     .product-card__buy svg { width: 18px; height: 18px; stroke: #fff; }
 
     /* 🟢 MY PRODUCTS (INVESTMENT CARDS) 🟢 */
-    .my-order-card { background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 14px rgba(30, 57, 50, 0.08); display: flex; flex-direction: column; gap: 12px; border-left: 5px solid var(--color-primary); position: relative; }
+    .my-order-card { background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 14px rgba(30, 57, 50, 0.08); display: flex; flex-direction: column; gap: 12px; border-left: 5px solid var(--color-primary); position: relative; margin-bottom: 14px; }
     .my-order-card__header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e0e0e0; padding-bottom: 10px; }
     .my-order-card__title { font-size: 16px; font-weight: 800; color: var(--color-primary-dark); display: flex; align-items: center; gap: 6px; }
     .my-order-card__title::before { content: '✓'; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: var(--color-status-success); color: #fff; border-radius: 50%; font-size: 10px; }
@@ -384,12 +383,10 @@ const API = {
     });
     return await res.json();
   },
-  
   checkBalance: async (mobile) => {
     const res = await fetch(`${API_BASE}/balance-check?mobile=${mobile}`);
     return await res.json();
   },
-  
   buyOrder: async (data) => {
     const res = await fetch(`${API_BASE}/order`, {
       method: 'POST',
@@ -398,12 +395,10 @@ const API = {
     });
     return await res.json();
   },
-  
   getTeam: async (mobile) => {
     const res = await fetch(`${API_BASE}/myteam?mobile=${mobile}`);
     return await res.json();
   },
-  
   getRefer: async (mobile) => {
     const res = await fetch(`${API_BASE}/refer?mobile=${mobile}`);
     return await res.json();
@@ -428,6 +423,8 @@ const TAB_TITLES = {
   team:    'আমার টিম',
   profile: 'প্রোফাইল'
 };
+
+const REF_BASE_URL = window.location.origin + window.location.pathname;
 
 /* =========================================================
    2) UTILS
@@ -650,7 +647,7 @@ async function refreshUserData() {
     const data = await API.checkBalance(CURRENT_USER.mobile);
     if (data.success) {
       CURRENT_USER["acount-balance"] = data.balance;
-      CURRENT_USER.product = data.product;
+      CURRENT_USER.products = data.products || {};
       renderOrders();
       renderProfile();
     }
@@ -712,40 +709,43 @@ function renderOrders(){
   
   if (!CURRENT_USER) { box.innerHTML = emptyState('প্রোডাক্ট দেখতে লগইন করুন'); return; }
   
-  const productData = CURRENT_USER.product || {};
-  
-  if (!productData["order-id"]) { 
+  // 🟢 এখন products (বহুবচন) থেকে ডেটা নেওয়া হচ্ছে
+  const productsData = CURRENT_USER.products || {};
+  const orderKeys = Object.keys(productsData);
+
+  if (orderKeys.length === 0) { 
     box.innerHTML = emptyState('আপনার কোনো প্রোডাক্ট নেই'); 
     return; 
   }
 
-  const done = (productData["product-total-income"] || 0) > 0;
-  
-  box.innerHTML = '' +
-    '<div class="my-order-card">' +
-      '<div class="my-order-card__header">' +
-        '<div class="my-order-card__title">VIP Product</div>' +
-        '<div class="my-order-card__date">' + dateStr(productData["order-start-time"]) + '</div>' +
-      '</div>' +
-      '<div class="my-order-card__details">' +
-        '<div class="my-order-card__detail-item">' +
-          '<div class="my-order-card__detail-label">বিনিয়োগ</div>' +
-          '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-price"]) + '</div>' +
+  box.innerHTML = orderKeys.map(orderId => {
+    const productData = productsData[orderId];
+    return '' +
+      '<div class="my-order-card">' +
+        '<div class="my-order-card__header">' +
+          '<div class="my-order-card__title">' + (productData["product-name"] || 'VIP') + '</div>' +
+          '<div class="my-order-card__date">' + dateStr(productData["order-start-time"]) + '</div>' +
         '</div>' +
-        '<div class="my-order-card__detail-item">' +
-          '<div class="my-order-card__detail-label">দৈনিক আয়</div>' +
-          '<div class="my-order-card__detail-value my-order-card__detail-value--green">৳ ' + fmt(productData["product-daly-income"]) + '</div>' +
+        '<div class="my-order-card__details">' +
+          '<div class="my-order-card__detail-item">' +
+            '<div class="my-order-card__detail-label">বিনিয়োগ</div>' +
+            '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-price"]) + '</div>' +
+          '</div>' +
+          '<div class="my-order-card__detail-item">' +
+            '<div class="my-order-card__detail-label">দৈনিক আয়</div>' +
+            '<div class="my-order-card__detail-value my-order-card__detail-value--green">৳ ' + fmt(productData["product-daly-income"]) + '</div>' +
+          '</div>' +
+          '<div class="my-order-card__detail-item">' +
+            '<div class="my-order-card__detail-label">মোট আয়</div>' +
+            '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-total-income"]) + '</div>' +
+          '</div>' +
+          '<div class="my-order-card__detail-item">' +
+            '<div class="my-order-card__detail-label">অর্ডার আইডি</div>' +
+            '<div class="my-order-card__detail-value" style="font-size:10px; color:#666;">' + (productData["order-id"] || orderId) + '</div>' +
+          '</div>' +
         '</div>' +
-        '<div class="my-order-card__detail-item">' +
-          '<div class="my-order-card__detail-label">মোট আয়</div>' +
-          '<div class="my-order-card__detail-value">৳ ' + fmt(productData["product-total-income"]) + '</div>' +
-        '</div>' +
-        '<div class="my-order-card__detail-item">' +
-          '<div class="my-order-card__detail-label">অবস্থা</div>' +
-          '<div class="my-order-card__detail-value my-order-card__detail-value--green">' + (done ? 'সম্পন্ন' : 'চলমান') + '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
+      '</div>';
+  }).join('');
 }
 
 async function renderTeam(){
@@ -884,10 +884,7 @@ async function buyProduct(key){
         return;
       }
 
-      CURRENT_USER["acount-balance"] = data.newBalance;
-      CURRENT_USER.product = data.product;
-      
-      renderAll();
+      await refreshUserData();
       showToast('সফলভাবে কেনা হয়েছে', 'success');
     } catch (err) {
       showToast('ক্রয় ব্যর্থ হয়েছে', 'error');
@@ -903,36 +900,32 @@ async function shortcutAction(type){
   if (type === 'invite') {
     if (!CURRENT_USER) { openAuthScreen('login'); return; }
     
-    try {
-      const data = await API.getRefer(CURRENT_USER.mobile);
-      const refLink = data.refLink;
+    // 🟢 রেফারেল লিংক তৈরি (বর্তমান ডোমেইন + ?ref=মোবাইল নম্বর)
+    const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(CURRENT_USER.mobile);
 
-      const copyLink = () => {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          return navigator.clipboard.writeText(refLink);
-        }
-        return new Promise((resolve, reject) => {
-          try {
-            const ta = document.createElement('textarea');
-            ta.value = refLink;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            resolve();
-          } catch (err) { reject(err); }
-        });
-      };
-      
-      copyLink().then(
-        () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
-        () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
-      );
-    } catch(err) {
-      showToast('রেফারেল লিংক তৈরি ব্যর্থ', 'error');
-    }
+    const copyLink = () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(refLink);
+      }
+      return new Promise((resolve, reject) => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = refLink;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          resolve();
+        } catch (err) { reject(err); }
+      });
+    };
+    
+    copyLink().then(
+      () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
+      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
+    );
     return;
   }
 
@@ -969,34 +962,40 @@ document.addEventListener('click', function (e) {
 
   renderProducts();
 
+  // 🟢 URL থেকে রেফারেল কোড চেক করা
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCodeParam = urlParams.get('ref');
+  if (refCodeParam) {
+    document.getElementById('regRefCode').value = refCodeParam;
+    switchAuthTab('register'); // সরাসরি রেজিস্টার ট্যাব ওপেন হবে
+  }
+
   // চেক করুন ইউজার আগে থেকে লগইন আছে কিনা (Local Storage)
   const savedMobile = localStorage.getItem('smbd_session');
   if (savedMobile) {
     try {
       const data = await API.checkBalance(savedMobile);
       if (data.success && data.balance !== undefined) {
-        // সরাসরি লগইন করিয়ে দেওয়া
         CURRENT_USER = { 
           mobile: savedMobile, 
           "acount-balance": data.balance,
-          product: data.product,
+          products: data.products || {},
           uid: 'Auto-Login-User' 
         };
         closeAuthScreen();
         renderAll();
         
-        // প্রতি ১ মিনিট পর পর ডেটা রিফ্রেশ হবে
         setInterval(refreshUserData, 60000);
       } else {
         localStorage.removeItem('smbd_session');
-        openAuthScreen('login');
+        openAuthScreen(refCodeParam ? 'register' : 'login');
       }
     } catch (err) {
       console.error("Auto Login Failed", err);
-      openAuthScreen('login');
+      openAuthScreen(refCodeParam ? 'register' : 'login');
     }
   } else {
-    openAuthScreen('login');
+    openAuthScreen(refCodeParam ? 'register' : 'login');
   }
 })();
 </script>
