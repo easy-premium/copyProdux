@@ -22,9 +22,7 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'এই মোবাইল নম্বরে অ্যাকাউন্ট নেই' });
       }
 
-      // পাসওয়ার্ড চেক (আপনার বর্তমান JSON এ পাসওয়ার্ড নেই, তাই ডেমো হিসেবে যেকোনো পাসওয়ার্ড নিচ্ছে)
-      // প্রোডাকশনে ডেটাবেসে পাসওয়ার্ড হ্যাশ করে রাখতে হবে
-      
+      // পাসওয়ার্ড চেক (আপনার ডেটাবেসে পাসওয়ার্ড ফিল্ড থাকলে এখানে চেক করবেন)
       return res.status(200).json({ success: true, user });
     } 
     
@@ -32,6 +30,7 @@ export default async function handler(req, res) {
       // চেক করুন ইউজার আগে থেকেই আছে কিনা
       const checkRes = await fetch(apiUrl);
       const existingUser = await checkRes.json();
+      
       if (existingUser) {
         return res.status(400).json({ error: 'এই নম্বরে অ্যাকাউন্ট আছে' });
       }
@@ -41,7 +40,10 @@ export default async function handler(req, res) {
         "acount-balance": 0,
         "amount-history": {
           "time": new Date().toISOString(),
-          "transactionuid": { "amount": 0, "info": "Account Created" }
+          "transactionuid": { 
+            "amount": 0, 
+            "info": "Account Created" 
+          }
         },
         "product": {
           "product-total-income": 0,
@@ -51,7 +53,8 @@ export default async function handler(req, res) {
           "product-daly-income": 0,
           "product-price": 0
         },
-        "uid": "UID_" + Date.now()
+        "uid": "UID_" + Date.now(),
+        "refBy": refCode || "" // রেফারেল কোড সেভ করা হচ্ছে
       };
 
       // ডেটাবেসে সেভ করুন
