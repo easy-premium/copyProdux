@@ -8,20 +8,15 @@ export default async function handler(req, res) {
   const dbUrl = (process.env.FIREBASE_DB_URL || "").replace(/\/+$/, "");
   const dbSecret = process.env.FIREBASE_DB_SECRET;
 
-  if (!dbUrl || !dbSecret) {
-    return res.status(500).json({ error: 'Database config missing' });
-  }
+  if (!dbUrl || !dbSecret) return res.status(500).json({ error: 'Database config missing' });
 
   try {
-    // ফায়ারবেস থেকে গ্লোবাল কনফিগারেশন (বোনাস এবং কমিশন) রিড করা
-    const response = await fetch(`${dbUrl}/.json?auth=${dbSecret}&shallow=true`);
+    // 🟢 shallow=true সরিয়ে দেওয়া হয়েছে যাতে আসল ডেটা পাওয়া যায়
+    const response = await fetch(`${dbUrl}/.json?auth=${dbSecret}`);
     const config = await response.json();
 
-    if (!config) {
-      return res.status(404).json({ error: 'Config not found' });
-    }
+    if (!config) return res.status(404).json({ error: 'Config not found' });
 
-    // ডেটাবেস থেকে ডেটা রিটার্ন করা
     return res.status(200).json({
       success: true,
       referBonus: Number(config["refer-bonus"] || 0),
