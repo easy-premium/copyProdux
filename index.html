@@ -371,33 +371,28 @@
 
 <script>
 /* =========================================================
-   FIREBASE REST API & VERCEL ENVIRONMENT CONFIGURATION
+   VERCEL SERVERLESS API CONFIGURATION
    ========================================================= */
-// ⚠️ আপনার Vercel Dashboard -> Settings -> Environment Variables এ নিচের ভেরিয়েবলগুলো সেট করুন
-// তবে সরাসরি ডেমো দেওয়ার জন্য আমি এখানে আপনার JSON এর ডেটা বসিয়ে দিচ্ছি।
+const API_BASE = '/api'; 
 
-const FIREBASE_CONFIG = {
-  // আপনার Firebase Realtime Database URL (শেষে .firebaseio.com বা আপনার রিজিওন URL)
-  databaseURL: "https://alamin-5f9c6-default-rtdb.firebaseio.com", 
-  
-  // ⚠️ এখানে ছবিতে থাকা Database Secret টি বসান। (Vercel Env: FIREBASE_DB_SECRET)
-  // নিরাপত্তার জন্য প্রোডাকশনে এটি সরাসরি কোডে না রেখে ব্যাকএন্ড (API) দিয়ে কল করুন।
-  databaseSecret: "YOUR_DATABASE_SECRET_HERE" 
-};
-
-const FIREBASE_API = {
-  // REST API: auth=<secret> দিয়ে ডেটা রিড/রাইট করা হয়
-  get: (path) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`).then(res => res.json()),
-  put: (path, data) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`, {
-    method: 'PUT',
+const API = {
+  login: (data) => fetch(`${API_BASE}/login`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }).then(res => res.json()),
-  patch: (path, data) => fetch(`${FIREBASE_CONFIG.databaseURL}/${path}.json?auth=${FIREBASE_CONFIG.databaseSecret}`, {
-    method: 'PATCH',
+  
+  checkBalance: (mobile) => fetch(`${API_BASE}/balance-check?mobile=${mobile}`).then(res => res.json()),
+  
+  buyOrder: (data) => fetch(`${API_BASE}/order`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
-  }).then(res => res.json())
+  }).then(res => res.json()),
+  
+  getTeam: (mobile) => fetch(`${API_BASE}/myteam?mobile=${mobile}`).then(res => res.json()),
+  
+  getRefer: (mobile) => fetch(`${API_BASE}/refer?mobile=${mobile}`).then(res => res.json())
 };
 
 /* =========================================================
@@ -412,16 +407,12 @@ const PRODUCTS = {
   vip6: { name:'VIP6', price:50000, dailyIncome:17857, totalIncome:1785700, image:'https://easy-premium.github.io/copyProdux/produx/image6.txt' }
 };
 
-const LEVEL_RATES = [0.10, 0.04, 0.02];   /* লেভেল ১ / ২ / ৩ */
 const TAB_TITLES = {
   product: 'Share Market BD',
   orders:  'আমার প্রোডাক্ট',
   team:    'আমার টিম',
   profile: 'প্রোফাইল'
 };
-
-/* রেফারেল লিংকের বেস URL */
-const REF_BASE_URL = 'https://yourdomain.com/';
 
 /* =========================================================
    2) UTILS
@@ -575,11 +566,10 @@ const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
 );
 
 /* =========================================================
-   4) FIREBASE DATABASE LOGIC (Replacing localStorage)
+   4) SESSION & AUTH LOGIC
    ========================================================= */
 let CURRENT_USER = null;
 
-// লগইন ফাংশন
 async function handleLogin(e){
   e.preventDefault();
   const mobile = document.getElementById('loginMobile').value.trim();
@@ -588,16 +578,11 @@ async function handleLogin(e){
   if (!/^01\d{9}$/.test(mobile)) { showToast('সঠিক মোবাইল নম্বর দিন', 'error'); return; }
 
   try {
-    // ফায়ারবেস থেকে ইউজার খোঁজা (JSON স্ট্রাকচার অনুযায়ী)
-    const user = await FIREBASE_API.get(`user/${mobile}`);
-    
-    // যদি ইউজার না থাকে অথবা পাসওয়ার্ড না মিলে (যদিও আপনার JSON এ পাসওয়ার্ড নেই, তাই ডেমো হিসেবে যেকোনো পাসওয়ার্ড কাজ করবে)
-    // রিয়েল অ্যাপে পাসওয়ার্ড হ্যাশ করে রাখতে হবে।
-    if (!user) { showToast('এই মোবাইল নম্বরে অ্যাকাউন্ট নেই', 'error'); return; }
+    const data = await API.login({ action: 'login', mobile, password: pass });
+    if (data.error) { showToast(data.error, 'error'); return; }
 
-    // ✅ সেশন সেভ করা
-    CURRENT_USER = { mobile, ...user };
-    localStorage.setItem('smbd_session', mobile); // ব্রাউজার সেশন
+    CURRENT_USER = { mobile, ...data.user };
+    localStorage.setItem('smbd_session', mobile);
 
     closeAuthScreen();
     renderAll();
@@ -608,7 +593,6 @@ async function handleLogin(e){
   }
 }
 
-// রেজিস্ট্রেশন ফাংশন
 async function handleRegister(e){
   e.preventDefault();
   const mobile = document.getElementById('regMobile').value.trim();
@@ -619,39 +603,10 @@ async function handleRegister(e){
   if (pass.length < 6) { showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); return; }
 
   try {
-    const existingUser = await FIREBASE_API.get(`user/${mobile}`);
-    if (existingUser) { showToast('এই নম্বরে অ্যাকাউন্ট আছে', 'error'); return; }
+    const data = await API.login({ action: 'register', mobile, password: pass, refCode: ref });
+    if (data.error) { showToast(data.error, 'error'); return; }
 
-    // নতুন ইউজার ডেটা JSON স্ট্রাকচার অনুযায়ী তৈরি
-    const newUser = {
-      "acount-balance": 0,
-      "amount-history": {
-        "time": new Date().toISOString(),
-        "transactionuid": {
-          "amount": 0,
-          "info": "Account Created"
-        }
-      },
-      "product": {
-        "product-total-income": 0,
-        "order-end-time": "",
-        "order-id": "",
-        "order-start-time": "",
-        "product-daly-income": 0,
-        "product-price": 0
-      },
-      "uid": "UID_" + Date.now()
-    };
-
-    await FIREBASE_API.put(`user/${mobile}`, newUser);
-
-    // রেফারেল লজিক (যদি থাকে)
-    if (ref) {
-      // এখানে রেফারেল সিস্টেমের জন্য ডেটাবেসে স্টোর করা যেতে পারে
-      console.log("Referred by:", ref);
-    }
-
-    CURRENT_USER = { mobile, ...newUser };
+    CURRENT_USER = { mobile, ...data.user };
     localStorage.setItem('smbd_session', mobile);
 
     closeAuthScreen();
@@ -663,7 +618,6 @@ async function handleRegister(e){
   }
 }
 
-// লগআউট ফাংশন
 function handleLogout(){
   showDialog('লগআউট', 'আপনি কি লগআউট করতে চান?', 'লগআউট', () => {
     CURRENT_USER = null;
@@ -674,13 +628,13 @@ function handleLogout(){
   });
 }
 
-// ইউজার ডেটা রিফ্রেশ
 async function refreshUserData() {
   if (!CURRENT_USER) return;
   try {
-    const user = await FIREBASE_API.get(`user/${CURRENT_USER.mobile}`);
-    if (user) {
-      CURRENT_USER = { mobile: CURRENT_USER.mobile, ...user };
+    const data = await API.checkBalance(CURRENT_USER.mobile);
+    if (data.success) {
+      CURRENT_USER["acount-balance"] = data.balance;
+      CURRENT_USER.product = data.product;
       renderOrders();
       renderProfile();
     }
@@ -742,8 +696,6 @@ function renderOrders(){
   
   if (!CURRENT_USER) { box.innerHTML = emptyState('প্রোডাক্ট দেখতে লগইন করুন'); return; }
   
-  // আপনার JSON স্ট্রাকচারে একটি ইউজারের একটি মাত্র প্রোডাক্ট অবজেক্ট আছে। 
-  // তাই আমরা সরাসরি CURRENT_USER.product চেক করছি।
   const productData = CURRENT_USER.product || {};
   
   if (!productData["order-id"]) { 
@@ -780,11 +732,32 @@ function renderOrders(){
     '</div>';
 }
 
-function renderTeam(){
+async function renderTeam(){
   const box = document.getElementById('teamList');
   if (!box) return;
   if (!CURRENT_USER) { box.innerHTML = emptyState('টিম দেখতে লগইন করুন'); return; }
-  box.innerHTML = emptyState('এখনো কোনো টিম সদস্য নেই'); // ডেমো টিম
+  
+  try {
+    const data = await API.getTeam(CURRENT_USER.mobile);
+    if (!data.team || data.team.length === 0) {
+      box.innerHTML = emptyState('এখনো কোনো টিম সদস্য নেই');
+      return;
+    }
+
+    box.innerHTML = data.team.map(m => {
+      const masked = m.mobile.slice(0, 4) + '****' + m.mobile.slice(-3);
+      return '' +
+        '<div class="team-member-item">' +
+          '<div class="team-member-info">' +
+            '<div class="team-member-name">' + masked + '</div>' +
+            '<div class="team-member-date">' + dateStr(m.joinDate) + '</div>' +
+          '</div>' +
+          '<div class="team-member-bonus">৳ ' + fmt(m.totalIncome) + '</div>' +
+        '</div>';
+    }).join('');
+  } catch (err) {
+    box.innerHTML = emptyState('টিম ডেটা লোড ব্যর্থ');
+  }
 }
 
 function renderProfile(){
@@ -852,10 +825,13 @@ function switchTab(tab){
 
   document.getElementById('navTitle').textContent = TAB_TITLES[tab] || 'Share Market BD';
   window.scrollTo(0, 0);
+
+  if (tab === 'orders' || tab === 'profile') refreshUserData();
+  if (tab === 'team') renderTeam();
 }
 
 /* =========================================================
-   7) PURCHASE (Firebase Write Logic)
+   7) PURCHASE (API Write Logic)
    ========================================================= */
 async function buyProduct(key){
   const p = PRODUCTS[key];
@@ -877,35 +853,21 @@ async function buyProduct(key){
     }
 
     try {
-      const newBalance = CURRENT_USER["acount-balance"] - p.price;
-      
-      // ১. ব্যালেন্স কাটা
-      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}`, { "acount-balance": newBalance });
-
-      // ২. প্রোডাক্ট ইনফো আপডেট (JSON স্ট্রাকচার অনুযায়ী)
-      const productData = {
-        "product-total-income": p.totalIncome,
-        "order-end-time": new Date(Date.now() + 30*24*60*60*1000).toISOString(), // ৩০ দিনের মেয়াদ
-        "order-id": "ORD_" + Date.now(),
-        "order-start-time": new Date().toISOString(),
-        "product-daly-income": p.dailyIncome,
-        "product-price": p.price
-      };
-      
-      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}/product`, productData);
-
-      // ৩. হিস্টোরি আপডেট
-      await FIREBASE_API.patch(`user/${CURRENT_USER.mobile}/amount-history`, {
-        "time": new Date().toISOString(),
-        "transactionuid": {
-          "amount": p.price,
-          "info": "Purchased " + p.name
-        }
+      const data = await API.buyOrder({
+        mobile: CURRENT_USER.mobile,
+        productId: key,
+        price: p.price,
+        dailyIncome: p.dailyIncome,
+        totalIncome: p.totalIncome
       });
 
-      // লোকাল ডেটা আপডেট
-      CURRENT_USER["acount-balance"] = newBalance;
-      CURRENT_USER.product = productData;
+      if (data.error) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      CURRENT_USER["acount-balance"] = data.newBalance;
+      CURRENT_USER.product = data.product;
       
       renderAll();
       showToast('সফলভাবে কেনা হয়েছে', 'success');
@@ -919,32 +881,40 @@ async function buyProduct(key){
 /* =========================================================
    8) SHORTCUTS & INIT
    ========================================================= */
-function shortcutAction(type){
+async function shortcutAction(type){
   if (type === 'invite') {
     if (!CURRENT_USER) { openAuthScreen('login'); return; }
-    const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(CURRENT_USER.mobile);
-    const copyLink = () => {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        return navigator.clipboard.writeText(refLink);
-      }
-      return new Promise((resolve, reject) => {
-        try {
-          const ta = document.createElement('textarea');
-          ta.value = refLink;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-          resolve();
-        } catch (err) { reject(err); }
-      });
-    };
-    copyLink().then(
-      () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
-      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
-    );
+    
+    try {
+      const data = await API.getRefer(CURRENT_USER.mobile);
+      const refLink = data.refLink;
+
+      const copyLink = () => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(refLink);
+        }
+        return new Promise((resolve, reject) => {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = refLink;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            resolve();
+          } catch (err) { reject(err); }
+        });
+      };
+      
+      copyLink().then(
+        () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
+        () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
+      );
+    } catch(err) {
+      showToast('রেফারেল লিংক তৈরি ব্যর্থ', 'error');
+    }
     return;
   }
 
@@ -972,30 +942,34 @@ document.addEventListener('click', function (e) {
   }
 });
 
-(function init(){
+(async function init(){
   const banner = document.getElementById('pageBanner');
   if (banner) banner.src = BANNER_SRC;
 
   renderProducts();
 
-  // চেক করুন সেশন আছে কিনা
   const savedMobile = localStorage.getItem('smbd_session');
   if (savedMobile) {
-    // ফায়ারবেস থেকে ডেটা আনুন
-    FIREBASE_API.get(`user/${savedMobile}`).then(user => {
-      if (user) {
-        CURRENT_USER = { mobile: savedMobile, ...user };
-        closeAuthScreen();
-        renderAll();
-        // প্রতি ৬০ সেকেন্ডে ডেটা রিফ্রেশ
-        setInterval(refreshUserData, 60000);
+    try {
+      const data = await API.checkBalance(savedMobile);
+      if (data.success && data.balance !== undefined) {
+        const userRes = await API.login({ action: 'login', mobile: savedMobile, password: '123456' }); // Dummy pass bypass in backend
+        if (userRes.success) {
+          CURRENT_USER = { mobile: savedMobile, ...userRes.user };
+          closeAuthScreen();
+          renderAll();
+          setInterval(refreshUserData, 60000);
+        } else {
+          localStorage.removeItem('smbd_session');
+          openAuthScreen('login');
+        }
       } else {
         localStorage.removeItem('smbd_session');
         openAuthScreen('login');
       }
-    }).catch(() => {
+    } catch (err) {
       openAuthScreen('login');
-    });
+    }
   } else {
     openAuthScreen('login');
   }
