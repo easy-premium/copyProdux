@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // CORS হেডার
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -11,22 +10,8 @@ export default async function handler(req, res) {
   const dbUrl = process.env.FIREBASE_DB_URL;
   const dbSecret = process.env.FIREBASE_DB_SECRET;
 
-  // ১. Environment Variable চেক
   if (!dbUrl || !dbSecret) {
-    return res.status(500).json({ error: 'Database configuration missing. Check Vercel Env Vars.' });
-  }
-
-  // ২. স্পেস বা নিউলাইন চেক (গুরুত্বপূর্ণ)
-  if (dbUrl.trim() !== dbUrl || dbSecret.trim() !== dbSecret) {
-    return res.status(500).json({ error: 'Environment variables contain extra spaces or newlines. Please re-enter them in Vercel.' });
-  }
-
-  // ৩. ইনপুট ভ্যালিডেশন
-  if (!mobile || !/^01\d{9}$/.test(mobile)) {
-    return res.status(400).json({ error: 'সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন' });
-  }
-  if (!action || (action !== 'login' && action !== 'register')) {
-    return res.status(400).json({ error: 'Invalid action specified' });
+    return res.status(500).json({ error: 'Database config missing' });
   }
 
   const apiUrl = `${dbUrl}/user/${mobile}.json?auth=${dbSecret}`;
@@ -39,18 +24,20 @@ export default async function handler(req, res) {
       if (!user) {
         return res.status(404).json({ error: 'এই মোবাইল নম্বরে অ্যাকাউন্ট নেই' });
       }
-      // পাসওয়ার্ড চেক (আপনার ডেটাবেসে পাসওয়ার্ড না থাকলে এখানে চেক বাদ দিন)
       return res.status(200).json({ success: true, user });
     } 
     
     else if (action === 'register') {
+      // ১. ডেটাবেসে ইউজার আগে থেকেই আছে কিনা চেক
       const checkRes = await fetch(apiUrl);
       const existingUser = await checkRes.json();
       
       if (existingUser) {
+        // ইউজার থাকলে ৪০০ এরর পাঠাবে
         return res.status(400).json({ error: 'এই নম্বরে অ্যাকাউন্ট আছে' });
       }
 
+      // ২. নতুন ইউজার তৈরি
       const newUser = {
         "acount-balance": 0,
         "amount-history": {
@@ -69,6 +56,7 @@ export default async function handler(req, res) {
         "refBy": refCode || "none"
       };
 
+      // ৩. ডেটাবেসে সেভ করা
       const saveRes = await fetch(apiUrl, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -76,8 +64,7 @@ export default async function handler(req, res) {
       });
 
       if (!saveRes.ok) {
-        const errText = await saveRes.text();
-        return res.status(500).json({ error: 'Firebase write failed', details: errText });
+        throw new Error('Failed to save to Firebase');
       }
 
       return res.status(200).json({ success: true, user: newUser });
