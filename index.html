@@ -296,15 +296,15 @@
         <div class="commission-title">কমিশন রেট</div>
         <div class="commission-level">
           <div class="commission-level__name">লেভেল ১ <span>সরাসরি রেফারেল</span></div>
-          <div class="commission-level__rate">১০%</div>
+          <div class="commission-level__rate" id="level1Rate">লোড হচ্ছে...</div>
         </div>
         <div class="commission-level">
           <div class="commission-level__name">লেভেল ২ <span>দ্বিতীয় স্তর</span></div>
-          <div class="commission-level__rate">৪%</div>
+          <div class="commission-level__rate" id="level2Rate">লোড হচ্ছে...</div>
         </div>
         <div class="commission-level">
           <div class="commission-level__name">লেভেল ৩ <span>তৃতীয় স্তর</span></div>
-          <div class="commission-level__rate">২%</div>
+          <div class="commission-level__rate" id="level3Rate">লোড হচ্ছে...</div>
         </div>
         <div class="commission-rules">
           <strong>নিয়মাবলী:</strong><br>
@@ -401,6 +401,10 @@ const API = {
   },
   getRefer: async (mobile) => {
     const res = await fetch(`${API_BASE}/refer?mobile=${mobile}`);
+    return await res.json();
+  },
+  getCommission: async () => {
+    const res = await fetch(`${API_BASE}/commission`);
     return await res.json();
   }
 };
@@ -709,7 +713,6 @@ function renderOrders(){
   
   if (!CURRENT_USER) { box.innerHTML = emptyState('প্রোডাক্ট দেখতে লগইন করুন'); return; }
   
-  // 🟢 এখন products (বহুবচন) থেকে ডেটা নেওয়া হচ্ছে
   const productsData = CURRENT_USER.products || {};
   const orderKeys = Object.keys(productsData);
 
@@ -832,7 +835,7 @@ function switchAuthTab(which){
   document.getElementById('registerForm').classList.toggle('auth-form--active', !isLogin);
 }
 
-function switchTab(tab){
+async function switchTab(tab){
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('tab-page--active'));
   const page = document.getElementById('tab-' + tab);
   if (page) page.classList.add('tab-page--active');
@@ -845,7 +848,24 @@ function switchTab(tab){
   window.scrollTo(0, 0);
 
   if (tab === 'orders' || tab === 'profile') refreshUserData();
-  if (tab === 'team') renderTeam();
+  
+  if (tab === 'team') {
+    renderTeam();
+    // 🟢 কমিশন ডেটা রিয়েল-টাইমে লোড করা
+    try {
+      const commData = await API.getCommission();
+      if (commData.success) {
+        document.getElementById('level1Rate').textContent = commData.level1;
+        document.getElementById('level2Rate').textContent = commData.level2;
+        document.getElementById('level3Rate').textContent = commData.level3;
+      }
+    } catch(e) { 
+      console.error("Commission load failed", e); 
+      document.getElementById('level1Rate').textContent = 'N/A';
+      document.getElementById('level2Rate').textContent = 'N/A';
+      document.getElementById('level3Rate').textContent = 'N/A';
+    }
+  }
 }
 
 /* =========================================================
@@ -900,7 +920,6 @@ async function shortcutAction(type){
   if (type === 'invite') {
     if (!CURRENT_USER) { openAuthScreen('login'); return; }
     
-    // 🟢 রেফারেল লিংক তৈরি (বর্তমান ডোমেইন + ?ref=মোবাইল নম্বর)
     const refLink = REF_BASE_URL + '?ref=' + encodeURIComponent(CURRENT_USER.mobile);
 
     const copyLink = () => {
@@ -962,15 +981,13 @@ document.addEventListener('click', function (e) {
 
   renderProducts();
 
-  // 🟢 URL থেকে রেফারেল কোড চেক করা
   const urlParams = new URLSearchParams(window.location.search);
   const refCodeParam = urlParams.get('ref');
   if (refCodeParam) {
     document.getElementById('regRefCode').value = refCodeParam;
-    switchAuthTab('register'); // সরাসরি রেজিস্টার ট্যাব ওপেন হবে
+    switchAuthTab('register');
   }
 
-  // চেক করুন ইউজার আগে থেকে লগইন আছে কিনা (Local Storage)
   const savedMobile = localStorage.getItem('smbd_session');
   if (savedMobile) {
     try {
