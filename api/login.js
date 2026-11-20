@@ -27,16 +27,16 @@ export default async function handler(req, res) {
       const existingUser = await checkRes.json();
       if (existingUser !== null) return res.status(400).json({ error: 'এই নম্বরে অ্যাকাউন্ট আছে' });
 
-      // ১. ফায়ারবেস থেকে লগইন বোনাস চেক করা
-      const configRes = await fetch(`${dbUrl}/.json?auth=${dbSecret}&shallow=true`);
+      const configRes = await fetch(`${dbUrl}/.json?auth=${dbSecret}`);
       const config = await configRes.json();
+      
+      // 🟢 Number() দিয়ে সঠিকভাবে সংখ্যায় কনভার্ট করা হচ্ছে
       const referBonus = Number(config["refer-bonus"] || 0);
 
       let finalRefCode = refCode && refCode.trim() !== "" ? refCode.trim() : "none";
 
-      // ২. নতুন ইউজার তৈরি (বোনাস অ্যাড করে)
       const newUser = {
-        "acount-balance": referBonus, // 🟢 এখানে ৩০০ টাকা অ্যাড হবে
+        "acount-balance": referBonus, // 🟢 এখন সঠিক সংখ্যা সেভ হবে
         "amount-history": {
           "time": new Date().toISOString(),
           "transactionuid": { 
