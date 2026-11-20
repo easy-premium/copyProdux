@@ -209,7 +209,7 @@
           <div class="auth-tab" onclick="switchAuthTab('register')" id="tabRegBtn">রেজিস্টার</div>
         </div>
 
-        <!-- LOGIN FORM (Mobile Number) -->
+        <!-- LOGIN FORM -->
         <form class="auth-form auth-form--active" id="loginForm" onsubmit="handleLogin(event)">
           <div class="input-group">
             <label>মোবাইল নম্বর</label>
@@ -222,7 +222,7 @@
           <button type="submit" class="auth-btn" id="loginBtn">লগইন করুন</button>
         </form>
 
-        <!-- REGISTER FORM (Mobile Number) -->
+        <!-- REGISTER FORM -->
         <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
           <div class="input-group">
             <label>মোবাইল নম্বর</label>
@@ -376,23 +376,38 @@
 const API_BASE = '/api'; 
 
 const API = {
-  login: (data) => fetch(`${API_BASE}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json()),
+  login: async (data) => {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
   
-  checkBalance: (mobile) => fetch(`${API_BASE}/balance-check?mobile=${mobile}`).then(res => res.json()),
+  checkBalance: async (mobile) => {
+    const res = await fetch(`${API_BASE}/balance-check?mobile=${mobile}`);
+    return await res.json();
+  },
   
-  buyOrder: (data) => fetch(`${API_BASE}/order`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json()),
+  buyOrder: async (data) => {
+    const res = await fetch(`${API_BASE}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
   
-  getTeam: (mobile) => fetch(`${API_BASE}/myteam?mobile=${mobile}`).then(res => res.json()),
+  getTeam: async (mobile) => {
+    const res = await fetch(`${API_BASE}/myteam?mobile=${mobile}`);
+    return await res.json();
+  },
   
-  getRefer: (mobile) => fetch(`${API_BASE}/refer?mobile=${mobile}`).then(res => res.json())
+  getRefer: async (mobile) => {
+    const res = await fetch(`${API_BASE}/refer?mobile=${mobile}`);
+    return await res.json();
+  }
 };
 
 /* =========================================================
@@ -420,7 +435,9 @@ const TAB_TITLES = {
 const fmt  = n => Number(n || 0).toLocaleString('en-US');
 const pad2 = n => String(n).padStart(2, '0');
 function dateStr(d){
+  if (!d) return 'N/A';
   const x = new Date(d);
+  if (isNaN(x.getTime())) return 'N/A';
   return pad2(x.getDate()) + '/' + pad2(x.getMonth() + 1) + '/' + x.getFullYear();
 }
 
@@ -430,7 +447,7 @@ function showToast(msg, type){
   t.textContent = msg;
   t.className = 'toast toast--show' + (type ? ' toast--' + type : '');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.className = 'toast'; }, 2200);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 3000);
 }
 
 /* ---- DIALOG ---- */
@@ -455,7 +472,7 @@ function confirmDialog(){
 }
 
 /* =========================================================
-   3) 🖼️ IMAGE LOADER  ——  .txt এর ভেতরের base64 → data URI
+   3) 🖼️ IMAGE LOADER
    ========================================================= */
 const IMG_CACHE   = {};
 const IMG_PENDING = {};
@@ -490,10 +507,9 @@ async function fetchImageSource(url){
     const res = await fetch(clean, { cache: 'force-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const raw = await res.text();
-    const src = normalizeImagePayload(raw);
-    return src;
+    return normalizeImagePayload(raw);
   } catch (err) {
-    console.warn('[IMG] লোড ব্যর্থ:', clean, err);
+    console.warn('[IMG] Load Failed:', clean, err);
     return null;
   }
 }
@@ -737,6 +753,8 @@ async function renderTeam(){
   if (!box) return;
   if (!CURRENT_USER) { box.innerHTML = emptyState('টিম দেখতে লগইন করুন'); return; }
   
+  box.innerHTML = '<div style="text-align:center;padding:20px;font-size:12px;color:#666;">লোড হচ্ছে...</div>';
+
   try {
     const data = await API.getTeam(CURRENT_USER.mobile);
     if (!data.team || data.team.length === 0) {
@@ -942,32 +960,39 @@ document.addEventListener('click', function (e) {
   }
 });
 
+/* =========================================================
+   9) INIT APP
+   ========================================================= */
 (async function init(){
   const banner = document.getElementById('pageBanner');
   if (banner) banner.src = BANNER_SRC;
 
   renderProducts();
 
+  // চেক করুন ইউজার আগে থেকে লগইন আছে কিনা (Local Storage)
   const savedMobile = localStorage.getItem('smbd_session');
   if (savedMobile) {
     try {
       const data = await API.checkBalance(savedMobile);
       if (data.success && data.balance !== undefined) {
-        const userRes = await API.login({ action: 'login', mobile: savedMobile, password: '123456' }); // Dummy pass bypass in backend
-        if (userRes.success) {
-          CURRENT_USER = { mobile: savedMobile, ...userRes.user };
-          closeAuthScreen();
-          renderAll();
-          setInterval(refreshUserData, 60000);
-        } else {
-          localStorage.removeItem('smbd_session');
-          openAuthScreen('login');
-        }
+        // সরাসরি লগইন করিয়ে দেওয়া
+        CURRENT_USER = { 
+          mobile: savedMobile, 
+          "acount-balance": data.balance,
+          product: data.product,
+          uid: 'Auto-Login-User' 
+        };
+        closeAuthScreen();
+        renderAll();
+        
+        // প্রতি ১ মিনিট পর পর ডেটা রিফ্রেশ হবে
+        setInterval(refreshUserData, 60000);
       } else {
         localStorage.removeItem('smbd_session');
         openAuthScreen('login');
       }
     } catch (err) {
+      console.error("Auto Login Failed", err);
       openAuthScreen('login');
     }
   } else {
