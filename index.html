@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#1E3932">
+  <meta name="color-scheme" content="light">
   <title>Share Market BD</title>
   <link rel="icon" href="https://img.icons8.com/ios-filled/100/00704A/financial-growth-analysis.png" type="image/png">
   <style>
@@ -383,8 +384,9 @@ const API = {
     });
     return await res.json();
   },
-  checkBalance: async (mobile) => {
-    const res = await fetch(`${API_BASE}/balance-check?mobile=${mobile}`);
+  getProducts: async (mobile) => {
+    const url = mobile ? `${API_BASE}/products?mobile=${mobile}` : `${API_BASE}/products`;
+    const res = await fetch(url);
     return await res.json();
   },
   buyOrder: async (data) => {
@@ -410,7 +412,7 @@ const API = {
 };
 
 /* =========================================================
-   1) PRODUCT DATA
+   1) PRODUCT DATA (Default fallback)
    ========================================================= */
 const PRODUCTS = {
   vip1: { name:'VIP1', price:1000,  dailyIncome:250,   totalIncome:25000,   image:'https://easy-premium.github.io/copyProdux/produx/image1.txt' },
@@ -648,10 +650,10 @@ function handleLogout(){
 async function refreshUserData() {
   if (!CURRENT_USER) return;
   try {
-    const data = await API.checkBalance(CURRENT_USER.mobile);
+    const data = await API.getProducts(CURRENT_USER.mobile);
     if (data.success) {
       CURRENT_USER["acount-balance"] = data.balance;
-      CURRENT_USER.products = data.products || {};
+      CURRENT_USER.products = data.purchasedProducts || {};
       renderOrders();
       renderProfile();
     }
@@ -851,7 +853,6 @@ async function switchTab(tab){
   
   if (tab === 'team') {
     renderTeam();
-    // 🟢 কমিশন ডেটা রিয়েল-টাইমে লোড করা
     try {
       const commData = await API.getCommission();
       if (commData.success) {
@@ -979,7 +980,15 @@ document.addEventListener('click', function (e) {
   const banner = document.getElementById('pageBanner');
   if (banner) banner.src = BANNER_SRC;
 
-  renderProducts();
+  // 🟢 সব প্রোডাক্ট API থেকে লোড করা
+  try {
+    const prodData = await API.getProducts();
+    if (prodData.success && prodData.allProducts) {
+      Object.assign(PRODUCTS, prodData.allProducts); 
+    }
+  } catch(e) { console.error("Failed to load products", e); }
+
+  renderProducts(); 
 
   const urlParams = new URLSearchParams(window.location.search);
   const refCodeParam = urlParams.get('ref');
@@ -991,24 +1000,23 @@ document.addEventListener('click', function (e) {
   const savedMobile = localStorage.getItem('smbd_session');
   if (savedMobile) {
     try {
-      const data = await API.checkBalance(savedMobile);
-      if (data.success && data.balance !== undefined) {
+      const data = await API.getProducts(savedMobile);
+      if (data.success) {
         CURRENT_USER = { 
           mobile: savedMobile, 
           "acount-balance": data.balance,
-          products: data.products || {},
-          uid: 'Auto-Login-User' 
+          products: data.purchasedProducts || {},
+          refBy: data.refBy,
+          uid: data.uid 
         };
         closeAuthScreen();
         renderAll();
-        
         setInterval(refreshUserData, 60000);
       } else {
         localStorage.removeItem('smbd_session');
         openAuthScreen(refCodeParam ? 'register' : 'login');
       }
     } catch (err) {
-      console.error("Auto Login Failed", err);
       openAuthScreen(refCodeParam ? 'register' : 'login');
     }
   } else {
