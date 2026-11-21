@@ -16,14 +16,11 @@ export default async function handler(req, res) {
     const { trx_id, user_id, link_amount } = req.body;
 
     if (!trx_id || !user_id || !link_amount) {
-        return res.status(400).json({ status: "error", message: "প্রয়োজনীয় তথ্য (TrxID, ইউজার আইডি বা টাকার পরিমাণ) প্রদান করা হয়নি।" });
+        return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
     }
 
-    // ডাটাবেজ ২ (ট্রানজেকশন) এর Environment Variables
     const FIREBASE_DB_URL2 = process.env.FIREBASE_DB_URL2;
     const FIREBASE_DB_SECRET2 = process.env.FIREBASE_DB_SECRET2;
-
-    // ডাটাবেজ ১ (ইউজার) এর Environment Variables
     const FIREBASE_DB_URL1 = process.env.FIREBASE_DB_URL;
     const FIREBASE_DB_SECRET1 = process.env.FIREBASE_DB_SECRET;
 
@@ -41,41 +38,26 @@ export default async function handler(req, res) {
 
         const transaction = trxData[trx_id];
 
-        // যদি ট্রানজেকশন খুঁজে না পাওয়া যায়
         if (!transaction) {
-            return res.status(404).json({ 
-                status: "error", 
-                message: "এই TrxID ডাটাবেজে পাওয়া যায়নি। অনুগ্রহ করে সঠিক TrxID দিন।" 
-            });
+            return res.status(404).json({ status: "error", message: "সঠিকভাবে টাকা পাঠিয়ে সঠিক ট্রানজেকশন বসিয়ে দিন।" });
         }
 
-        // চেক করা হচ্ছে ট্রানজেকশনটি আগে ব্যবহার করা হয়েছে কিনা
         if (transaction.status === "used" || transaction.used_by) {
-            return res.status(400).json({ 
-                status: "error", 
-                message: `এই TrxID টি আগেই ব্যবহার করা হয়েছে (ব্যবহারকারী: ${transaction.used_by || 'অজানা'})।` 
-            });
+            return res.status(400).json({ status: "error", message: "এই TrxID টি আগেই ব্যবহার করা হয়েছে।" });
         }
 
-        // ট্রানজেকশন পাওয়া গেলে টাকার পরিমাণ বের করা
         const trxAmount = Number(transaction.amount_bdt);
         const expectedAmount = Number(link_amount);
 
         if (isNaN(trxAmount) || isNaN(expectedAmount)) {
-            return res.status(400).json({ 
-                status: "error", 
-                message: "ট্রানজেকশনে সঠিক টাকার পরিমাণ নেই।" 
-            });
+            return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
         }
 
         // ==========================================
         // ধাপ ২: লিংকের টাকার সাথে ট্রানজেকশনের টাকার মিল চেক করা
         // ==========================================
         if (trxAmount !== expectedAmount) {
-            return res.status(400).json({ 
-                status: "error", 
-                message: `টাকার পরিমাণ মেলেনি! আপনি ${expectedAmount} টাকা পাঠিয়েছেন, কিন্তু TrxID-তে ${trxAmount} টাকা আছে।` 
-            });
+            return res.status(400).json({ status: "error", message: "লেনদেন টাকার পরিমাণ সঠিকভাবে লিখুন।" });
         }
 
         // ==========================================
@@ -85,35 +67,15 @@ export default async function handler(req, res) {
         const userResponse = await fetch(userURL);
         const userData = await userResponse.json();
 
-        // যদি ইউজার (ফোন নাম্বার) ডাটাবেজে না থাকে
         if (!userData) {
-            return res.status(404).json({ 
-                status: "error", 
-                message: "ডাটাবেজে এই ইউজার (ফোন নাম্বার) খুঁজে পাওয়া যায়নি।" 
-            });
+            return res.status(404).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
         }
 
         // ==========================================
-        // ধাপ ৪: ইউজারের ব্যালেন্স আপডেট করা
-        // ==========================================
-        const currentBalance = Number(userData['acount-balance']) || 0;
-        const newBalance = currentBalance + trxAmount;
-
-        const updateUserRes = await fetch(userURL, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'acount-balance': newBalance })
-        });
-
-        if (!updateUserRes.ok) {
-            throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
-        }
-
-        // ==========================================
-        // ধাপ ৫: ট্রানজেকশনটিকে "used" হিসেবে মার্ক করা (DB 2)
+        // ধাপ ৪: ট্রানজেকশনটিকে প্রথমে "used" হিসেবে মার্ক করা (DB 2)
         // ==========================================
         const trxMarkURL = `${FIREBASE_DB_URL2.replace(/\/$/, '')}/${trx_id}.json?auth=${FIREBASE_DB_SECRET2}`;
-        const currentTime = new Date().toISOString(); // বর্তমান সময়
+        const currentTime = new Date().toISOString();
 
         const markTrxRes = await fetch(trxMarkURL, {
             method: 'PATCH',
@@ -125,8 +87,32 @@ export default async function handler(req, res) {
             })
         });
 
+        // যদি ট্রানজেকশন মার্ক করা ব্যর্থ হয়, তবে এখানেই থেমে যাবে। ইউজারের ব্যালেন্সে টাকা যাবে না।
         if (!markTrxRes.ok) {
-            console.error("ট্রানজেকশন স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে, তবে ইউজারের ব্যালেন্স যোগ হয়েছে।");
+            throw new Error("ট্রানজেকশন স্ট্যাটাস আপডেট করা সম্ভব হয়নি।");
+        }
+
+        // ==========================================
+        // ধাপ ৫: ট্রানজেকশন সফল হলে ইউজারের ব্যালেন্স আপডেট করা
+        // ==========================================
+        const currentBalance = Number(userData['acount-balance']) || 0;
+        const newBalance = currentBalance + trxAmount;
+
+        const updateUserRes = await fetch(userURL, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'acount-balance': newBalance })
+        });
+
+        // যদি ইউজারের ব্যালেন্স আপডেট ব্যর্থ হয়, তবে ট্রানজেকশনটি আবার আগের অবস্থায় ফিরিয়ে নেওয়া হবে (Rollback)
+        if (!updateUserRes.ok) {
+            // Rollback: ট্রানজেকশন স্ট্যাটাস আবার আগের মতো করে দেওয়া
+            await fetch(trxMarkURL, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: transaction.status || "successful", used_by: null, used_at: null })
+            });
+            throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
         }
 
         // ==========================================
@@ -134,7 +120,7 @@ export default async function handler(req, res) {
         // ==========================================
         return res.status(200).json({
             status: "success",
-            message: "ট্রানজেকশন সফলভাবে ম্যাচ হয়েছে এবং ব্যালেন্স যোগ হয়েছে!",
+            message: "ট্রানজেকশন সফলভাবে ম্যাচ হয়েছে এবং ব্যালেন্স যোগ হয়েছে!",
             transaction_data: {
                 ...transaction,
                 status: "used",
@@ -146,6 +132,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error("Payment Error:", error);
-        return res.status(500).json({ status: "error", message: "সার্ভারে সমস্যা হয়েছে: " + error.message });
+        return res.status(500).json({ status: "error", message: "সার্ভারে সমস্যা হয়েছে, টাকা কাটা হয়নি।" });
     }
 }
