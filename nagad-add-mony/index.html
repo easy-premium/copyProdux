@@ -688,13 +688,13 @@
                             trxDetailsList.innerHTML = '';
                             const data = checkResult.data;
                             
-                            // যেসব তথ্য স্ক্রিনে দেখানো হবে না তার লিস্ট
-                            const hiddenKeys = ['amount_paisa', 'balance_paisa', 'fee_paisa'];
+                            // বাদ দেওয়ার জন্য কী-গুলোর তালিকা
+                            const keysToExclude = ['amount_paisa', 'balance_paisa', 'fee_paisa', 'transaction_type'];
 
                             // অবজেক্টের প্রতিটি key-value পেয়ার লুপ করে দেখানো
                             for (const [key, value] of Object.entries(data)) {
-                                // যদি key টি hiddenKeys এর ভেতরে থাকে, তবে সেটি স্কিপ করে যাবে
-                                if (hiddenKeys.includes(key)) {
+                                // যদি কী বাদ দেওয়ার তালিকায় থাকে, তবে স্কিপ করবে
+                                if (keysToExclude.includes(key)) {
                                     continue;
                                 }
 
