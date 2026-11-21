@@ -327,11 +327,43 @@
                 font-size: 14px;
             }
         }
+        
+        /* Database Error Overlay */
+        .db-error-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            flex-direction: column;
+        }
+        .db-error-overlay p {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: normal;
+            color: #ffcccc;
+        }
     </style>
 </head>
 <body>
 
-<div class="payment-wrapper">
+<!-- Database Error Overlay -->
+<div id="dbErrorOverlay" class="db-error-overlay">
+    ডাটাবেজের সমস্যা হয়েছে!
+    <p>অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন অথবা সাপোর্টে যোগাযোগ করুন।</p>
+</div>
+
+<div class="payment-wrapper" id="paymentWrapper" style="display: none;">
 
     <header class="payment-header">
         <div class="header-row">
@@ -386,9 +418,9 @@
 
             <div class="wallet-box">
                 <span class="wallet-number" id="walletNumber">
-                    ???????????
+                    লোডিং...
                 </span>
-                <button type="button" class="copy-button" aria-label="Copy wallet number">
+                <button type="button" class="copy-button" id="copyBtn" aria-label="Copy wallet number">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
                         <rect x="8" y="3" width="11" height="14" rx="2"></rect>
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"></path>
@@ -438,5 +470,7 @@
     </main>
 </div>
 
+<!-- Scripts -->
+<script type="module" src="./nagad-database.js"></script>
 </body>
 </html>
