@@ -509,6 +509,7 @@
         const copyBtn = document.getElementById('copyBtn');
         const trxInput = document.getElementById('trxInput');
         const submitButton = document.getElementById('submitButton');
+        const toast = document.getElementById('toastMessage');
         
         // URL থেকে ডাটা সংগ্রহের জন্য এলিমেন্ট
         const headerAmount = document.getElementById('headerAmount');
@@ -542,7 +543,6 @@
 
             // ৩. ফোন নাম্বারের শুরুতে 0 যুক্ত করার লজিক
             let rawNumber = String(result.nagad_number);
-            // যদি নাম্বারের শুরুতে 0 না থাকে, তবে শুরুতে 0 যোগ করে নিবে
             if (!rawNumber.startsWith('0')) {
                 rawNumber = '0' + rawNumber;
             }
@@ -552,18 +552,13 @@
             paymentWrapper.style.display = 'block'; 
             dbErrorOverlay.style.display = 'none';
 
-            // ৫. কপি বাটনের কাজ (কাস্টম নোটিফিকেশন সহ)
+            // ৫. কপি বাটনের কাজ
             copyBtn.addEventListener('click', () => {
-                // এখানেও rawNumber ব্যবহার করা হয়েছে যাতে ০ সহ কপি হয়
                 navigator.clipboard.writeText(rawNumber).then(() => {
-                    // নোটিফিকেশন দেখানোর ফাংশন
-                    const toast = document.getElementById('toastMessage');
+                    toast.innerText = 'কপি সম্পন্ন হয়েছে!';
+                    toast.style.backgroundColor = '#333';
                     toast.classList.add('show');
-                    
-                    // ৩ সেকেন্ড পর নোটিফিকেশনটি লুকিয়ে ফেলা
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                    }, 3000);
+                    setTimeout(() => toast.classList.remove('show'), 3000);
                 }).catch(err => {
                     console.error('Failed to copy: ', err);
                 });
@@ -588,34 +583,60 @@
                 }
             });
             
-            // ৭. সাবমিট বাটনে ক্লিক করলে
-            submitButton.addEventListener('click', () => {
+            // ৭. সাবমিট বাটনে ক্লিক করলে TrxID চেক করা হবে
+            submitButton.addEventListener('click', async () => {
                 const trxId = trxInput.value.trim();
+                
                 if (trxId.length >= 6) {
-                    const toast = document.getElementById('toastMessage');
-                    toast.innerText = `পেমেন্ট রিকোয়েস্ট জমা হয়েছে! (TrxID: ${trxId})`;
-                    toast.style.backgroundColor = '#067a54'; // সাকসেসের জন্য সবুজ রঙ
-                    toast.classList.add('show');
-                    
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                        // রিসেট করে দেওয়া যাতে পরের বার আবার কপি করলে ঠিকমতো কাজ করে
-                        toast.style.backgroundColor = '#333'; 
-                        toast.innerText = 'কপি সম্পন্ন হয়েছে!';
-                    }, 3000);
-
-                    // সাবমিট করার পর বাটন ডিজেবল করে দেওয়া
+                    // বাটন লোডিং স্টেট
+                    submitButton.textContent = 'চেক করা হচ্ছে...';
                     submitButton.disabled = true;
-                    submitButton.style.background = '#f1f1f1';
-                    submitButton.style.color = '#777777';
-                    submitButton.style.borderColor = '#8d8d8d';
-                    submitButton.textContent = 'প্রসেসিং...';
+
+                    try {
+                        // API-তে TrxID পাঠানো হচ্ছে
+                        const checkResponse = await fetch('/api/nagad-trx_id', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ trx_id: trxId })
+                        });
+
+                        const checkResult = await checkResponse.json();
+
+                        if (checkResponse.ok && checkResult.status === 'success') {
+                            // সঠিক মিল পাওয়া গেলে
+                            toast.innerText = `সফল! TrxID ম্যাচ করেছে।`;
+                            toast.style.backgroundColor = '#067a54';
+                            toast.classList.add('show');
+                            
+                            // চাইলে এখানে ট্রানজেকশনের ডাটা গুলো কনসোল বা স্ক্রিনে দেখাতে পারেন
+                            console.log("Transaction Details:", checkResult.data);
+
+                        } else {
+                            // মিল না পেলে বা ভুল হলে
+                            toast.innerText = checkResult.message || 'ভুল TrxID!';
+                            toast.style.backgroundColor = '#ff1414';
+                            toast.classList.add('show');
+                        }
+                    } catch (error) {
+                        console.error('API Error:', error);
+                        toast.innerText = 'সার্ভারে সমস্যা হয়েছে।';
+                        toast.style.backgroundColor = '#ff1414';
+                        toast.classList.add('show');
+                    } finally {
+                        // কাজ শেষে বাটন আবার আগের অবস্থায় ফিরিয়ে আনা
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'নিশ্চিত';
+                        }, 3000);
+                    }
                 }
             });
 
         } catch (error) {
             console.error('Error:', error);
-            // ডাটাবেজে সমস্যা হলে পেমেন্ট সেকশন লুকিয়ে এরর মেসেজ দেখানো
             paymentWrapper.style.display = 'none';
             dbErrorOverlay.innerHTML = "ডাটাবেজের সমস্যা হয়েছে!<p>অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন অথবা সাপোর্টে যোগাযোগ করুন।</p>";
             dbErrorOverlay.style.display = 'flex'; 
