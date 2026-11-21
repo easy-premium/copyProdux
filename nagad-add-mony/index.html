@@ -368,7 +368,7 @@
     <header class="payment-header">
         <div class="header-row">
             <div>
-                <div class="header-amount">
+                <div class="header-amount" id="headerAmount">
                     BDT ???
                 </div>
                 <div class="header-warning">
@@ -389,7 +389,7 @@
 
     <main class="payment-content">
 
-        <p class="amount-notice">
+        <p class="amount-notice" id="amountNotice">
             আপনি যদি টাকার পরিমাণ পরিবর্তন করেন
             (BDT ???),
             আপনি ক্রেডিট পেতে সক্ষম হবেন না।
@@ -479,9 +479,30 @@
         const copyBtn = document.getElementById('copyBtn');
         const trxInput = document.getElementById('trxInput');
         const submitButton = document.getElementById('submitButton');
+        
+        // নতুন: URL থেকে ডাটা সংগ্রহের জন্য এলিমেন্ট
+        const headerAmount = document.getElementById('headerAmount');
+        const amountNotice = document.getElementById('amountNotice');
+
+        // ১. URL থেকে taka এবং user সংগ্রহ করা
+        const urlParams = new URLSearchParams(window.location.search);
+        const taka = urlParams.get('taka');
+        const user = urlParams.get('user');
+
+        // যদি URL-এ taka বা user না থাকে, তবে এরর দেখাবে
+        if (!taka || !user) {
+            paymentWrapper.style.display = 'none';
+            dbErrorOverlay.innerHTML = "ভুল লিংক!<p>অনুগ্রহ করে সঠিক পেমেন্ট লিংক ব্যবহার করুন।</p>";
+            dbErrorOverlay.style.display = 'flex';
+            return;
+        }
+
+        // UI-তে টাকার পরিমাণ দেখানো
+        headerAmount.textContent = `BDT ${taka}`;
+        amountNotice.innerHTML = `আপনি যদি টাকার পরিমাণ পরিবর্তন করেন (BDT ${taka}), আপনি ক্রেডিট পেতে সক্ষম হবেন না।`;
 
         try {
-            // Vercel এর API রুটে কল করা
+            // ২. Vercel এর API রুটে কল করে ডাটাবেজ থেকে ওয়ালেট নাম্বার আনা
             const response = await fetch('/api/nagad-database');
             const result = await response.json();
 
@@ -489,12 +510,12 @@
                 throw new Error(result.message || 'Database error');
             }
 
-            // ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
+            // ৩. ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
             walletNumberEl.textContent = result.nagad_number;
             paymentWrapper.style.display = 'block'; 
             dbErrorOverlay.style.display = 'none';
 
-            // কপি বাটনের কাজ
+            // ৪. কপি বাটনের কাজ
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(result.nagad_number).then(() => {
                     alert('Wallet number copied!');
@@ -503,7 +524,7 @@
                 });
             });
 
-            // TrxID ভ্যালিডেশন
+            // ৫. TrxID ভ্যালিডেশন
             trxInput.addEventListener('input', () => {
                 if (trxInput.value.trim().length >= 6) {
                     submitButton.disabled = false;
@@ -521,11 +542,28 @@
                     submitButton.style.borderColor = '#8d8d8d';
                 }
             });
+            
+            // ৬. সাবমিট বাটনে ক্লিক করলে (ভবিষ্যতে ডাটাবেজে পাঠানোর জন্য)
+            submitButton.addEventListener('click', () => {
+                const trxId = trxInput.value.trim();
+                if (trxId.length >= 6) {
+                    // এখানে আপনি চাইলে API-তে user, taka, trxId পাঠানোর লজিক বসাতে পারবেন
+                    alert(`পেমেন্ট রিকোয়েস্ট সফলভাবে জমা হয়েছে!\n\nইউজার: ${user}\nটাকা: ${taka} BDT\nTrxID: ${trxId}`);
+                    
+                    // সাবমিট করার পর বাটন ডিজেবল করে দেওয়া
+                    submitButton.disabled = true;
+                    submitButton.style.background = '#f1f1f1';
+                    submitButton.style.color = '#777777';
+                    submitButton.style.borderColor = '#8d8d8d';
+                    submitButton.textContent = 'প্রসেসিং...';
+                }
+            });
 
         } catch (error) {
             console.error('Error:', error);
-            // সমস্যা হলে পেমেন্ট সেকশন লুকিয়ে এরর মেসেজ দেখানো
+            // ডাটাবেজে সমস্যা হলে পেমেন্ট সেকশন লুকিয়ে এরর মেসেজ দেখানো
             paymentWrapper.style.display = 'none';
+            dbErrorOverlay.innerHTML = "ডাটাবেজের সমস্যা হয়েছে!<p>অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন অথবা সাপোর্টে যোগাযোগ করুন।</p>";
             dbErrorOverlay.style.display = 'flex'; 
         }
     });
