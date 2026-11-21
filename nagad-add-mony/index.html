@@ -688,8 +688,16 @@
                             trxDetailsList.innerHTML = '';
                             const data = checkResult.data;
                             
+                            // যেসব তথ্য স্ক্রিনে দেখানো হবে না তার লিস্ট
+                            const hiddenKeys = ['amount_paisa', 'balance_paisa', 'fee_paisa'];
+
                             // অবজেক্টের প্রতিটি key-value পেয়ার লুপ করে দেখানো
                             for (const [key, value] of Object.entries(data)) {
+                                // যদি key টি hiddenKeys এর ভেতরে থাকে, তবে সেটি স্কিপ করে যাবে
+                                if (hiddenKeys.includes(key)) {
+                                    continue;
+                                }
+
                                 const li = document.createElement('li');
                                 
                                 const keySpan = document.createElement('span');
