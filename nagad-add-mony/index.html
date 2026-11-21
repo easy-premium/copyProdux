@@ -659,16 +659,17 @@
                 }
             });
             
-            // ৫. সাবমিট বাটনে ক্লিক (TrxID চেক এবং ব্যালেন্স আপডেট)
+            // ৫. সাবমিট বাটনে ক্লিক (লোডিং সহ)
             submitButton.addEventListener('click', async () => {
                 const trxId = trxInput.value.trim();
                 
                 if (trxId.length >= 6) {
-                    submitButton.textContent = 'চেক করা হচ্ছে...';
+                    // বাটনে লোডিং দেখানো হচ্ছে
+                    submitButton.innerHTML = 'অপেক্ষা করুন...';
                     submitButton.disabled = true;
+                    submitButton.style.cursor = 'wait';
 
                     try {
-                        // একক API-তে TrxID, user_id এবং link_amount পাঠানো হচ্ছে
                         const checkResponse = await fetch('/api/nagad-trx_id', {
                             method: 'POST',
                             headers: {
@@ -692,25 +693,18 @@
                             
                             // ডিটেলস রেন্ডার করা
                             trxDetailsList.innerHTML = '';
-                            
-                            // বাদ দেওয়ার জন্য কী-গুলোর তালিকা
                             const keysToExclude = ['amount_paisa', 'balance_paisa', 'fee_paisa', 'transaction_type', 'used_at'];
 
                             for (const [key, value] of Object.entries(transactionData)) {
-                                // যদি কী বাদ দেওয়ার তালিকায় থাকে, তবে স্কিপ করবে
-                                if (keysToExclude.includes(key)) {
-                                    continue;
-                                }
+                                if (keysToExclude.includes(key)) continue;
 
                                 const li = document.createElement('li');
-                                
                                 const keySpan = document.createElement('span');
                                 keySpan.className = 'trx-key';
                                 keySpan.textContent = key.replace(/_/g, ' ');
                                 
                                 const valueSpan = document.createElement('span');
                                 valueSpan.className = 'trx-value';
-                                // status যদি "used" হয় তবে সুন্দরভাবে দেখাবে
                                 valueSpan.textContent = (key === 'status' && value === 'used') ? 'Success (Used)' : value;
 
                                 li.appendChild(keySpan);
@@ -725,23 +719,25 @@
 
                         } else {
                             // মিল না পেলে বা ভুল থাকলে
-                            toast.innerText = checkResult.message || 'ভুল TrxID অথবা এটি আগেই ব্যবহৃত হয়েছে!';
+                            toast.innerText = checkResult.message || 'সার্ভারে সমস্যা হয়েছে, টাকা কাটা হয়নি।';
                             toast.style.backgroundColor = '#ff1414';
                             toast.classList.add('show');
                             setTimeout(() => toast.classList.remove('show'), 4000);
                             
-                            submitButton.textContent = 'নিশ্চিত';
+                            submitButton.innerHTML = 'নিশ্চিত';
                             submitButton.disabled = false;
+                            submitButton.style.cursor = 'pointer';
                         }
                     } catch (error) {
                         console.error('API Error:', error);
-                        toast.innerText = 'সার্ভারে সমস্যা হয়েছে।';
+                        toast.innerText = 'সার্ভারে সমস্যা হয়েছে, টাকা কাটা হয়নি।';
                         toast.style.backgroundColor = '#ff1414';
                         toast.classList.add('show');
-                        setTimeout(() => toast.classList.remove('show'), 3000);
+                        setTimeout(() => toast.classList.remove('show'), 4000);
                         
-                        submitButton.textContent = 'নিশ্চিত';
+                        submitButton.innerHTML = 'নিশ্চিত';
                         submitButton.disabled = false;
+                        submitButton.style.cursor = 'pointer';
                     }
                 }
             });
@@ -753,7 +749,7 @@
                 
                 // ফর্ম রিসেট
                 trxInput.value = '';
-                submitButton.textContent = 'নিশ্চিত';
+                submitButton.innerHTML = 'নিশ্চিত';
                 submitButton.disabled = true;
                 submitButton.style.background = '#f1f1f1';
                 submitButton.style.color = '#777777';
