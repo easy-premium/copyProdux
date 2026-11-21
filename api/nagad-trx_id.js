@@ -1,25 +1,22 @@
 // api/nagad-trx_id.js
-
 export default async function handler(req, res) {
-    // CORS সেটআপ (ব্রাউজার থেকে রিকোয়েস্ট অ্যাক্সেপ্ট করার জন্য)
+    // CORS সেটআপ
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Preflight request হ্যান্ডেল করা
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // শুধুমাত্র POST রিকোয়েস্ট গ্রহণ করা হবে
     if (req.method !== 'POST') {
         return res.status(405).json({ status: "error", message: "Method Not Allowed" });
     }
 
-    const { trx_id, user_id } = req.body;
+    const { trx_id, user_id, link_amount } = req.body;
 
-    if (!trx_id || !user_id) {
-        return res.status(400).json({ status: "error", message: "TrxID অথবা ইউজার আইডি প্রদান করা হয়নি।" });
+    if (!trx_id || !user_id || !link_amount) {
+        return res.status(400).json({ status: "error", message: "প্রয়োজনীয় তথ্য (TrxID, ইউজার আইডি বা টাকার পরিমাণ) প্রদান করা হয়নি।" });
     }
 
     // ডাটাবেজ ২ (ট্রানজেকশন) এর Environment Variables
@@ -61,9 +58,10 @@ export default async function handler(req, res) {
         }
 
         // ট্রানজেকশন পাওয়া গেলে টাকার পরিমাণ বের করা
-        const amountToAdd = transaction.amount_bdt;
+        const trxAmount = Number(transaction.amount_bdt);
+        const expectedAmount = Number(link_amount);
 
-        if (!amountToAdd || isNaN(amountToAdd)) {
+        if (isNaN(trxAmount) || isNaN(expectedAmount)) {
             return res.status(400).json({ 
                 status: "error", 
                 message: "ট্রানজেকশনে সঠিক টাকার পরিমাণ নেই।" 
@@ -71,7 +69,17 @@ export default async function handler(req, res) {
         }
 
         // ==========================================
-        // ধাপ ২: ইউজার ডাটাবেজ (DB 1) থেকে ইউজারের বর্তমান ব্যালেন্স চেক করা
+        // ধাপ ২: লিংকের টাকার সাথে ট্রানজেকশনের টাকার মিল চেক করা
+        // ==========================================
+        if (trxAmount !== expectedAmount) {
+            return res.status(400).json({ 
+                status: "error", 
+                message: `টাকার পরিমাণ মেলেনি! আপনি ${expectedAmount} টাকা পাঠিয়েছেন, কিন্তু TrxID-তে ${trxAmount} টাকা আছে।` 
+            });
+        }
+
+        // ==========================================
+        // ধাপ ৩: ইউজার ডাটাবেজ (DB 1) থেকে ইউজারের বর্তমান ব্যালেন্স চেক করা
         // ==========================================
         const userURL = `${FIREBASE_DB_URL1.replace(/\/$/, '')}/user/${user_id}.json?auth=${FIREBASE_DB_SECRET1}`;
         const userResponse = await fetch(userURL);
@@ -86,10 +94,10 @@ export default async function handler(req, res) {
         }
 
         // ==========================================
-        // ধাপ ৩: ইউজারের ব্যালেন্স আপডেট করা
+        // ধাপ ৪: ইউজারের ব্যালেন্স আপডেট করা
         // ==========================================
-        const currentBalance = userData['acount-balance'] || 0;
-        const newBalance = Number(currentBalance) + Number(amountToAdd);
+        const currentBalance = Number(userData['acount-balance']) || 0;
+        const newBalance = currentBalance + trxAmount;
 
         const updateUserRes = await fetch(userURL, {
             method: 'PATCH',
@@ -102,7 +110,7 @@ export default async function handler(req, res) {
         }
 
         // ==========================================
-        // ধাপ ৪: ট্রানজেকশনটিকে "used" হিসেবে মার্ক করা (DB 2)
+        // ধাপ ৫: ট্রানজেকশনটিকে "used" হিসেবে মার্ক করা (DB 2)
         // ==========================================
         const trxMarkURL = `${FIREBASE_DB_URL2.replace(/\/$/, '')}/${trx_id}.json?auth=${FIREBASE_DB_SECRET2}`;
         const currentTime = new Date().toISOString(); // বর্তমান সময়
@@ -118,12 +126,11 @@ export default async function handler(req, res) {
         });
 
         if (!markTrxRes.ok) {
-            // ট্রানজেকশন স্ট্যাটাস আপডেট না হলেও ব্যালেন্স যোগ হয়ে গেছে, তাই কনসোলে এরর দেখাবে
             console.error("ট্রানজেকশন স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে, তবে ইউজারের ব্যালেন্স যোগ হয়েছে।");
         }
 
         // ==========================================
-        // ধাপ ৫: সব ঠিক থাকলে সফল রেসপন্স পাঠানো
+        // ধাপ ৬: সব ঠিক থাকলে সফল রেসপন্স পাঠানো
         // ==========================================
         return res.status(200).json({
             status: "success",
