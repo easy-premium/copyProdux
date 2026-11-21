@@ -353,9 +353,39 @@
             font-weight: normal;
             color: #ffcccc;
         }
+
+        /* Custom Toast Notification */
+        .custom-toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 10000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 15px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.4s, bottom 0.4s;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .custom-toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
     </style>
 </head>
 <body>
+
+<!-- Custom Toast Notification -->
+<div id="toastMessage" class="custom-toast">কপি সম্পন্ন হয়েছে!</div>
 
 <!-- Database Error Overlay -->
 <div id="dbErrorOverlay" class="db-error-overlay">
@@ -515,10 +545,17 @@
             paymentWrapper.style.display = 'block'; 
             dbErrorOverlay.style.display = 'none';
 
-            // ৪. কপি বাটনের কাজ
+            // ৪. কপি বাটনের কাজ (কাস্টম নোটিফিকেশন সহ)
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(result.nagad_number).then(() => {
-                    alert('Wallet number copied!');
+                    // নোটিফিকেশন দেখানোর ফাংশন
+                    const toast = document.getElementById('toastMessage');
+                    toast.classList.add('show');
+                    
+                    // ৩ সেকেন্ড পর নোটিফিকেশনটি লুকিয়ে ফেলা
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 3000);
                 }).catch(err => {
                     console.error('Failed to copy: ', err);
                 });
@@ -543,13 +580,23 @@
                 }
             });
             
-            // ৬. সাবমিট বাটনে ক্লিক করলে (ভবিষ্যতে ডাটাবেজে পাঠানোর জন্য)
+            // ৬. সাবমিট বাটনে ক্লিক করলে
             submitButton.addEventListener('click', () => {
                 const trxId = trxInput.value.trim();
                 if (trxId.length >= 6) {
                     // এখানে আপনি চাইলে API-তে user, taka, trxId পাঠানোর লজিক বসাতে পারবেন
-                    alert(`পেমেন্ট রিকোয়েস্ট সফলভাবে জমা হয়েছে!\n\nইউজার: ${user}\nটাকা: ${taka} BDT\nTrxID: ${trxId}`);
+                    const toast = document.getElementById('toastMessage');
+                    toast.innerText = `পেমেন্ট রিকোয়েস্ট জমা হয়েছে! (TrxID: ${trxId})`;
+                    toast.style.backgroundColor = '#067a54'; // সাকসেসের জন্য সবুজ রঙ
+                    toast.classList.add('show');
                     
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        // রিসেট করে দেওয়া যাতে পরের বার আবার কপি করলে ঠিকমতো কাজ করে
+                        toast.style.backgroundColor = '#333'; 
+                        toast.innerText = 'কপি সম্পন্ন হয়েছে!';
+                    }, 3000);
+
                     // সাবমিট করার পর বাটন ডিজেবল করে দেওয়া
                     submitButton.disabled = true;
                     submitButton.style.background = '#f1f1f1';
