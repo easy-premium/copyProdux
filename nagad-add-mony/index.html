@@ -380,6 +380,66 @@
             opacity: 1;
             bottom: 50px;
         }
+
+        /* Transaction Details Section */
+        .trx-details-container {
+            display: none; /* Initially hidden */
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #dcdcdc;
+        }
+
+        .trx-details-header {
+            color: #067a54;
+            font-size: 20px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #067a54;
+            padding-bottom: 10px;
+        }
+
+        .trx-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .trx-details-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+        }
+
+        .trx-details-list li:last-child {
+            border-bottom: none;
+        }
+
+        .trx-key {
+            font-weight: 700;
+            color: #555555;
+            text-transform: capitalize;
+        }
+
+        .trx-value {
+            font-weight: 600;
+            color: #111111;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .success-icon {
+            text-align: center;
+            font-size: 50px;
+            color: #067a54;
+            margin-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -419,82 +479,99 @@
 
     <main class="payment-content">
 
-        <p class="amount-notice" id="amountNotice">
-            আপনি যদি টাকার পরিমাণ পরিবর্তন করেন
-            (BDT ???),
-            আপনি ক্রেডিট পেতে সক্ষম হবেন না।
-        </p>
+        <!-- Payment Form Section -->
+        <div id="paymentFormSection">
+            <p class="amount-notice" id="amountNotice">
+                আপনি যদি টাকার পরিমাণ পরিবর্তন করেন
+                (BDT ???),
+                আপনি ক্রেডিট পেতে সক্ষম হবেন না।
+            </p>
 
-        <section class="method-card" style="background: linear-gradient(135deg, #f15a24 0%, #e31e24 100%);">
-            <div class="method-logo-circle">
-                <img src="https://gateway.play2win5.com/assets/payment/nagad.png" alt="NAGAD Deposit">
+            <section class="method-card" style="background: linear-gradient(135deg, #f15a24 0%, #e31e24 100%);">
+                <div class="method-logo-circle">
+                    <img src="https://gateway.play2win5.com/assets/payment/nagad.png" alt="NAGAD Deposit">
+                </div>
+                <div class="method-name">
+                    NAGAD Deposit
+                </div>
+            </section>
+
+            <section>
+                <label class="field-label">
+                    Wallet No
+                    <span class="required-star">*</span>
+                </label>
+
+                <div class="wallet-instruction">
+                    এই নাম্বারে শুধুমাত্র
+                    <span class="instruction-highlight">সেন্ড মানি</span>
+                    গ্রহণ করা হয়
+                </div>
+
+                <div class="wallet-box">
+                    <span class="wallet-number" id="walletNumber">
+                        লোডিং...
+                    </span>
+                    <button type="button" class="copy-button" id="copyBtn" aria-label="Copy wallet number">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+                            <rect x="8" y="3" width="11" height="14" rx="2"></rect>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"></path>
+                            <path stroke-linecap="round" d="M11 7h5M11 10h5M11 13h3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <div class="trx-label">
+                সেন্ড মানির TrxID নাম্বারটি লিখুন
+                <span class="trx-required">(প্রয়োজন)</span>
             </div>
-            <div class="method-name">
-                NAGAD Deposit
-            </div>
-        </section>
 
-        <section>
-            <label class="field-label">
-                Wallet No
-                <span class="required-star">*</span>
-            </label>
+            <input type="text" name="trx_id" id="trxInput" class="trx-input" value="" placeholder="TrxID অবশ্যই পূরণ করতে হবে।" autocomplete="off" minlength="6" maxlength="100">
 
-            <div class="wallet-instruction">
-                এই নাম্বারে শুধুমাত্র
-                <span class="instruction-highlight">সেন্ড মানি</span>
-                গ্রহণ করা হয়
-            </div>
-
-            <div class="wallet-box">
-                <span class="wallet-number" id="walletNumber">
-                    লোডিং...
-                </span>
-                <button type="button" class="copy-button" id="copyBtn" aria-label="Copy wallet number">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
-                        <rect x="8" y="3" width="11" height="14" rx="2"></rect>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"></path>
-                        <path stroke-linecap="round" d="M11 7h5M11 10h5M11 13h3"></path>
-                    </svg>
+            <div class="submit-area">
+                <button type="button" id="submitButton" class="submit-button" disabled>
+                    নিশ্চিত
                 </button>
             </div>
-        </section>
 
-        <div class="trx-label">
-            সেন্ড মানির TrxID নাম্বারটি লিখুন
-            <span class="trx-required">(প্রয়োজন)</span>
+            <div class="warning-heading">
+                সতর্কতা:
+            </div>
+
+            <div class="animated-warning">
+                লেনদেন আইডি সঠিকভাবে পূরণ করতে হবে,
+                অন্যথায় ক্রেডিট ব্যর্থ হবে !
+            </div>
+
+            <div class="bottom-description">
+                অনুগ্রহ করে নিশ্চিত হয়ে নিন যে আপনি
+                NAGAD deposit ওয়ালেট নাম্বারে
+                সেন্ড মানি করেছেন।
+                এই নাম্বারের জন্য অন্য কোনো পদ্ধতিতে টাকা পাঠালে
+                সেই টাকা পাওয়ার কোনো সম্ভাবনা নেই।
+            </div>
+
+            <div class="gateway-disclaimer-box">
+                <strong>
+                    🛡️ আইনি নোটিশ ও ব্যবহার বিধি:
+                </strong>
+                এই গেটওয়ে অ্যাপ্লিকেশনটি সম্পূর্ণ সলিড ই-কমার্স ও ডিজিটাল আইটি সার্ভিস প্রোভাইডার হিসেবে কাজ করে। আমরা কোনো ধরনের অবৈধ বেটিং, অনলাইন জুয়া বা মানি লন্ডারিং অ্যাপ্লিকেশন সমর্থন করি না এবং এর সাথে আমাদের কোনো সংযোগ নেই। যদি কোনো ব্যবহারকারী আইনবহির্ভূত কাজে এই পেমেন্ট সার্ভিস অপব্যবহার করার চেষ্টা করে, তবে তার তথ্য আইন প্রয়োগকারী সংস্থার কাছে সাথে সাথে হস্তান্তর করা হবে।
+            </div>
         </div>
 
-        <input type="text" name="trx_id" id="trxInput" class="trx-input" value="" placeholder="TrxID অবশ্যই পূরণ করতে হবে।" autocomplete="off" minlength="6" maxlength="100">
-
-        <div class="submit-area">
-            <button type="button" id="submitButton" class="submit-button" disabled>
-                নিশ্চিত
-            </button>
-        </div>
-
-        <div class="warning-heading">
-            সতর্কতা:
-        </div>
-
-        <div class="animated-warning">
-            লেনদেন আইডি সঠিকভাবে পূরণ করতে হবে,
-            অন্যথায় ক্রেডিট ব্যর্থ হবে !
-        </div>
-
-        <div class="bottom-description">
-            অনুগ্রহ করে নিশ্চিত হয়ে নিন যে আপনি
-            NAGAD deposit ওয়ালেট নাম্বারে
-            সেন্ড মানি করেছেন।
-            এই নাম্বারের জন্য অন্য কোনো পদ্ধতিতে টাকা পাঠালে
-            সেই টাকা পাওয়ার কোনো সম্ভাবনা নেই।
-        </div>
-
-        <div class="gateway-disclaimer-box">
-            <strong>
-                🛡️ আইনি নোটিশ ও ব্যবহার বিধি:
-            </strong>
-            এই গেটওয়ে অ্যাপ্লিকেশনটি সম্পূর্ণ সলিড ই-কমার্স ও ডিজিটাল আইটি সার্ভিস প্রোভাইডার হিসেবে কাজ করে। আমরা কোনো ধরনের অবৈধ বেটিং, অনলাইন জুয়া বা মানি লন্ডারিং অ্যাপ্লিকেশন সমর্থন করি না এবং এর সাথে আমাদের কোনো সংযোগ নেই। যদি কোনো ব্যবহারকারী আইনবহির্ভূত কাজে এই পেমেন্ট সার্ভিস অপব্যবহার করার চেষ্টা করে, তবে তার তথ্য আইন প্রয়োগকারী সংস্থার কাছে সাথে সাথে হস্তান্তর করা হবে।
+        <!-- Transaction Details Section (Hidden Initially) -->
+        <div id="transactionDetailsSection" class="trx-details-container">
+            <div class="success-icon">✔️</div>
+            <div class="trx-details-header">ট্রানজেকশন সফলভাবে ম্যাচ হয়েছে!</div>
+            <ul class="trx-details-list" id="trxDetailsList">
+                <!-- Details will be injected via JS -->
+            </ul>
+            <div class="submit-area" style="margin-top: 20px;">
+                <button type="button" id="backButton" class="submit-button" style="background: #067a54; color: white; border-color: #067a54; opacity: 1; cursor: pointer;">
+                    ফিরে যান
+                </button>
+            </div>
         </div>
 
     </main>
@@ -511,6 +588,12 @@
         const submitButton = document.getElementById('submitButton');
         const toast = document.getElementById('toastMessage');
         
+        // Sections for toggling
+        const paymentFormSection = document.getElementById('paymentFormSection');
+        const transactionDetailsSection = document.getElementById('transactionDetailsSection');
+        const trxDetailsList = document.getElementById('trxDetailsList');
+        const backButton = document.getElementById('backButton');
+        
         // URL থেকে ডাটা সংগ্রহের জন্য এলিমেন্ট
         const headerAmount = document.getElementById('headerAmount');
         const amountNotice = document.getElementById('amountNotice');
@@ -520,7 +603,6 @@
         const taka = urlParams.get('taka');
         const user = urlParams.get('user');
 
-        // যদি URL-এ taka বা user না থাকে, তবে এরর দেখাবে
         if (!taka || !user) {
             paymentWrapper.style.display = 'none';
             dbErrorOverlay.innerHTML = "ভুল লিংক!<p>অনুগ্রহ করে সঠিক পেমেন্ট লিংক ব্যবহার করুন।</p>";
@@ -528,12 +610,11 @@
             return;
         }
 
-        // UI-তে টাকার পরিমাণ দেখানো
         headerAmount.textContent = `BDT ${taka}`;
         amountNotice.innerHTML = `আপনি যদি টাকার পরিমাণ পরিবর্তন করেন (BDT ${taka}), আপনি ক্রেডিট পেতে সক্ষম হবেন না।`;
 
         try {
-            // ২. Vercel এর API রুটে কল করে ডাটাবেজ থেকে ওয়ালেট নাম্বার আনা
+            // ২. ওয়ালেট নাম্বার আনা
             const response = await fetch('/api/nagad-database');
             const result = await response.json();
 
@@ -541,30 +622,26 @@
                 throw new Error(result.message || 'Database error');
             }
 
-            // ৩. ফোন নাম্বারের শুরুতে 0 যুক্ত করার লজিক
             let rawNumber = String(result.nagad_number);
             if (!rawNumber.startsWith('0')) {
                 rawNumber = '0' + rawNumber;
             }
 
-            // ৪. ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
             walletNumberEl.textContent = rawNumber;
             paymentWrapper.style.display = 'block'; 
             dbErrorOverlay.style.display = 'none';
 
-            // ৫. কপি বাটনের কাজ
+            // ৩. কপি বাটন
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(rawNumber).then(() => {
                     toast.innerText = 'কপি সম্পন্ন হয়েছে!';
                     toast.style.backgroundColor = '#333';
                     toast.classList.add('show');
                     setTimeout(() => toast.classList.remove('show'), 3000);
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
+                }).catch(err => console.error('Failed to copy: ', err));
             });
 
-            // ৬. TrxID ভ্যালিডেশন
+            // ৪. TrxID ভ্যালিডেশন
             trxInput.addEventListener('input', () => {
                 if (trxInput.value.trim().length >= 6) {
                     submitButton.disabled = false;
@@ -583,17 +660,15 @@
                 }
             });
             
-            // ৭. সাবমিট বাটনে ক্লিক করলে TrxID চেক করা হবে
+            // ৫. সাবমিট বাটনে ক্লিক (TrxID চেক)
             submitButton.addEventListener('click', async () => {
                 const trxId = trxInput.value.trim();
                 
                 if (trxId.length >= 6) {
-                    // বাটন লোডিং স্টেট
                     submitButton.textContent = 'চেক করা হচ্ছে...';
                     submitButton.disabled = true;
 
                     try {
-                        // API-তে TrxID পাঠানো হচ্ছে
                         const checkResponse = await fetch('/api/nagad-trx_id', {
                             method: 'POST',
                             headers: {
@@ -605,34 +680,69 @@
                         const checkResult = await checkResponse.json();
 
                         if (checkResponse.ok && checkResult.status === 'success') {
-                            // সঠিক মিল পাওয়া গেলে
-                            toast.innerText = `সফল! TrxID ম্যাচ করেছে।`;
-                            toast.style.backgroundColor = '#067a54';
-                            toast.classList.add('show');
+                            // সফল হলে ফর্ম হাইড করে ডিটেলস দেখানো
+                            paymentFormSection.style.display = 'none';
+                            transactionDetailsSection.style.display = 'block';
                             
-                            // চাইলে এখানে ট্রানজেকশনের ডাটা গুলো কনসোল বা স্ক্রিনে দেখাতে পারেন
-                            console.log("Transaction Details:", checkResult.data);
+                            // ডিটেলস রেন্ডার করা
+                            trxDetailsList.innerHTML = '';
+                            const data = checkResult.data;
+                            
+                            // অবজেক্টের প্রতিটি key-value পেয়ার লুপ করে দেখানো
+                            for (const [key, value] of Object.entries(data)) {
+                                const li = document.createElement('li');
+                                
+                                const keySpan = document.createElement('span');
+                                keySpan.className = 'trx-key';
+                                // key এর ভেতরের আন্ডারস্কোর (_) সরিয়ে স্পেস দেওয়া
+                                keySpan.textContent = key.replace(/_/g, ' ');
+                                
+                                const valueSpan = document.createElement('span');
+                                valueSpan.className = 'trx-value';
+                                valueSpan.textContent = value;
+
+                                li.appendChild(keySpan);
+                                li.appendChild(valueSpan);
+                                trxDetailsList.appendChild(li);
+                            }
 
                         } else {
-                            // মিল না পেলে বা ভুল হলে
+                            // মিল না পেলে
                             toast.innerText = checkResult.message || 'ভুল TrxID!';
                             toast.style.backgroundColor = '#ff1414';
                             toast.classList.add('show');
+                            setTimeout(() => toast.classList.remove('show'), 3000);
+                            
+                            submitButton.textContent = 'নিশ্চিত';
+                            submitButton.disabled = false;
                         }
                     } catch (error) {
                         console.error('API Error:', error);
                         toast.innerText = 'সার্ভারে সমস্যা হয়েছে।';
                         toast.style.backgroundColor = '#ff1414';
                         toast.classList.add('show');
-                    } finally {
-                        // কাজ শেষে বাটন আবার আগের অবস্থায় ফিরিয়ে আনা
-                        setTimeout(() => {
-                            toast.classList.remove('show');
-                            submitButton.disabled = false;
-                            submitButton.textContent = 'নিশ্চিত';
-                        }, 3000);
+                        setTimeout(() => toast.classList.remove('show'), 3000);
+                        
+                        submitButton.textContent = 'নিশ্চিত';
+                        submitButton.disabled = false;
                     }
                 }
+            });
+            
+            // ৬. ফিরে যান বাটনে ক্লিক করলে ফর্ম আবার দেখানো
+            backButton.addEventListener('click', () => {
+                transactionDetailsSection.style.display = 'none';
+                paymentFormSection.style.display = 'block';
+                
+                // ফর্ম রিসেট
+                trxInput.value = '';
+                submitButton.textContent = 'নিশ্চিত';
+                submitButton.disabled = true;
+                submitButton.style.background = '#f1f1f1';
+                submitButton.style.color = '#777777';
+                submitButton.style.borderColor = '#8d8d8d';
+                submitButton.style.cursor = 'not-allowed';
+                submitButton.style.opacity = '0.78';
             });
 
         } catch (error) {
