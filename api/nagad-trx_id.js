@@ -43,7 +43,7 @@ export default async function handler(req, res) {
         }
 
         if (transaction.status === "used" || transaction.used_by) {
-            return res.status(400).json({ status: "error", message: "এই TrxID টি আগেই ব্যবহার করা হয়েছে।" });
+            return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
         }
 
         const trxAmount = Number(transaction.amount_bdt);
