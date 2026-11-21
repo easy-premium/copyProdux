@@ -471,6 +471,64 @@
 </div>
 
 <!-- Scripts -->
-<script type="module" src="./nagad-database.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const dbErrorOverlay = document.getElementById('dbErrorOverlay');
+        const paymentWrapper = document.getElementById('paymentWrapper');
+        const walletNumberEl = document.getElementById('walletNumber');
+        const copyBtn = document.getElementById('copyBtn');
+        const trxInput = document.getElementById('trxInput');
+        const submitButton = document.getElementById('submitButton');
+
+        try {
+            // Vercel এর API রুটে কল করা
+            const response = await fetch('/api/nagad-database');
+            const result = await response.json();
+
+            if (!response.ok || result.status === 'error') {
+                throw new Error(result.message || 'Database error');
+            }
+
+            // ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
+            walletNumberEl.textContent = result.nagad_number;
+            paymentWrapper.style.display = 'block'; 
+            dbErrorOverlay.style.display = 'none';
+
+            // কপি বাটনের কাজ
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(result.nagad_number).then(() => {
+                    alert('Wallet number copied!');
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+
+            // TrxID ভ্যালিডেশন
+            trxInput.addEventListener('input', () => {
+                if (trxInput.value.trim().length >= 6) {
+                    submitButton.disabled = false;
+                    submitButton.style.cursor = 'pointer';
+                    submitButton.style.opacity = '1';
+                    submitButton.style.background = '#067a54';
+                    submitButton.style.color = '#ffffff';
+                    submitButton.style.borderColor = '#067a54';
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.style.cursor = 'not-allowed';
+                    submitButton.style.opacity = '0.78';
+                    submitButton.style.background = '#f1f1f1';
+                    submitButton.style.color = '#777777';
+                    submitButton.style.borderColor = '#8d8d8d';
+                }
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            // সমস্যা হলে পেমেন্ট সেকশন লুকিয়ে এরর মেসেজ দেখানো
+            paymentWrapper.style.display = 'none';
+            dbErrorOverlay.style.display = 'flex'; 
+        }
+    });
+</script>
 </body>
 </html>
