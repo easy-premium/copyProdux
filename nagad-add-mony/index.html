@@ -439,7 +439,6 @@
             color: #067a54;
             margin-bottom: 10px;
         }
-
     </style>
 </head>
 <body>
@@ -660,7 +659,7 @@
                 }
             });
             
-            // ৫. সাবমিট বাটনে ক্লিক (TrxID চেক)
+            // ৫. সাবমিট বাটনে ক্লিক (TrxID চেক এবং ব্যালেন্স আপডেট)
             submitButton.addEventListener('click', async () => {
                 const trxId = trxInput.value.trim();
                 
@@ -669,30 +668,34 @@
                     submitButton.disabled = true;
 
                     try {
+                        // একক API-তে TrxID এবং user_id পাঠানো হচ্ছে
                         const checkResponse = await fetch('/api/nagad-trx_id', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ trx_id: trxId })
+                            body: JSON.stringify({ 
+                                trx_id: trxId,
+                                user_id: user 
+                            })
                         });
 
                         const checkResult = await checkResponse.json();
 
                         if (checkResponse.ok && checkResult.status === 'success') {
+                            const transactionData = checkResult.transaction_data;
+                            
                             // সফল হলে ফর্ম হাইড করে ডিটেলস দেখানো
                             paymentFormSection.style.display = 'none';
                             transactionDetailsSection.style.display = 'block';
                             
                             // ডিটেলস রেন্ডার করা
                             trxDetailsList.innerHTML = '';
-                            const data = checkResult.data;
                             
                             // বাদ দেওয়ার জন্য কী-গুলোর তালিকা
-                            const keysToExclude = ['amount_paisa', 'balance_paisa', 'fee_paisa', 'transaction_type'];
+                            const keysToExclude = ['amount_paisa', 'balance_paisa', 'fee_paisa', 'transaction_type', 'used_at'];
 
-                            // অবজেক্টের প্রতিটি key-value পেয়ার লুপ করে দেখানো
-                            for (const [key, value] of Object.entries(data)) {
+                            for (const [key, value] of Object.entries(transactionData)) {
                                 // যদি কী বাদ দেওয়ার তালিকায় থাকে, তবে স্কিপ করবে
                                 if (keysToExclude.includes(key)) {
                                     continue;
@@ -702,24 +705,29 @@
                                 
                                 const keySpan = document.createElement('span');
                                 keySpan.className = 'trx-key';
-                                // key এর ভেতরের আন্ডারস্কোর (_) সরিয়ে স্পেস দেওয়া
                                 keySpan.textContent = key.replace(/_/g, ' ');
                                 
                                 const valueSpan = document.createElement('span');
                                 valueSpan.className = 'trx-value';
-                                valueSpan.textContent = value;
+                                // status যদি "used" হয় তবে সুন্দরভাবে দেখাবে
+                                valueSpan.textContent = (key === 'status' && value === 'used') ? 'Success (Used)' : value;
 
                                 li.appendChild(keySpan);
                                 li.appendChild(valueSpan);
                                 trxDetailsList.appendChild(li);
                             }
 
+                            toast.innerText = `সফল! আপনার একাউন্টে ${transactionData.amount_bdt} টাকা যোগ হয়েছে।`;
+                            toast.style.backgroundColor = '#067a54';
+                            toast.classList.add('show');
+                            setTimeout(() => toast.classList.remove('show'), 4000);
+
                         } else {
-                            // মিল না পেলে
-                            toast.innerText = checkResult.message || 'ভুল TrxID!';
+                            // মিল না পেলে বা ভুল থাকলে
+                            toast.innerText = checkResult.message || 'ভুল TrxID অথবা এটি আগেই ব্যবহৃত হয়েছে!';
                             toast.style.backgroundColor = '#ff1414';
                             toast.classList.add('show');
-                            setTimeout(() => toast.classList.remove('show'), 3000);
+                            setTimeout(() => toast.classList.remove('show'), 4000);
                             
                             submitButton.textContent = 'নিশ্চিত';
                             submitButton.disabled = false;
