@@ -668,7 +668,7 @@
                     submitButton.disabled = true;
 
                     try {
-                        // একক API-তে TrxID এবং user_id পাঠানো হচ্ছে
+                        // একক API-তে TrxID, user_id এবং link_amount পাঠানো হচ্ছে
                         const checkResponse = await fetch('/api/nagad-trx_id', {
                             method: 'POST',
                             headers: {
@@ -676,7 +676,8 @@
                             },
                             body: JSON.stringify({ 
                                 trx_id: trxId,
-                                user_id: user 
+                                user_id: user,
+                                link_amount: taka 
                             })
                         });
 
