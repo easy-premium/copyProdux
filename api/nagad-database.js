@@ -1,11 +1,20 @@
 // api/nagad-trx_id.js
+
 export default async function handler(req, res) {
+    // CORS সেটআপ (ব্রাউজার থেকে রিকোয়েস্ট অ্যাক্সেপ্ট করার জন্য)
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ status: "error", message: "Method Not Allowed" });
+    // Preflight request হ্যান্ডেল করা
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    // শুধুমাত্র POST রিকোয়েস্ট গ্রহণ করা হবে
+    if (req.method !== 'POST') {
+        return res.status(405).json({ status: "error", message: "Method Not Allowed" });
+    }
 
     const { trx_id, user_id } = req.body;
 
@@ -13,8 +22,11 @@ export default async function handler(req, res) {
         return res.status(400).json({ status: "error", message: "TrxID অথবা ইউজার আইডি প্রদান করা হয়নি।" });
     }
 
+    // ডাটাবেজ ২ (ট্রানজেকশন) এর Environment Variables
     const FIREBASE_DB_URL2 = process.env.FIREBASE_DB_URL2;
     const FIREBASE_DB_SECRET2 = process.env.FIREBASE_DB_SECRET2;
+
+    // ডাটাবেজ ১ (ইউজার) এর Environment Variables
     const FIREBASE_DB_URL1 = process.env.FIREBASE_DB_URL;
     const FIREBASE_DB_SECRET1 = process.env.FIREBASE_DB_SECRET;
 
@@ -32,8 +44,12 @@ export default async function handler(req, res) {
 
         const transaction = trxData[trx_id];
 
+        // যদি ট্রানজেকশন খুঁজে না পাওয়া যায়
         if (!transaction) {
-            return res.status(404).json({ status: "error", message: "এই TrxID ডাটাবেজে পাওয়া যায়নি। সঠিক TrxID দিন।" });
+            return res.status(404).json({ 
+                status: "error", 
+                message: "এই TrxID ডাটাবেজে পাওয়া যায়নি। অনুগ্রহ করে সঠিক TrxID দিন।" 
+            });
         }
 
         // চেক করা হচ্ছে ট্রানজেকশনটি আগে ব্যবহার করা হয়েছে কিনা
@@ -44,9 +60,14 @@ export default async function handler(req, res) {
             });
         }
 
+        // ট্রানজেকশন পাওয়া গেলে টাকার পরিমাণ বের করা
         const amountToAdd = transaction.amount_bdt;
+
         if (!amountToAdd || isNaN(amountToAdd)) {
-            return res.status(400).json({ status: "error", message: "ট্রানজেকশনে সঠিক টাকার পরিমাণ নেই।" });
+            return res.status(400).json({ 
+                status: "error", 
+                message: "ট্রানজেকশনে সঠিক টাকার পরিমাণ নেই।" 
+            });
         }
 
         // ==========================================
@@ -56,8 +77,12 @@ export default async function handler(req, res) {
         const userResponse = await fetch(userURL);
         const userData = await userResponse.json();
 
+        // যদি ইউজার (ফোন নাম্বার) ডাটাবেজে না থাকে
         if (!userData) {
-            return res.status(404).json({ status: "error", message: "ডাটাবেজে এই ইউজার (ফোন নাম্বার) খুঁজে পাওয়া যায়নি।" });
+            return res.status(404).json({ 
+                status: "error", 
+                message: "ডাটাবেজে এই ইউজার (ফোন নাম্বার) খুঁজে পাওয়া যায়নি।" 
+            });
         }
 
         // ==========================================
@@ -72,7 +97,9 @@ export default async function handler(req, res) {
             body: JSON.stringify({ 'acount-balance': newBalance })
         });
 
-        if (!updateUserRes.ok) throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
+        if (!updateUserRes.ok) {
+            throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
+        }
 
         // ==========================================
         // ধাপ ৪: ট্রানজেকশনটিকে "used" হিসেবে মার্ক করা (DB 2)
@@ -91,10 +118,13 @@ export default async function handler(req, res) {
         });
 
         if (!markTrxRes.ok) {
+            // ট্রানজেকশন স্ট্যাটাস আপডেট না হলেও ব্যালেন্স যোগ হয়ে গেছে, তাই কনসোলে এরর দেখাবে
             console.error("ট্রানজেকশন স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে, তবে ইউজারের ব্যালেন্স যোগ হয়েছে।");
         }
 
-        // সব ঠিক থাকলে সফল রেসপন্স পাঠানো
+        // ==========================================
+        // ধাপ ৫: সব ঠিক থাকলে সফল রেসপন্স পাঠানো
+        // ==========================================
         return res.status(200).json({
             status: "success",
             message: "ট্রানজেকশন সফলভাবে ম্যাচ হয়েছে এবং ব্যালেন্স যোগ হয়েছে!",
