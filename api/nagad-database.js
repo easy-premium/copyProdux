@@ -44,7 +44,7 @@ export default async function handler(req, res) {
 
         const diffInMs = Math.abs(currentTime - dbTime);
         const diffInMinutes = Math.floor(diffInMs / 60000);
-        const ALLOWED_TIME_DIFF_MINUTES = 5; // ৫ মিনিটের বেশি পার্থক্য থাকলে বন্ধ হবে
+        const ALLOWED_TIME_DIFF_MINUTES = 1; // 1 মিনিটের বেশি পার্থক্য থাকলে বন্ধ হবে
 
         if (diffInMinutes > ALLOWED_TIME_DIFF_MINUTES) {
             return res.status(400).json({ status: "error", message: "ডাটাবেজের সমস্যা হয়েছে (টাইম পুরোনো)" });
