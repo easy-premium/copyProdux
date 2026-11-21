@@ -510,7 +510,7 @@
         const trxInput = document.getElementById('trxInput');
         const submitButton = document.getElementById('submitButton');
         
-        // নতুন: URL থেকে ডাটা সংগ্রহের জন্য এলিমেন্ট
+        // URL থেকে ডাটা সংগ্রহের জন্য এলিমেন্ট
         const headerAmount = document.getElementById('headerAmount');
         const amountNotice = document.getElementById('amountNotice');
 
@@ -540,14 +540,22 @@
                 throw new Error(result.message || 'Database error');
             }
 
-            // ৩. ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
-            walletNumberEl.textContent = result.nagad_number;
+            // ৩. ফোন নাম্বারের শুরুতে 0 যুক্ত করার লজিক
+            let rawNumber = String(result.nagad_number);
+            // যদি নাম্বারের শুরুতে 0 না থাকে, তবে শুরুতে 0 যোগ করে নিবে
+            if (!rawNumber.startsWith('0')) {
+                rawNumber = '0' + rawNumber;
+            }
+
+            // ৪. ডাটা সফলভাবে আসলে ওয়েবসাইট দেখানো এবং নাম্বার সেট করা
+            walletNumberEl.textContent = rawNumber;
             paymentWrapper.style.display = 'block'; 
             dbErrorOverlay.style.display = 'none';
 
-            // ৪. কপি বাটনের কাজ (কাস্টম নোটিফিকেশন সহ)
+            // ৫. কপি বাটনের কাজ (কাস্টম নোটিফিকেশন সহ)
             copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(result.nagad_number).then(() => {
+                // এখানেও rawNumber ব্যবহার করা হয়েছে যাতে ০ সহ কপি হয়
+                navigator.clipboard.writeText(rawNumber).then(() => {
                     // নোটিফিকেশন দেখানোর ফাংশন
                     const toast = document.getElementById('toastMessage');
                     toast.classList.add('show');
@@ -561,7 +569,7 @@
                 });
             });
 
-            // ৫. TrxID ভ্যালিডেশন
+            // ৬. TrxID ভ্যালিডেশন
             trxInput.addEventListener('input', () => {
                 if (trxInput.value.trim().length >= 6) {
                     submitButton.disabled = false;
@@ -580,11 +588,10 @@
                 }
             });
             
-            // ৬. সাবমিট বাটনে ক্লিক করলে
+            // ৭. সাবমিট বাটনে ক্লিক করলে
             submitButton.addEventListener('click', () => {
                 const trxId = trxInput.value.trim();
                 if (trxId.length >= 6) {
-                    // এখানে আপনি চাইলে API-তে user, taka, trxId পাঠানোর লজিক বসাতে পারবেন
                     const toast = document.getElementById('toastMessage');
                     toast.innerText = `পেমেন্ট রিকোয়েস্ট জমা হয়েছে! (TrxID: ${trxId})`;
                     toast.style.backgroundColor = '#067a54'; // সাকসেসের জন্য সবুজ রঙ
