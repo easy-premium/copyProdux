@@ -39,11 +39,11 @@ export default async function handler(req, res) {
         const transaction = trxData[trx_id];
 
         if (!transaction) {
-            return res.status(404).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
+            return res.status(404).json({ status: "error", message: "সঠিকভাবে টাকা পাঠিয়ে সঠিক ট্রানজেকশন বসিয়ে দিন।" });
         }
 
         if (transaction.status === "used" || transaction.used_by) {
-            return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
+            return res.status(400).json({ status: "error", message: "এই TrxID টি আগেই ব্যবহার করা হয়েছে।" });
         }
 
         const trxAmount = Number(transaction.amount_bdt);
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         // ধাপ ২: লিংকের টাকার সাথে ট্রানজেকশনের টাকার মিল চেক করা
         // ==========================================
         if (trxAmount !== expectedAmount) {
-            return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
+            return res.status(400).json({ status: "error", message: "লেনদেন টাকার পরিমাণ সঠিকভাবে লিখুন।" });
         }
 
         // ==========================================
@@ -87,32 +87,44 @@ export default async function handler(req, res) {
             })
         });
 
-        // যদি ট্রানজেকশন মার্ক করা ব্যর্থ হয়, তবে এখানেই থেমে যাবে। ইউজারের ব্যালেন্সে টাকা যাবে না।
         if (!markTrxRes.ok) {
-            throw new Error("ট্রানজেকশন স্ট্যাটাস আপডেট করা সম্ভব হয়নি।");
+            throw new Error("ট্রানজেকশন স্ট্যাটাস আপডেট করা সম্ভব হয়নি।");
         }
 
         // ==========================================
-        // ধাপ ৫: ট্রানজেকশন সফল হলে ইউজারের ব্যালেন্স আপডেট করা
+        // ধাপ ৫: ইউজারের ব্যালেন্স আপডেট করা এবং amount-history সেভ করা
         // ==========================================
         const currentBalance = Number(userData['acount-balance']) || 0;
         const newBalance = currentBalance + trxAmount;
 
+        // ইউজারের হিস্ট্রি আপডেট
+        // এখানে trx_id ব্যবহার করা হয়েছে যাতে প্রতিটি ট্রানজেকশনের জন্য আলাদা হিস্ট্রি তৈরি হয়
+        const updateData = {
+            'acount-balance': newBalance,
+            [`amount-history/${trx_id}`]: {
+                amount: trxAmount,
+                time: currentTime,
+                trx_id: trx_id,
+                from: transaction.from || "Unknown",
+                provider: transaction.provider || "Unknown",
+                info: `Deposit via ${transaction.provider || 'Nagad'} (TrxID: ${trx_id})`
+            }
+        };
+
         const updateUserRes = await fetch(userURL, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'acount-balance': newBalance })
+            body: JSON.stringify(updateData)
         });
 
-        // যদি ইউজারের ব্যালেন্স আপডেট ব্যর্থ হয়, তবে ট্রানজেকশনটি আবার আগের অবস্থায় ফিরিয়ে নেওয়া হবে (Rollback)
+        // যদি ইউজারের ব্যালেন্স আপডেট ব্যর্থ হয়, তবে ট্রানজেকশনটি আবার আগের অবস্থায় ফিরিয়ে নেওয়া হবে (Rollback)
         if (!updateUserRes.ok) {
-            // Rollback: ট্রানজেকশন স্ট্যাটাস আবার আগের মতো করে দেওয়া
             await fetch(trxMarkURL, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: transaction.status || "successful", used_by: null, used_at: null })
             });
-            throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
+            throw new Error("ইউজারের ব্যালেন্স আপডেট করা সম্ভব হয়নি।");
         }
 
         // ==========================================
