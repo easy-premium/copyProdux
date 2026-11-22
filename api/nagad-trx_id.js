@@ -97,8 +97,7 @@ export default async function handler(req, res) {
         const currentBalance = Number(userData['acount-balance']) || 0;
         const newBalance = currentBalance + trxAmount;
 
-        // ইউজারের হিস্ট্রি আপডেট
-        // এখানে trx_id ব্যবহার করা হয়েছে যাতে প্রতিটি ট্রানজেকশনের জন্য আলাদা হিস্ট্রি তৈরি হয়
+        // ইউজারের হিস্ট্রি আপডেট (এখানে acount-total-balance যুক্ত করা হয়েছে)
         const updateData = {
             'acount-balance': newBalance,
             [`amount-history/${trx_id}`]: {
@@ -107,6 +106,7 @@ export default async function handler(req, res) {
                 trx_id: trx_id,
                 from: transaction.from || "Unknown",
                 provider: transaction.provider || "Unknown",
+                'acount-total-balance': newBalance,
                 info: `Deposit via ${transaction.provider || 'Nagad'} (TrxID: ${trx_id})`
             }
         };
