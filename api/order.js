@@ -21,26 +21,63 @@ export default async function handler(req, res) {
         const currentBalance = Number(user["acount-balance"]) || 0;
         if (currentBalance < price) return res.status(400).json({ error: 'পর্যাপ্ত ব্যালেন্স নেই' });
 
-        // ২. নতুন ব্যালেন্স এবং অর্ডার আইডি তৈরি করা
+        // ২. গিটহাব থেকে produx.json ফাইলটি রিড করা (মেয়াদ এবং অন্যান্য তথ্যের জন্য)
+        // এখানে আপনার গিটহাবের র' লিংকটি ব্যবহার করতে হবে
+        const githubRawUrl = 'https://raw.githubusercontent.com/easy-premium/copyProdux/main/produx.json';
+        const productRes = await fetch(githubRawUrl);
+        const productData = await productRes.json();
+
+        const productInfo = productData.products[productId];
+        if (!productInfo) return res.status(404).json({ error: 'Product info not found' });
+
+        // ডাটাবেজ থেকে মেয়াদ (expiry-date) নেওয়া হচ্ছে, না থাকলে ডিফল্ট ৯০ দিন
+        const expiryDays = productInfo['expiry-date'] || 90;
+
+        // ৩. নতুন ব্যালেন্স এবং অর্ডার আইডি তৈরি করা
         const newBalance = currentBalance - price;
         const orderId = "ORD_" + Date.now();
         
-        // ৩. নতুন ট্রানজেকশন আইডি তৈরি করা (SM + ৬ ডিজিটের র‍্যান্ডম সংখ্যা)
+        // ৪. নতুন ট্রানজেকশন আইডি তৈরি করা
         const trx_id = "SM" + Math.floor(100000 + Math.random() * 900000);
         const currentTime = new Date().toISOString();
 
-        // ৪. প্রোডাক্টের তথ্য তৈরি করা
+        // ৫. অটো ব্যালেন্স অ্যাড করার ডেট (Daily Income) ক্যালকুলেশন
+        const autoAddBalanceData = {};
+        let currentDate = new Date(); // আজকের তারিখ থেকে শুরু
+
+        // ব্যাকএন্ডে বাংলাদেশ টাইম (UTC+6) ব্যবহার করার জন্য
+        const bdOffset = 6 * 60 * 60 * 1000;
+        
+        for (let i = 0; i < expiryDays; i++) {
+            // বর্তমান তারিখের সাথে দিন যোগ করা
+            const targetDate = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000 + bdOffset);
+            
+            // ফরম্যাট তৈরি: yyyy-dd-MM (আপনার ডাটাবেজের স্ক্রিনশট অনুযায়ী)
+            const year = targetDate.getUTCFullYear();
+            const month = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(targetDate.getUTCDate()).padStart(2, '0');
+            
+            const dateKey = `${year}-${day}-${month}`; // 2026-22-11
+            
+            // ঐ দিনের জন্য কত টাকা পাবে
+            autoAddBalanceData[dateKey] = {
+                taka: dailyIncome
+            };
+        }
+
+        // ৬. প্রোডাক্টের সম্পূর্ণ তথ্য তৈরি করা (autoadd-balance-dat সহ)
         const newProduct = {
             "product-total-income": totalIncome,
-            "order-end-time": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            "order-end-time": new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toISOString(),
             "order-id": orderId,
             "order-start-time": currentTime,
             "product-daly-income": dailyIncome,
             "product-price": price,
-            "product-name": productId
+            "product-name": productId,
+            "autoadd-balance-dat": autoAddBalanceData // এখানে দিন অনুযায়ী টাকার তালিকা সেভ হচ্ছে
         };
 
-        // ৫. ইউজারের ব্যালেন্স কাটা, প্রোডাক্ট অ্যাড করা এবং amount-history তে সম্পূর্ণ বিবরণ সেভ করা
+        // ৭. ইউজারের ব্যালেন্স কাটা, প্রোডাক্ট অ্যাড করা এবং amount-history তে সম্পূর্ণ বিবরণ সেভ করা
         const updateData = {
             "acount-balance": newBalance,
             [`products/${orderId}`]: newProduct,
@@ -62,7 +99,7 @@ export default async function handler(req, res) {
             body: JSON.stringify(updateData)
         });
 
-        // 🟢 ৬. কমিশন ডিস্ট্রিবিউশন (আপলাইনদের বোনাস দেওয়া)
+        // 🟢 ৮. কমিশন ডিস্ট্রিবিউশন (আপলাইনদের বোনাস দেওয়া)
         if (user.refBy && user.refBy !== "none") {
             // গ্লোবাল কমিশন রেট চেক করা
             const configRes = await fetch(`${dbUrl}/.json?auth=${dbSecret}&shallow=true`);
@@ -173,7 +210,7 @@ export default async function handler(req, res) {
             }
         }
 
-        // ৭. সফল রেসপন্স পাঠানো
+        // ৯. সফল রেসপন্স পাঠানো
         return res.status(200).json({ 
             success: true, 
             newBalance, 
