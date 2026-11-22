@@ -939,7 +939,7 @@ function renderOrders(){
   box.innerHTML = orderKeys.map(orderId => {
     const productData = productsData[orderId];
     return '' +
-      '<div class="my-order-card">' +
+      '<div class="my-order-card" onclick="openOrderDetails(\'' + CURRENT_USER.mobile + '\', \'' + orderId + '\')" style="cursor: pointer;">' +
         '<div class="my-order-card__header">' +
           '<div class="my-order-card__title">' + (productData["product-name"] || 'VIP') + '</div>' +
           '<div class="my-order-card__date">' + dateStr(productData["order-start-time"]) + '</div>' +
@@ -1119,8 +1119,73 @@ async function buyProduct(key){
 }
 
 /* =========================================================
-   8) SHORTCUTS
+   8) SHORTCUTS & AUTO ADD BALANCE DETAILS
    ========================================================= */
+async function openOrderDetails(mobile, orderId) {
+    showDialog('লোড হচ্ছে...', '<div style="text-align:center;padding:20px;color:#006241;">অনুগ্রহ করে অপেক্ষা করুন...</div>', 'ঠিক আছে', () => {});
+
+    try {
+        const res = await fetch(`/api/order-products-dat?mobile=${mobile}&orderId=${orderId}`);
+        const data = await res.json();
+
+        if (!data.success || !data.history || data.history.length === 0) {
+            showDialog('অটো অ্যাড ব্যালেন্স', '<div style="text-align:center;padding:20px;color:#666;">কোনো ডেটা পাওয়া যায়নি।</div>', 'ঠিক আছে', () => {});
+            return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // আজকের তারিখের শুরু
+
+        const htmlContent = data.history.map(item => {
+            const itemDate = new Date(item.date);
+            const isPast = itemDate <= today;
+            
+            // অতিবৃদ্ধ হলে সবুজ, ভবিষ্যৎ হলে হলুদ
+            const bgColor = isPast ? '#E8F5E9' : '#FFF3E0'; 
+            const textColor = isPast ? '#2E7D32' : '#EF6C00';
+            const statusText = isPast ? 'প্রাপ্ত' : 'বাকি';
+            const formattedDate = item.date.split('-').reverse().join('/');
+
+            return `
+                <div style="
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center;
+                    padding: 12px 16px; 
+                    margin-bottom: 10px; 
+                    background: ${bgColor}; 
+                    border-left: 4px solid ${textColor};
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                ">
+                    <div>
+                        <div style="font-size: 14px; font-weight: 700; color: #333;">${formattedDate}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 15px; font-weight: 800; color: ${textColor};">৳ ${item.taka}</div>
+                        <div style="font-size: 10px; color: ${textColor}; font-weight: 600;">${statusText}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        showDialog('অটো অ্যাড ব্যালেন্স ডেটails', htmlContent, 'ঠিক আছে', () => {});
+        
+        // ডায়ালগের বডি স্ক্রলযোগ্য করা
+        setTimeout(() => {
+            const dlgBody = document.getElementById('dlgBody');
+            if(dlgBody) {
+                dlgBody.style.maxHeight = '60vh';
+                dlgBody.style.overflowY = 'auto';
+            }
+        }, 100);
+
+    } catch (error) {
+        console.error("Error:", error);
+        showDialog('ত্রুটি', '<div style="text-align:center;padding:20px;color:#c1121f;">ডেটা লোড করতে সমস্যা হয়েছে।</div>', 'ঠিক আছে', () => {});
+    }
+}
+
 async function shortcutAction(type){
   if (type === 'invite') {
     if (!CURRENT_USER) { openAuthScreen('login'); return; }
