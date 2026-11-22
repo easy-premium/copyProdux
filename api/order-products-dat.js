@@ -1,79 +1,91 @@
-/* =========================================================
-   ORDER PRODUCTS AUTO ADD BALANCE DATA
-   ========================================================= */
+// api/order-products-dat.js
 
-// API থেকে ডেটা লোড করার ফাংশন
-async function fetchOrderHistory(mobile, orderId) {
+export default async function handler(req, res) {
+    // CORS হেডার (যাতে ফ্রন্টএন্ড থেকে কল করা যায়)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    if (req.method !== 'GET') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    // URL থেকে mobile এবং orderId বের করা
+    const { mobile, orderId } = req.query;
+
+    if (!mobile || !orderId) {
+        return res.status(400).json({ error: 'Mobile and Order ID are required' });
+    }
+
+    // Vercel Environment Variables থেকে URL এবং Secret নেওয়া
+    const dbUrl = process.env.FIREBASE_DB_URL;
+    const dbSecret = process.env.FIREBASE_DB_SECRET;
+
+    if (!dbUrl || !dbSecret) {
+        console.error("FIREBASE_DB_URL অথবা FIREBASE_DB_SECRET সেট করা নেই।");
+        return res.status(500).json({ error: 'Database configuration missing' });
+    }
+
     try {
-        const res = await fetch(`/api/user/${mobile}/products/${orderId}/autoadd-balance-dat`);
-        if (!res.ok) throw new Error('Network response was not ok');
-        const data = await res.json();
-        return data;
+        // আপনার Firebase ডেটাবেসের সঠিক পাথটি এখানে দিন
+        // উদাহরণ: /users/01325475745/products/ORD_1795354391434/autoadd-balance-dat.json?auth=SECRET
+        const firebasePath = `${dbUrl}/users/${mobile}/products/${orderId}/autoadd-balance-dat.json?auth=${dbSecret}`;
+        
+        const response = await fetch(firebasePath);
+        
+        if (!response.ok) {
+            // যদি ডেটা না পাওয়া যায় (404), তবে খালি অ্যারে রিটার্ন করবে
+            if (response.status === 404) {
+                return res.status(200).json({ success: true, history: [] });
+            }
+            throw new Error(`Firebase Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // যদি ডেটাবেসে কোনো ডেটা না থাকে
+        if (!data) {
+            return res.status(200).json({ success: true, history: [] });
+        }
+
+        // Firebase থেকে ডেটা সাধারণত Object আকারে আসে (Key-Value পেয়ার)
+        // আমরা সেটাকে Array-তে রূপান্তর করব
+        let historyArray = [];
+
+        if (typeof data === 'object' && !Array.isArray(data)) {
+            historyArray = Object.keys(data).map(key => {
+                return {
+                    id: key,
+                    ...data[key]
+                };
+            });
+        } else if (Array.isArray(data)) {
+            historyArray = data;
+        }
+
+        // ডেটাগুলোকে তারিখ অনুযায়ী সিরিয়ালি সাজানো (পুরনো থেকে নতুন)
+        historyArray.sort((a, b) => {
+            // আপনার ডেটাবেসের ডেট ফিল্ডের নাম অনুযায়ী 'date', 'time' বা 'createdAt' ব্যবহার করুন
+            const dateA = new Date(a.date || a.time || a.createdAt || 0);
+            const dateB = new Date(b.date || b.time || b.createdAt || 0);
+            return dateA - dateB;
+        });
+
+        // ফ্রন্টএন্ডে ডেটা পাঠানো
+        return res.status(200).json({
+            success: true,
+            orderId: orderId,
+            history: historyArray
+        });
+
     } catch (error) {
-        console.error("Error fetching order history:", error);
-        return { success: false, history: [] };
+        console.error("Error fetching order data from Firebase:", error);
+        return res.status(500).json({ 
+            success: false, 
+            error: 'ডেটা লোড করতে সমস্যা হয়েছে' 
+        });
     }
-}
-
-// UI-তে ডেটা রেন্ডার করার ফাংশন
-function renderOrderHistory(historyList) {
-    if (!historyList || historyList.length === 0) {
-        return `<div style="text-align:center;padding:20px;color:#666;">কোনো ডেটা পাওয়া যায়নি।</div>`;
-    }
-
-    return historyList.map(item => {
-        // status 'paid' হলে (অতিবৃদ্ধ) সবুজ ব্যাকগ্রাউন্ড, আর 'upcoming' হলে (ভবিষ্যৎ) হলুদ ব্যাকগ্রাউন্ড
-        const bgColor = item.status === 'paid' ? '#E8F5E9' : '#FFF3E0';
-        const textColor = item.status === 'paid' ? '#2E7D32' : '#EF6C00';
-        const statusText = item.status === 'paid' ? 'প্রাপ্ত' : 'বাকি';
-
-        return `
-            <div style="
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center;
-                padding: 12px 16px; 
-                margin-bottom: 10px; 
-                background: ${bgColor}; 
-                border-left: 4px solid ${textColor};
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                font-family: 'Hind Siliguri', sans-serif;
-            ">
-                <div>
-                    <div style="font-size: 14px; font-weight: 700; color: #333;">${item.date}</div>
-                    <div style="font-size: 12px; color: #666;">${item.time}</div>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 15px; font-weight: 800; color: ${textColor};">৳ ${item.amount}</div>
-                    <div style="font-size: 10px; color: ${textColor}; font-weight: 600;">${statusText}</div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// মূল ফাংশন যা অর্ডারে ক্লিক করলে কল হবে
-async function openOrderDetails(mobile, orderId) {
-    // ডায়ালগ বা নতুন পেজ দেখানোর জন্য
-    showDialog('অটো অ্যাড ব্যালেন্স ডেটails', '<div style="text-align:center;padding:20px;">লোড হচ্ছে...</div>', 'ঠিক আছে', () => {});
-
-    const data = await fetchOrderHistory(mobile, orderId);
-    let historyList = [];
-
-    if (data.success && data.history) {
-        historyList = data.history;
-    }
-
-    // ডেটা সিরিয়ালি সাজানো (তারিখ অনুযায়ী)
-    historyList.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    const htmlContent = renderOrderHistory(historyList);
-
-    // ডায়ালগ আপডেট করা
-    document.getElementById('dlgTitle').textContent = 'অটো অ্যাড ব্যালেন্স ডেটails';
-    document.getElementById('dlgBody').innerHTML = htmlContent;
-    document.getElementById('dlgBtn').textContent = 'ঠিক আছে';
-    document.getElementById('dlgBody').style.maxHeight = '60vh';
-    document.getElementById('dlgBody').style.overflowY = 'auto';
 }
