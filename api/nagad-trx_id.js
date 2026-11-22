@@ -39,7 +39,7 @@ export default async function handler(req, res) {
         const transaction = trxData[trx_id];
 
         if (!transaction) {
-            return res.status(404).json({ status: "error", message: "সঠিকভাবে টাকা পাঠিয়ে সঠিক ট্রানজেকশন বসিয়ে দিন।" });
+            return res.status(404).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
         }
 
         if (transaction.status === "used" || transaction.used_by) {
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         // ধাপ ২: লিংকের টাকার সাথে ট্রানজেকশনের টাকার মিল চেক করা
         // ==========================================
         if (trxAmount !== expectedAmount) {
-            return res.status(400).json({ status: "error", message: "লেনদেন টাকার পরিমাণ সঠিকভাবে লিখুন।" });
+            return res.status(400).json({ status: "error", message: "আপনার কোথাও একটা ভুল হচ্ছে, সঠিকভাবে ফরম পূরণ করুন।" });
         }
 
         // ==========================================
