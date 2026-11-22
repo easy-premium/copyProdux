@@ -6,6 +6,7 @@
       "price": 1000,
       "dailyIncome": 250,
       "totalIncome": 25000,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image1.txt"
     },
     "vip2": {
@@ -13,6 +14,7 @@
       "price": 3000,
       "dailyIncome": 789,
       "totalIncome": 78900,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image2.txt"
     },
     "vip3": {
@@ -20,6 +22,7 @@
       "price": 6000,
       "dailyIncome": 1666,
       "totalIncome": 166600,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image3.txt"
     },
     "vip4": {
@@ -27,6 +30,7 @@
       "price": 12000,
       "dailyIncome": 3530,
       "totalIncome": 353000,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image4.txt"
     },
     "vip5": {
@@ -34,6 +38,7 @@
       "price": 25000,
       "dailyIncome": 8333,
       "totalIncome": 833300,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image5.txt"
     },
     "vip6": {
@@ -41,6 +46,7 @@
       "price": 50000,
       "dailyIncome": 17857,
       "totalIncome": 1785700,
+      "expiry-date": 90,
       "image": "https://easy-premium.github.io/copyProdux/produx/image6.txt"
     }
   }
