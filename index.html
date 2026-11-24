@@ -1147,7 +1147,7 @@ async function openOrderDetails(mobile, orderId) {
             
             // 🟢 কালার সেটিংস 🟢
             const bgColor = isPast ? '#006241' : '#FFF3E0'; //
-            const borderColor = '#673AB7'; // 
+            const borderColor = '#006241'; // 
             const textColor = '#000000'; //
             
             const statusText = isPast ? 'প্রাপ্ত' : 'বাকি';
@@ -1170,13 +1170,13 @@ async function openOrderDetails(mobile, orderId) {
                     </div>
                     <div style="text-align: right;">
                         <div style="font-size: 15px; font-weight: 800; color: ${textColor};">৳ ${item.taka}</div>
-                        <div style="font-size: 10px; color: #000000; font-weight: 600;">${statusText}</div>
+                        <div style="font-size: 15px; color: #000000; font-weight: 600;">${statusText}</div>
                     </div>
                 </div>
             `;
         }).join('');
 
-        showDialog('অটো অ্যাড ব্যালেন্স ডেটails', htmlContent, 'ঠিক আছে', () => {});
+        showDialog('লেনদেন এর বিবরণ', htmlContent, 'ঠিক আছে', () => {});
         
         setTimeout(() => {
             const dlgBody = document.getElementById('dlgBody');
