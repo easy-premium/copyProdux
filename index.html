@@ -1146,9 +1146,9 @@ async function openOrderDetails(mobile, orderId) {
             const isPast = itemDate <= today;
             
             // 🟢 কালার সেটিংস 🟢
-            const bgColor = isPast ? '#E8F5E9' : '#FFF3E0'; // পাস্ট হলে হালকা সবুজ, আপকামিং হলে হালকা হলুদ
-            const borderColor = '#673AB7'; // বেগুনি বর্ডার কালার (স্ক্রিনশটের মতো)
-            const textColor = '#000000'; // কালো টেক্সট কালার
+            const bgColor = isPast ? '#E8F5E9' : '#FFF3E0'; //
+            const borderColor = '#673AB7'; // 
+            const textColor = '#000000'; //
             
             const statusText = isPast ? 'প্রাপ্ত' : 'বাকি';
             const formattedDate = item.date.split('-').reverse().join('/');
