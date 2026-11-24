@@ -32,7 +32,12 @@
       font-size: 17.0667px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent; 
+    }
 
     html, body {
       font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif;
@@ -1141,7 +1146,7 @@ async function openOrderDetails(mobile, orderId) {
             const isPast = itemDate <= today;
             
             // 🟢 কালার সেটিংস 🟢
-            const bgColor = isPast ? '#F3E5F5' : '#FFF3E0'; // হালকা বেগুনি এবং হালকা হলুদ
+            const bgColor = isPast ? '#E8F5E9' : '#FFF3E0'; // পাস্ট হলে হালকা সবুজ, আপকামিং হলে হালকা হলুদ
             const borderColor = '#673AB7'; // বেগুনি বর্ডার কালার (স্ক্রিনশটের মতো)
             const textColor = '#000000'; // কালো টেক্সট কালার
             
