@@ -538,7 +538,7 @@
             <div class="list-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             </div>
-            <div class="list-text">অ্যাপ সম্পর্কে</div>
+            <div class="list-text">লেনদেন এর বিবরণ</div>
             <div class="list-arrow">›</div>
           </div>
         </div>
@@ -1176,7 +1176,7 @@ async function openOrderDetails(mobile, orderId) {
             `;
         }).join('');
 
-        showDialog('লেনদেন এর বিবরণ', htmlContent, 'ঠিক আছে', () => {});
+        showDialog('আপনার মুনাফা অর্জন তারিখ', htmlContent, 'ঠিক আছে', () => {});
         
         setTimeout(() => {
             const dlgBody = document.getElementById('dlgBody');
