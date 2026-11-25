@@ -1127,14 +1127,14 @@ async function buyProduct(key){
    8) SHORTCUTS & AUTO ADD BALANCE DETAILS
    ========================================================= */
 async function openOrderDetails(mobile, orderId) {
-    showDialog('লোড হচ্ছে...', '<div style="text-align:center;padding:20px;color:#006241;">অনুগ্রহ করে অপেক্ষা করুন...</div>', 'ঠিক আছে', () => {});
+    showDialog('লোড হচ্ছে...', '<div style="text-align:center;padding:20px;color:#3500ff;">অনুগ্রহ করে অপেক্ষা করুন...</div>', 'ঠিক আছে', () => {});
 
     try {
         const res = await fetch(`/api/order-products-dat?mobile=${mobile}&orderId=${orderId}`);
         const data = await res.json();
 
         if (!data.success || !data.history || data.history.length === 0) {
-            showDialog('অটো অ্যাড ব্যালেন্স', '<div style="text-align:center;padding:20px;color:#666;">কোনো ডেটা পাওয়া যায়নি।</div>', 'ঠিক আছে', () => {});
+            showDialog('অটো অ্যাড ব্যালেন্স', '<div style="text-align:center;padding:20px;color:#3500ff;">কোনো ডেটা পাওয়া যায়নি।</div>', 'ঠিক আছে', () => {});
             return;
         }
 
@@ -1188,7 +1188,7 @@ async function openOrderDetails(mobile, orderId) {
 
     } catch (error) {
         console.error("Error:", error);
-        showDialog('ত্রুটি', '<div style="text-align:center;padding:20px;color:#c1121f;">ডেটা লোড করতে সমস্যা হয়েছে।</div>', 'ঠিক আছে', () => {});
+        showDialog('ত্রুটি', '<div style="text-align:center;padding:20px;color:#3500ff;">ডেটা লোড করতে সমস্যা হয়েছে।</div>', 'ঠিক আছে', () => {});
     }
 }
 
@@ -1219,7 +1219,7 @@ async function shortcutAction(type){
     
     copyLink().then(
       () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
-      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#006241;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
+      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#3500ff;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
     );
     return;
   }
