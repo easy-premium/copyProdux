@@ -11,24 +11,28 @@
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
 
     :root {
-      --color-status-success: #3500ff;
-      --color-status-failed: #3500ff;
-      --color-status-pending: #3500ff;
+      /* 🟢 এখানে আপনার মেইন কালারটি সেট করুন 🟢 */
+      --main-color: #3500ff;
+      
+      /* বাকি কালারগুলো মেইন কালার থেকে নেওয়া হবে */
+      --color-status-success: var(--main-color);
+      --color-status-failed: var(--main-color);
+      --color-status-pending: var(--main-color);
       --color-primary: #000000;
       --color-primary-dark: #000000;
-      --color-secondary: #3500ff;
-      --color-accent: #3500ff;
-      --color-page-bg: #3500ff;
-      --color-card-bg: #3500ff;
-      --color-text: #3500ff;
-      --color-text-muted: #3500ff;
-      --color-app-bg: #3500ff;
-      --gradient-btn: #3500ff;
-      --gradient-tabbar: #3500ff;
-      --gradient-card: #3500ff;
-      --gradient-actions: #3500ff;
-      --page-surface-bg: #3500ff;
-      --color-primary-soft: #3500ff;
+      --color-secondary: var(--main-color);
+      --color-accent: var(--main-color);
+      --color-page-bg: #F2F0EB;
+      --color-card-bg: #ffffff;
+      --color-text: #000000;
+      --color-text-muted: #666;
+      --color-app-bg: #ffffff;
+      --gradient-btn: var(--main-color);
+      --gradient-tabbar: var(--main-color);
+      --gradient-card: var(--main-color);
+      --gradient-actions: linear-gradient(135deg, #FFFFFF 0%, #EAF3EF 100%);
+      --page-surface-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%), #F2F0EB;
+      --color-primary-soft: rgba(0, 112, 74, 0.08);
       font-size: 17.0667px;
     }
 
@@ -123,7 +127,7 @@
     .profile-container { padding: 20px 16px 90px 16px; }
     
     .profile-header-card {
-      background: #3500ff;
+      background: var(--main-color);
       border-radius: 24px;
       padding: 24px;
       color: #fff;
@@ -331,8 +335,8 @@
     /* FIXED TOAST */
     .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: rgba(30, 57, 50, 0.95); color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); transition: all 0.3s; max-width: 85vw; text-align: center; opacity: 0; pointer-events: none; }
     .toast--show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    .toast--error { background: #3500ff; }
-    .toast--success { background: #3500ff; }
+    .toast--error { background: var(--main-color); }
+    .toast--success { background: var(--main-color); }
 
     /* LOGIN/REGISTER SCREEN */
     .auth-screen { position: fixed; inset: 0; background: var(--page-surface-bg); z-index: 3000; display: none; flex-direction: column; justify-content: center; padding: 20px; }
