@@ -14,7 +14,6 @@
       /* 🟢 এখানে আপনার মেইন কালারটি সেট করুন 🟢 */
       --main-color: #ff0e00;
       
-    
       --color-status-success: var(--main-color);
       --color-status-failed: var(--main-color);
       --color-status-pending: var(--main-color);
@@ -417,27 +416,39 @@
         </div>
         <div class="product-page__shortcuts">
           <div class="product-page__shortcut" onclick="shortcutAction('deposit')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios-filled/100/3500ff/money-bag.png" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/3500ff/money-bag.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/money-bag.png" alt="">
+            </div>
             <span>দৈনিক বোনাস</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('withdraw')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios-filled/100/3500ff/card-exchange.png" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/3500ff/card-exchange.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/card-exchange.png" alt="">
+            </div>
             <span>ডিপোজিট</span>
           </div>
           <div class="product-page__shortcut" onclick="switchTab('orders')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=3500ff" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=3500ff" data-src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=COLOR" alt="">
+            </div>
             <span>ফ্রী কুপন</span>
           </div>
           <div class="product-page__shortcut" onclick="switchTab('team')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=3500ff" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=3500ff" data-src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=COLOR" alt="">
+            </div>
             <span>লাইভ গ্রুপ</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('invite')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios-filled/100/3500ff/share.png" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/3500ff/share.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/share.png" alt="">
+            </div>
             <span>ইনভাইট</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('support')">
-            <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios-filled/100/3500ff/headset.png" alt=""></div>
+            <div class="product-page__shortcut-icon">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/3500ff/headset.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/headset.png" alt="">
+            </div>
             <span>সাপোর্ট</span>
           </div>
         </div>
@@ -786,12 +797,11 @@ function loadImageInto(imgEl, url, label){
   });
 }
 
-/* 🟢 এখানে ব্যানারের কালার পরিবর্তন করা হয়েছে 🟢 */
 const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="280" viewBox="0 0 800 280">' +
     '<defs>' +
       '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0" stop-color="#3500ff"/><stop offset="0.55" stop-color="#3500ff"/><stop offset="1" stop-color="#2200aa"/>' +
+        '<stop offset="0" stop-color="#ff0e00"/><stop offset="0.55" stop-color="#ff0e00"/><stop offset="1" stop-color="#aa0a00"/>' +
       '</linearGradient>' +
       '<linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">' +
         '<stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff"/>' +
@@ -1132,14 +1142,16 @@ async function buyProduct(key){
    8) SHORTCUTS & AUTO ADD BALANCE DETAILS
    ========================================================= */
 async function openOrderDetails(mobile, orderId) {
-    showDialog('লোড হচ্ছে...', '<div style="text-align:center;padding:20px;color:#3500ff;">অনুগ্রহ করে অপেক্ষা করুন...</div>', 'ঠিক আছে', () => {});
+    const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+
+    showDialog('লোড হচ্ছে...', `<div style="text-align:center;padding:20px;color:${mainColor};">অনুগ্রহ করে অপেক্ষা করুন...</div>`, 'ঠিক আছে', () => {});
 
     try {
         const res = await fetch(`/api/order-products-dat?mobile=${mobile}&orderId=${orderId}`);
         const data = await res.json();
 
         if (!data.success || !data.history || data.history.length === 0) {
-            showDialog('অটো অ্যাড ব্যালেন্স', '<div style="text-align:center;padding:20px;color:#3500ff;">কোনো ডেটা পাওয়া যায়নি।</div>', 'ঠিক আছে', () => {});
+            showDialog('অটো অ্যাড ব্যালেন্স', `<div style="text-align:center;padding:20px;color:${mainColor};">কোনো ডেটা পাওয়া যায়নি।</div>`, 'ঠিক আছে', () => {});
             return;
         }
 
@@ -1150,10 +1162,9 @@ async function openOrderDetails(mobile, orderId) {
             const itemDate = new Date(item.date);
             const isPast = itemDate <= today;
             
-            // 🟢  🟢
-            const bgColor = isPast ? '#3500ff' : '#ffffff'; //
-            const borderColor = '#3500ff'; // 
-            const textColor = '#000000'; //
+            const bgColor = isPast ? mainColor : '#ffffff'; 
+            const borderColor = mainColor; 
+            const textColor = '#000000'; 
             
             const statusText = isPast ? 'প্রাপ্ত' : 'বাকি';
             const formattedDate = item.date.split('-').reverse().join('/');
@@ -1193,7 +1204,7 @@ async function openOrderDetails(mobile, orderId) {
 
     } catch (error) {
         console.error("Error:", error);
-        showDialog('ত্রুটি', '<div style="text-align:center;padding:20px;color:#3500ff;">ডেটা লোড করতে সমস্যা হয়েছে।</div>', 'ঠিক আছে', () => {});
+        showDialog('ত্রুটি', `<div style="text-align:center;padding:20px;color:${mainColor};">ডেটা লোড করতে সমস্যা হয়েছে।</div>`, 'ঠিক আছে', () => {});
     }
 }
 
@@ -1224,7 +1235,10 @@ async function shortcutAction(type){
     
     copyLink().then(
       () => showToast('রেফারেল লিংক কপি হয়েছে', 'success'),
-      () => showDialog('আপনার রেফারেল লিংক', '<div style="text-align:center;font-size:13px;font-weight:700;color:#3500ff;word-break:break-all">' + refLink + '</div>', 'ঠিক আছে')
+      () => {
+        const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+        showDialog('আপনার রেফারেল লিংক', `<div style="text-align:center;font-size:13px;font-weight:700;color:${mainColor};word-break:break-all">` + refLink + '</div>', 'ঠিক আছে');
+      }
     );
     return;
   }
@@ -1301,6 +1315,19 @@ document.addEventListener('click', function (e) {
   } else {
     openAuthScreen(refCodeParam ? 'register' : 'login');
   }
+
+  // 🟢 অটোমেটিক আইকন কালার পরিবর্তনের স্ক্রিপ্ট 🟢
+  setTimeout(() => {
+      const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+      const hexColor = mainColor.replace('#', ''); 
+      
+      document.querySelectorAll('.dynamic-icon').forEach(img => {
+          const dataSrc = img.getAttribute('data-src');
+          if (dataSrc) {
+              img.src = dataSrc.replace('COLOR', hexColor);
+          }
+      });
+  }, 100);
 })();
 </script>
 </body>
