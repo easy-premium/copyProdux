@@ -417,37 +417,37 @@
         <div class="product-page__shortcuts">
           <div class="product-page__shortcut" onclick="shortcutAction('deposit')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/3500ff/money-bag.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/money-bag.png" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/money-bag.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/money-bag.png" alt="">
             </div>
             <span>দৈনিক বোনাস</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('withdraw')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" data-src="https://img.icons8.com/ios-filled/100/COLOR/card-exchange.png" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/card-exchange.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/card-exchange.png" alt="">
             </div>
             <span>ডিপোজিট</span>
           </div>
           <div class="product-page__shortcut" onclick="switchTab('orders')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" data-src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=COLOR" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=02c8d3" data-src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=COLOR" alt="">
             </div>
             <span>ফ্রী কুপন</span>
           </div>
           <div class="product-page__shortcut" onclick="switchTab('team')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" data-src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=COLOR" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=02c8d3" data-src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=COLOR" alt="">
             </div>
             <span>লাইভ গ্রুপ</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('invite')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" data-src="https://img.icons8.com/ios-filled/100/COLOR/share.png" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/share.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/share.png" alt="">
             </div>
             <span>ইনভাইট</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('support')">
             <div class="product-page__shortcut-icon">
-              <img class="dynamic-icon" data-src="https://img.icons8.com/ios-filled/100/COLOR/headset.png" alt="">
+              <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/headset.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/headset.png" alt="">
             </div>
             <span>সাপোর্ট</span>
           </div>
@@ -801,7 +801,7 @@ const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="280" viewBox="0 0 800 280">' +
     '<defs>' +
       '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0" stop-color="#ff0e00"/><stop offset="0.55" stop-color="#ff0e00"/><stop offset="1" stop-color="#aa0a00"/>' +
+        '<stop offset="0" stop-color="#02c8d3"/><stop offset="0.55" stop-color="#02c8d3"/><stop offset="1" stop-color="#019ba3"/>' +
       '</linearGradient>' +
       '<linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">' +
         '<stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff"/>' +
@@ -1268,8 +1268,26 @@ document.addEventListener('click', function (e) {
 });
 
 /* =========================================================
-   9) INIT APP
+   9) INIT APP & FAST ICON LOADER
    ========================================================= */
+// 🟢 দ্রুত আইকন কালার পরিবর্তনের ফাংশন 🟢
+function applyDynamicIconColors() {
+  const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+  const hexColor = mainColor.replace('#', ''); 
+  
+  document.querySelectorAll('.dynamic-icon').forEach(img => {
+      const dataSrc = img.getAttribute('data-src');
+      if (dataSrc) {
+          img.src = dataSrc.replace('COLOR', hexColor);
+      }
+  });
+}
+
+// ডম লোড হওয়ার সাথে সাথেই যেন কালার পরিবর্তন হয়ে যায়
+document.addEventListener('DOMContentLoaded', () => {
+  applyDynamicIconColors();
+});
+
 (async function init(){
   const banner = document.getElementById('pageBanner');
   if (banner) banner.src = BANNER_SRC;
@@ -1315,19 +1333,6 @@ document.addEventListener('click', function (e) {
   } else {
     openAuthScreen(refCodeParam ? 'register' : 'login');
   }
-
-  // 🟢 অটোমেটিক আইকন কালার পরিবর্তনের স্ক্রিপ্ট 🟢
-  setTimeout(() => {
-      const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
-      const hexColor = mainColor.replace('#', ''); 
-      
-      document.querySelectorAll('.dynamic-icon').forEach(img => {
-          const dataSrc = img.getAttribute('data-src');
-          if (dataSrc) {
-              img.src = dataSrc.replace('COLOR', hexColor);
-          }
-      });
-  }, 100);
 })();
 </script>
 </body>
