@@ -422,11 +422,11 @@
           </div>
           <div class="product-page__shortcut" onclick="switchTab('orders')">
             <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=3500ff" alt=""></div>
-            <span>ফ্রী কুপন</span></span>
+            <span>ফ্রী কুপন</span>
           </div>
           <div class="product-page__shortcut" onclick="switchTab('team')">
             <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=3500ff" alt=""></div>
-            <span>লাইভ গ্রুপ</span></span>
+            <span>লাইভ গ্রুপ</span>
           </div>
           <div class="product-page__shortcut" onclick="shortcutAction('invite')">
             <div class="product-page__shortcut-icon"><img src="https://img.icons8.com/ios-filled/100/3500ff/share.png" alt=""></div>
@@ -782,23 +782,24 @@ function loadImageInto(imgEl, url, label){
   });
 }
 
+/* 🟢 এখানে ব্যানারের কালার পরিবর্তন করা হয়েছে 🟢 */
 const BANNER_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="280" viewBox="0 0 800 280">' +
     '<defs>' +
       '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0" stop-color="#006241"/><stop offset="0.55" stop-color="#1E3932"/><stop offset="1" stop-color="#0B2B24"/>' +
+        '<stop offset="0" stop-color="#3500ff"/><stop offset="0.55" stop-color="#3500ff"/><stop offset="1" stop-color="#2200aa"/>' +
       '</linearGradient>' +
       '<linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">' +
-        '<stop offset="0" stop-color="#C8A96A"/><stop offset="1" stop-color="#F0DFB8"/>' +
+        '<stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff"/>' +
       '</linearGradient>' +
     '</defs>' +
     '<rect width="800" height="280" fill="url(#bg)"/>' +
     '<circle cx="670" cy="50" r="150" fill="#ffffff" opacity="0.05"/>' +
     '<circle cx="110" cy="250" r="120" fill="#ffffff" opacity="0.04"/>' +
     '<path d="M70 200 L140 155 L210 175 L290 110 L360 140 L440 75" fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
-    '<circle cx="440" cy="75" r="10" fill="#C8A96A"/>' +
+    '<circle cx="440" cy="75" r="10" fill="#ffffff"/>' +
     '<text x="70" y="95" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold" fill="#ffffff">Share Market BD</text>' +
-    '<text x="70" y="130" font-family="Arial, Helvetica, sans-serif" font-size="18" letter-spacing="2" fill="#C8A96A">INVEST  •  EARN  •  GROW</text>' +
+    '<text x="70" y="130" font-family="Arial, Helvetica, sans-serif" font-size="18" letter-spacing="2" fill="#ffffff">INVEST  •  EARN  •  GROW</text>' +
   '</svg>'
 );
 
