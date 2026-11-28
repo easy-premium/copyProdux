@@ -416,7 +416,13 @@
           // === নতুন আপডেট: Income (আয়) ডিটেক্ট করা ===
           if (type === 'income' || /income/i.test(info)) {
             category = 'income';
-            title = info || 'ইনকাম আয়';
+            // "Income vip2 (Order: ...)" থেকে শুধু "ইনকাম vip2" অংশটুকু নেওয়া হচ্ছে
+            let productMatch = info.match(/Income\s+([^\s(]+)/i);
+            if (productMatch && productMatch[1]) {
+                title = 'ইনকাম ' + productMatch[1].toUpperCase();
+            } else {
+                title = 'ইনকাম আয়';
+            }
             isPlus = true;
           } 
           else if (type === 'purchase' || /purchase/i.test(info)) {
@@ -452,7 +458,8 @@
             title: title,
             time: time,
             isPlus: isPlus,
-            trxId: item.trx_id || key,
+            // ট্রানজেকশন আইডি হিসেবে trx_id বা Order আইডি দেখানো হচ্ছে
+            trxId: item.trx_id || item.Order || key,
           });
         });
 
