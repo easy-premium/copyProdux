@@ -1,1 +1,305 @@
-glkjlkjl
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1E3932">
+  <title>লেনদেনের বিবরণ - Share Market BD</title>
+  <link rel="icon" href="https://img.icons8.com/ios-filled/100/02c8d3/financial-growth-analysis.png" type="image/png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+    :root {
+      --main-color: #02c8d3;
+      --color-primary: #000000;
+      --color-primary-dark: #000000;
+      --color-page-bg: #F2F0EB;
+      --color-card-bg: #ffffff;
+      --color-text: #000000;
+      --color-text-muted: #666;
+      --color-app-bg: #ffffff;
+      --gradient-btn: var(--main-color);
+      --gradient-card: var(--main-color);
+      --page-surface-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%), #F2F0EB;
+      --color-primary-soft: rgba(0, 112, 74, 0.08);
+      --color-success: #2E7D32;
+      --color-danger: #C62828;
+      --color-warning: #EF6C00;
+      font-size: 17.0667px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif; background: #000000; color: var(--color-text); min-height: 100vh; }
+    body { display: flex; justify-content: center; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+
+    .layout {
+      width: 100%;
+      max-width: 400px;
+      min-height: 100vh;
+      background: var(--page-surface-bg);
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* NAVBAR */
+    .app-nav { position: sticky; top: 0; z-index: 50; }
+    .app-nav__bar { background: #000000; color: #fff; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    .app-nav__back { background: none; color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
+    .app-nav__back:hover { background: rgba(255,255,255,0.1); }
+    .app-nav__title { font-size: 17px; font-weight: 600; flex: 1; text-align: center; }
+    .app-nav__spacer { width: 32px; }
+
+    /* PAGE */
+    .history-page { padding: 16px 12px 40px 12px; min-height: calc(100vh - 52px); }
+
+    /* BALANCE CARD (নগদ স্টাইল) */
+    .balance-card {
+      background: linear-gradient(135deg, var(--main-color), #019ba3);
+      border-radius: 20px;
+      padding: 24px 20px;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(2, 200, 211, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .balance-card__label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .balance-card__amount {
+      font-size: 32px;
+      font-weight: 800;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .balance-card__amount span { font-size: 22px; }
+    .balance-card__info {
+      margin-top: 14px;
+      font-size: 12px;
+      opacity: 0.85;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* FILTER TABS */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      padding: 8px 16px;
+      background: #fff;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid #e0e0e0;
+      transition: all 0.2s;
+    }
+    .filter-tab--active {
+      background: var(--main-color);
+      color: #fff;
+      border-color: var(--main-color);
+      box-shadow: 0 4px 12px rgba(2, 200, 211, 0.3);
+    }
+
+    /* TRANSACTION LIST */
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .txn-date-group {
+      margin-bottom: 4px;
+    }
+    .txn-date-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      padding: 6px 4px;
+      margin-top: 8px;
+    }
+
+    .txn-item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid #f0f0f0;
+      transition: transform 0.15s;
+      margin-bottom: 8px;
+    }
+    .txn-item:active { transform: scale(0.98); }
+
+    .txn-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .txn-icon--deposit { background: #E8F5E9; color: var(--color-success); }
+    .txn-icon--withdraw { background: #FFEBEE; color: var(--color-danger); }
+    .txn-icon--purchase { background: #FFF3E0; color: var(--color-warning); }
+    .txn-icon--bonus { background: #E3F2FD; color: #1565C0; }
+    .txn-icon--default { background: #F5F7FA; color: #555; }
+
+    .txn-info { flex: 1; min-width: 0; }
+    .txn-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .txn-sub {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .txn-amount {
+      font-size: 15px;
+      font-weight: 800;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .txn-amount--plus { color: var(--color-success); }
+    .txn-amount--minus { color: var(--color-danger); }
+    .txn-time {
+      font-size: 10px;
+      color: var(--color-text-muted);
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    /* LOADING & EMPTY */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      color: var(--color-text-muted);
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f0f0f0;
+      border-top-color: var(--main-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+    .empty-state svg { width: 80px; height: 80px; margin-bottom: 16px; opacity: 0.4; }
+
+    /* TOAST */
+    .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: rgba(30, 57, 50, 0.95); color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 9999; transition: all 0.3s; max-width: 85vw; text-align: center; opacity: 0; pointer-events: none; }
+    .toast--show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- NAVBAR -->
+    <div class="app-nav">
+      <div class="app-nav__bar">
+        <button class="app-nav__back" onclick="goBack()">‹</button>
+        <div class="app-nav__title">লেনদেনের বিবরণ</div>
+        <div class="app-nav__spacer"></div>
+      </div>
+    </div>
+
+    <!-- PAGE -->
+    <div class="history-page">
+      <!-- BALANCE CARD -->
+      <div class="balance-card" id="balanceCard">
+        <div class="balance-card__label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          মোট ব্যালেন্স
+        </div>
+        <div class="balance-card__amount" id="balanceAmount"><span>৳</span> 0</div>
+        <div class="balance-card__info">
+          <span id="userMobileDisplay">—</span>
+          <span id="txnCountDisplay">0 লেনদেন</span>
+        </div>
+      </div>
+
+      <!-- FILTER TABS -->
+      <div class="filter-tabs" id="filterTabs">
+        <div class="filter-tab filter-tab--active" data-filter="all" onclick="setFilter('all')">সব</div>
+        <div class="filter-tab" data-filter="deposit" onclick="setFilter('deposit')">ডিপোজিট</div>
+        <div class="filter-tab" data-filter="purchase" onclick="setFilter('purchase')">ইনভেস্ট</div>
+        <div class="filter-tab" data-filter="withdraw" onclick="setFilter('withdraw')">উইথড্র</div>
+        <div class="filter-tab" data-filter="bonus" onclick="setFilter('bonus')">বোনাস</div>
+      </div>
+
+      <!-- TRANSACTION LIST -->
+      <div class="transaction-list" id="transactionList">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <div>লোড হচ্ছে...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <!-- JS ফাইল কানেক্ট করা হলো -->
+  <script src="add-mony-history.js"></script>
+</body>
+</html>
