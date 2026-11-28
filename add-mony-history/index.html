@@ -306,7 +306,6 @@
     (function() {
       'use strict';
 
-      // আপনার তৈরি করা API এর এন্ডপয়েন্ট
       const API_ENDPOINT = '/api/add-mony-history'; 
 
       let currentUser = null;
@@ -371,9 +370,6 @@
           .replace(/'/g, '&#39;');
       }
 
-      // ============================================================
-      // FETCH USER DATA (VIA VERCEL SERVERLESS API)
-      // ============================================================
       async function fetchUserData(mobile) {
         try {
           const res = await fetch(`${API_ENDPOINT}?mobile=${mobile}`);
@@ -396,9 +392,6 @@
         }
       }
 
-      // ============================================================
-      // PARSE TRANSACTIONS
-      // ============================================================
       function parseTransactions(history) {
         if (!history || typeof history !== 'object') return [];
         const list = [];
@@ -406,7 +399,7 @@
         Object.keys(history).forEach((key) => {
           const item = history[key];
           if (!item || typeof item !== 'object') return;
-          if (key === 'time') return; // Invalid key skip
+          if (key === 'time') return;
 
           const amount = Number(item.amount || 0);
           const type = (item.type || '').toLowerCase();
@@ -459,9 +452,6 @@
         return list;
       }
 
-      // ============================================================
-      // RENDER UI
-      // ============================================================
       function renderBalance(user) {
         const balEl = document.getElementById('balanceAmount');
         const mobEl = document.getElementById('userMobileDisplay');
