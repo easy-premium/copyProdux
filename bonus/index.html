@@ -1,3 +1,168 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1E3932">
+  <title>দৈনিক বোনাস - Share Market BD</title>
+  <link rel="icon" href="https://img.icons8.com/ios-filled/100/02c8d3/financial-growth-analysis.png" type="image/png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+    :root {
+      --main-color: #02c8d3;
+      --color-primary: #000000;
+      --color-primary-dark: #000000;
+      --color-text: #000000;
+      --color-text-muted: #666;
+      --page-surface-bg: linear-gradient(180deg, #F2F0EB 0%, #F2F0EB 100%), #F2F0EB;
+      --gradient-card: var(--main-color);
+      font-size: 17.0667px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Noto Sans Bengali', Arial, sans-serif; background: #000000; color: var(--color-text); min-height: 100vh; }
+    body { display: flex; justify-content: center; }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+
+    .layout {
+      width: 100%;
+      max-width: 400px;
+      min-height: 100vh;
+      background: var(--page-surface-bg);
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* NAVBAR */
+    .app-nav { position: sticky; top: 0; z-index: 50; }
+    .app-nav__bar { background: #000000; color: #fff; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    .app-nav__back { background: none; color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
+    .app-nav__back:hover { background: rgba(255,255,255,0.1); }
+    .app-nav__title { font-size: 17px; font-weight: 600; flex: 1; text-align: center; }
+    .app-nav__spacer { width: 32px; }
+
+    /* PAGE CONTENT */
+    .page-content { padding: 20px 16px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 52px); }
+
+    /* BONUS CARD */
+    .bonus-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      width: 100%;
+      border: 1px solid #f0f0f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bonus-card::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      background: var(--main-color);
+      opacity: 0.1;
+      border-radius: 50%;
+      filter: blur(30px);
+      z-index: 0;
+    }
+
+    .bonus-icon-box {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, rgba(2, 200, 211, 0.1), rgba(2, 200, 211, 0.3));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .bonus-icon-box img { width: 50px; height: 50px; object-fit: contain; }
+
+    .bonus-title { font-size: 22px; font-weight: 800; color: var(--color-primary-dark); margin-bottom: 8px; position: relative; z-index: 1; }
+    .bonus-desc { font-size: 13px; color: var(--color-text-muted); margin-bottom: 24px; line-height: 1.5; position: relative; z-index: 1; }
+
+    .bonus-amount {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--main-color);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 4px 15px rgba(2, 200, 211, 0.3);
+    }
+
+    .claim-btn {
+      background: var(--gradient-card);
+      color: #fff;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(2, 200, 211, 0.4);
+      transition: all 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .claim-btn:active { transform: scale(0.97); }
+    .claim-btn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; color: #666; }
+
+    /* LOADING & TOAST */
+    .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: rgba(30, 57, 50, 0.95); color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 9999; transition: all 0.3s; max-width: 85vw; text-align: center; opacity: 0; pointer-events: none; }
+    .toast--show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- NAVBAR -->
+    <div class="app-nav">
+      <div class="app-nav__bar">
+        <button class="app-nav__back" onclick="goBack()">‹</button>
+        <div class="app-nav__title">দৈনিক বোনাস</div>
+        <div class="app-nav__spacer"></div>
+      </div>
+    </div>
+
+    <!-- PAGE -->
+    <div class="page-content">
+      <div class="bonus-card">
+        <div class="bonus-icon-box">
+          <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/money-bag.png" alt="Bonus" id="bonusIcon">
+        </div>
+        <div class="bonus-title">ডেইলি লগইন বোনাস</div>
+        <div class="bonus-desc">প্রতিদিন অ্যাপে লগইন করে ফ্রি বোনাস সংগ্রহ করুন। বোনাসটি প্রতিদিন আপনার অ্যাকাউন্টে যোগ হবে।</div>
+        
+        <!-- ডাইনামিক বোনাস অ্যামাউন্ট (লোডিং স্টেট) -->
+        <div class="bonus-amount" id="bonusAmountDisplay">৳ ...</div>
+
+        <button class="claim-btn" id="claimBtn" onclick="claimBonus()">
+          <span id="btnText">বোনাস সংগ্রহ করুন</span>
+          <div class="spinner" id="btnSpinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
   <script>
     const API_ENDPOINT = '/api/bonus';
     let currentUserMobile = null;
@@ -30,19 +195,18 @@
     // API থেকে বোনাস এমাউন্ট লোড করা
     async function loadBonusAmount() {
       const displayEl = document.getElementById('bonusAmountDisplay');
-      displayEl.textContent = '৳ ...';
       
       try {
         const res = await fetch(API_ENDPOINT); // GET Request
         const data = await res.json();
         
-        if (data.success && data.amount) {
+        if (data.success && data.amount !== undefined) {
           displayEl.textContent = '৳ ' + data.amount;
         } else {
           displayEl.textContent = '৳ 10'; // Fallback
         }
       } catch (e) {
-        console.error(e);
+        console.error('Fetch error:', e);
         displayEl.textContent = '৳ 10';
       }
     }
@@ -90,7 +254,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       applyDynamicIconColors();
-      loadBonusAmount(); // এমাউন্ট লোড করবে
+      loadBonusAmount(); // বোনাস কত টাকা তা API থেকে লোড করবে
       
       const params = new URLSearchParams(window.location.search);
       currentUserMobile = params.get('user');
@@ -102,3 +266,5 @@
       }
     });
   </script>
+</body>
+</html>
