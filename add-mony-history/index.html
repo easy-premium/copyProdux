@@ -25,6 +25,7 @@
       --color-success: #2E7D32;
       --color-danger: #C62828;
       --color-warning: #EF6C00;
+      --color-income: #00A300;
       font-size: 17.0667px;
     }
 
@@ -183,6 +184,7 @@
     .txn-icon--withdraw { background: #FFEBEE; color: var(--color-danger); }
     .txn-icon--purchase { background: #FFF3E0; color: var(--color-warning); }
     .txn-icon--bonus { background: #E3F2FD; color: #1565C0; }
+    .txn-icon--income { background: #E8F5E9; color: var(--color-income); }
     .txn-icon--default { background: #F5F7FA; color: #555; }
 
     .txn-info { flex: 1; min-width: 0; }
@@ -282,6 +284,7 @@
         <div class="filter-tab filter-tab--active" data-filter="all" onclick="setFilter('all')">সব</div>
         <div class="filter-tab" data-filter="deposit" onclick="setFilter('deposit')">ডিপোজিট</div>
         <div class="filter-tab" data-filter="purchase" onclick="setFilter('purchase')">ইনভেস্ট</div>
+        <div class="filter-tab" data-filter="income" onclick="setFilter('income')">আয় (ইনকাম)</div>
         <div class="filter-tab" data-filter="withdraw" onclick="setFilter('withdraw')">উইথড্র</div>
         <div class="filter-tab" data-filter="bonus" onclick="setFilter('bonus')">বোনাস</div>
       </div>
@@ -410,23 +413,33 @@
           let title = info || 'লেনদেন';
           let isPlus = false;
 
-          if (type === 'purchase' || /purchase/i.test(info)) {
+          // === নতুন আপডেট: Income (আয়) ডিটেক্ট করা ===
+          if (type === 'income' || /income/i.test(info)) {
+            category = 'income';
+            title = info || 'ইনকাম আয়';
+            isPlus = true;
+          } 
+          else if (type === 'purchase' || /purchase/i.test(info)) {
             category = 'purchase';
             title = 'ইনভেস্ট';
             isPlus = false;
-          } else if (/deposit/i.test(info) || item.provider) {
+          } 
+          else if (/deposit/i.test(info) || item.provider) {
             category = 'deposit';
             title = 'ডিপোজিট' + (item.provider ? ' (' + item.provider + ')' : '');
             isPlus = true;
-          } else if (/withdraw/i.test(info)) {
+          } 
+          else if (/withdraw/i.test(info)) {
             category = 'withdraw';
             title = 'উইথড্র';
             isPlus = false;
-          } else if (/bonus|commission|refer/i.test(info)) {
+          } 
+          else if (/bonus|commission|refer/i.test(info)) {
             category = 'bonus';
             title = info || 'বোনাস';
             isPlus = true;
-          } else if (/signup/i.test(info)) {
+          } 
+          else if (/signup/i.test(info)) {
             category = 'bonus';
             title = 'সাইনআপ বোনাস';
             isPlus = true;
@@ -470,6 +483,8 @@
             return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>';
           case 'purchase':
             return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+          case 'income':
+            return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
           case 'bonus':
             return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>';
           default:
