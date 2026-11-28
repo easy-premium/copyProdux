@@ -378,7 +378,7 @@
             <input type="tel" id="loginMobile" required placeholder="01XXXXXXXXX">
           </div>
           <div class="input-group">
-            <label>পাসওয়ার্ড</label>
+            <label>পাসওয়ার্ড</label>
             <input type="password" id="loginPassword" required placeholder="••••••••">
           </div>
           <button type="submit" class="auth-btn" id="loginBtn">লগইন করুন</button>
@@ -389,7 +389,7 @@
             <input type="tel" id="regMobile" required placeholder="01XXXXXXXXX">
           </div>
           <div class="input-group">
-            <label>পাসওয়ার্ড</label>
+            <label>পাসওয়ার্ড</label>
             <input type="password" id="regPassword" required placeholder="••••••••" minlength="6">
           </div>
           <div class="input-group">
@@ -1179,8 +1179,8 @@ function openAppLink(type) {
       return;
   }
 
-  // নতুন ট্যাবে লিংক ওপেন হবে
-  window.open(url, '_blank');
+  // একই ট্যাবে লিংক ওপেন হবে (Same Tab)
+  window.location.href = url;
 }
 
 async function openOrderDetails(mobile, orderId) {
