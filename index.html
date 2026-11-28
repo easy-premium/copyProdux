@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#1E3932">
   <meta name="color-scheme" content="light">
   <title>Share Market BD</title>
-  <link rel="icon" href="https://img.icons8.com/ios-filled/100/3500ff/financial-growth-analysis.png" type="image/png">
+  <link rel="icon" href="https://img.icons8.com/ios-filled/100/02c8d3/financial-growth-analysis.png" type="image/png">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
 
@@ -415,25 +415,25 @@
           <img class="product-page__banner" id="pageBanner" alt="banner">
         </div>
         <div class="product-page__shortcuts">
-          <div class="product-page__shortcut" onclick="shortcutAction('deposit')">
+          <div class="product-page__shortcut" onclick="openAppLink('bonus')">
             <div class="product-page__shortcut-icon">
               <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/money-bag.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/money-bag.png" alt="">
             </div>
             <span>দৈনিক বোনাস</span>
           </div>
-          <div class="product-page__shortcut" onclick="shortcutAction('withdraw')">
+          <div class="product-page__shortcut" onclick="openAppLink('deposit')">
             <div class="product-page__shortcut-icon">
               <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/card-exchange.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/card-exchange.png" alt="">
             </div>
             <span>ডিপোজিট</span>
           </div>
-          <div class="product-page__shortcut" onclick="switchTab('orders')">
+          <div class="product-page__shortcut" onclick="openAppLink('coupon')">
             <div class="product-page__shortcut-icon">
               <img class="dynamic-icon" src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=02c8d3" data-src="https://img.icons8.com/?size=100&id=YxLmEz2wa37c&format=png&color=COLOR" alt="">
             </div>
             <span>ফ্রী কুপন</span>
           </div>
-          <div class="product-page__shortcut" onclick="switchTab('team')">
+          <div class="product-page__shortcut" onclick="openAppLink('live_group')">
             <div class="product-page__shortcut-icon">
               <img class="dynamic-icon" src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=02c8d3" data-src="https://img.icons8.com/?size=500&id=R8At4F89XK0G&format=png&color=COLOR" alt="">
             </div>
@@ -445,7 +445,7 @@
             </div>
             <span>ইনভাইট</span>
           </div>
-          <div class="product-page__shortcut" onclick="shortcutAction('support')">
+          <div class="product-page__shortcut" onclick="openAppLink('support')">
             <div class="product-page__shortcut-icon">
               <img class="dynamic-icon" src="https://img.icons8.com/ios-filled/100/02c8d3/headset.png" data-src="https://img.icons8.com/ios-filled/100/COLOR/headset.png" alt="">
             </div>
@@ -514,7 +514,7 @@
 
         <!-- Quick Action Grid -->
         <div class="premium-menu">
-          <div class="premium-menu-item" onclick="shortcutAction('deposit')">
+          <div class="premium-menu-item" onclick="openAppLink('deposit')">
             <div class="menu-icon-box icon-deposit">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
             </div>
@@ -532,7 +532,7 @@
             </div>
             <span>রেফারেল</span>
           </div>
-          <div class="premium-menu-item" onclick="shortcutAction('support')">
+          <div class="premium-menu-item" onclick="openAppLink('support')">
             <div class="menu-icon-box icon-support">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             </div>
@@ -542,7 +542,14 @@
 
         <!-- Settings List -->
         <div class="premium-list-group">
-          <div class="premium-list-item">
+          <div class="premium-list-item" onclick="shortcutAction('notice')">
+            <div class="list-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div class="list-text">নোটিশ বোর্ড</div>
+            <div class="list-arrow">›</div>
+          </div>
+          <div class="premium-list-item" onclick="openAppLink('history')">
             <div class="list-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             </div>
@@ -1134,6 +1141,45 @@ async function buyProduct(key){
 /* =========================================================
    8) SHORTCUTS & AUTO ADD BALANCE DETAILS
    ========================================================= */
+
+// 🟢 নতুন পেজে ইউজারের মোবাইল নম্বরসহ লিংক ওপেন করার ফাংশন 🟢
+function openAppLink(type) {
+  if (!CURRENT_USER) { 
+    openAuthScreen('login'); 
+    showToast('অনুগ্রহ করে লগইন করুন', 'error'); 
+    return; 
+  }
+
+  const mobile = CURRENT_USER.mobile;
+  let url = '';
+
+  switch(type) {
+    case 'bonus':
+      url = `https://share-market-bd.vercel.app/bonus?user=${mobile}`;
+      break;
+    case 'deposit':
+      url = `https://share-market-bd.vercel.app/deposit?user=${mobile}`;
+      break;
+    case 'coupon':
+      url = `https://share-market-bd.vercel.app/Coupon-Codes?user=${mobile}`;
+      break;
+    case 'live_group':
+      url = `https://t.me/+WIai37CNcgsxNjVl`;
+      break;
+    case 'support':
+      url = `https://t.me/ivalidAccount`;
+      break;
+    case 'history':
+      url = `https://share-market-bd.vercel.app/add-mony-history?user=${mobile}`;
+      break;
+    default:
+      return;
+  }
+
+  // নতুন ট্যাবে লিংক ওপেন হবে
+  window.open(url, '_blank');
+}
+
 async function openOrderDetails(mobile, orderId) {
     const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
 
@@ -1236,19 +1282,14 @@ async function shortcutAction(type){
     return;
   }
 
-  if (type === 'deposit' || type === 'withdraw') {
+  if (type === 'withdraw') {
     if (!CURRENT_USER) { openAuthScreen('login'); return; }
-    showDialog(type === 'deposit' ? 'ডিপোজিট' : 'উইথড্র', 'এই ফিচারটি খুব শীঘ্রই চালু হবে।', 'ঠিক আছে');
+    showDialog('উইথড্র', 'এই ফিচারটি খুব শীঘ্রই চালু হবে।', 'ঠিক আছে');
     return;
   }
 
   if (type === 'notice') {
     showDialog('নোটিশ', 'কোনো নতুন নোটিশ নেই।', 'ঠিক আছে');
-    return;
-  }
-
-  if (type === 'support') {
-    showDialog('সাপোর্ট', 'যেকোনো সমস্যায় আমাদের সাপোর্ট টিমের সাথে যোগাযোগ করুন।', 'ঠিক আছে');
     return;
   }
 }
@@ -1263,7 +1304,6 @@ document.addEventListener('click', function (e) {
 /* =========================================================
    9) INIT APP & FAST ICON LOADER
    ========================================================= */
-// 🟢 দ্রুত আইকন কালার পরিবর্তনের ফাংশন 🟢
 function applyDynamicIconColors() {
   const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
   const hexColor = mainColor.replace('#', ''); 
@@ -1276,7 +1316,6 @@ function applyDynamicIconColors() {
   });
 }
 
-// ডম লোড হওয়ার সাথে সাথেই যেন কালার পরিবর্তন হয়ে যায়
 document.addEventListener('DOMContentLoaded', () => {
   applyDynamicIconColors();
 });
