@@ -150,7 +150,7 @@
         <div class="bonus-title">ডেইলি লগইন বোনাস</div>
         <div class="bonus-desc">প্রতিদিন অ্যাপে লগইন করে ফ্রি বোনাস সংগ্রহ করুন। বোনাসটি প্রতিদিন আপনার অ্যাকাউন্টে যোগ হবে।</div>
         
-        <!-- ডাইনামিক বোনাস অ্যামাউন্ট (লোডিং স্টেট) -->
+        <!-- ডাইনামিক বোনাস অ্যামাউন্ট -->
         <div class="bonus-amount" id="bonusAmountDisplay">৳ ...</div>
 
         <button class="claim-btn" id="claimBtn" onclick="claimBonus()">
@@ -238,9 +238,14 @@
           showToast('সফলভাবে বোনাস গ্রহণ করা হয়েছে!');
           btnText.textContent = 'আজকের বোনাস নেওয়া হয়েছে';
         } else {
+          // যদি সার্ভার থেকে এরর আসে (যেমন: ইতিমধ্যে বোনাস নেওয়া হয়েছে)
           showToast(data.error || 'বোনাস নিতে সমস্যা হয়েছে');
-          btn.disabled = false;
-          btnText.textContent = 'আবার চেষ্টা করুন';
+          btnText.textContent = 'ইতিমধ্যে গ্রহণ করা হয়েছে';
+          
+          // এরর মেসেজ দেখানোর পর হোম পেজে পাঠিয়ে দেওয়া
+          setTimeout(() => {
+            window.location.href = '/'; 
+          }, 2000);
         }
       } catch (err) {
         console.error(err);
@@ -252,9 +257,42 @@
       }
     }
 
+    // পেজ লোড হওয়ার সময় চেক করা ইউজার বোনাস নিয়েছে কিনা
+    async function checkBonusStatusOnLoad(mobile) {
+      try {
+        // আমরা ইউজারের ডেটা চেক করার জন্য products API কল করছি (যা আপনার মেইন অ্যাপে ব্যবহৃত হয়)
+        const res = await fetch(`/api/products?mobile=${mobile}`);
+        const data = await res.json();
+        
+        if (data.success && data.user) {
+          const today = new Date().toISOString().split('T')[0];
+          const lastBonusDate = data.user['last-bonus-date'];
+
+          // যদি আজ বোনাস নেওয়া হয়ে থাকে
+          if (lastBonusDate === today) {
+            const btn = document.getElementById('claimBtn');
+            const btnText = document.getElementById('btnText');
+            
+            btn.disabled = true;
+            btnText.textContent = 'আজকের বোনাস নেওয়া হয়েছে';
+            
+            // ইউজারকে এলার্ট দেখানো
+            showToast('আপনি ইতিমধ্যে আজকের বোনাস গ্রহণ করেছেন!');
+            
+            // ২ সেকেন্ড পর হোম পেজে পাঠিয়ে দেওয়া
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 2000);
+          }
+        }
+      } catch (err) {
+        console.error('Error checking bonus status:', err);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       applyDynamicIconColors();
-      loadBonusAmount(); // বোনাস কত টাকা তা API থেকে লোড করবে
+      loadBonusAmount(); 
       
       const params = new URLSearchParams(window.location.search);
       currentUserMobile = params.get('user');
@@ -263,6 +301,9 @@
         showToast('ইউজার পাওয়া যায়নি');
         document.getElementById('claimBtn').disabled = true;
         document.getElementById('btnText').textContent = 'লগইন করুন';
+      } else {
+        // পেজ লোড হলেই চেক করবে সে আজ বোনাস নিয়েছে কিনা
+        checkBonusStatusOnLoad(currentUserMobile);
       }
     });
   </script>
