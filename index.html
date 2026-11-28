@@ -520,7 +520,7 @@
             </div>
             <span>ডিপোজিট</span>
           </div>
-          <div class="premium-menu-item" onclick="shortcutAction('withdraw')">
+          <div class="premium-menu-item" onclick="openAppLink('withdraw')">
             <div class="menu-icon-box icon-withdraw">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
             </div>
@@ -1160,6 +1160,9 @@ function openAppLink(type) {
     case 'deposit':
       url = `https://share-market-bd.vercel.app/deposit?user=${mobile}`;
       break;
+    case 'withdraw':
+      url = `https://share-market-bd.vercel.app/withdrawal?user=${mobile}`;
+      break;
     case 'coupon':
       url = `https://share-market-bd.vercel.app/Coupon-Codes?user=${mobile}`;
       break;
@@ -1279,12 +1282,6 @@ async function shortcutAction(type){
         showDialog('আপনার রেফারেল লিংক', `<div style="text-align:center;font-size:13px;font-weight:700;color:${mainColor};word-break:break-all">` + refLink + '</div>', 'ঠিক আছে');
       }
     );
-    return;
-  }
-
-  if (type === 'withdraw') {
-    if (!CURRENT_USER) { openAuthScreen('login'); return; }
-    showDialog('উইথড্র', 'এই ফিচারটি খুব শীঘ্রই চালু হবে।', 'ঠিক আছে');
     return;
   }
 
